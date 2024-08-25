@@ -1,0 +1,26 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+exclude:
+    - generated/**
+plugins:
+    - custom_lint
+
+custom_lint:
+class_match_file_name: true
+
+# Lint rules
+linter:
+  rules:
+    avoid_function_literals_in_foreach_calls: true
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    always_declare_return_types: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    prefer_final_parameters: true
+    avoid_print: true
+    prefer_asserts_with_message: true
+    cancel_subscriptions: true
+    close_sinks: true
+    
