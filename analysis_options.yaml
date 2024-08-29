@@ -18,7 +18,6 @@ linter:
     always_declare_return_types: true
     prefer_final_fields: true
     prefer_final_locals: true
-    prefer_final_parameters: true
     avoid_print: true
     prefer_asserts_with_message: true
     cancel_subscriptions: true
