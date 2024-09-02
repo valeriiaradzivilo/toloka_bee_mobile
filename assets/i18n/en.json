@@ -1,3 +1,5 @@
 {
-    "app.name": "Zip Way"
+    "app.name": "Zip Way",
+    "location.disabled": "Location service is disabled",
+    "oops.error.occurred": "Oops! An error occurred. Please restart the app."
 }
