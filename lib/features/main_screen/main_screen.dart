@@ -8,6 +8,10 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Provider(create: (_) => MapScreenBloc(), child: const MapScreen());
+    return Provider(
+      create: (_) => MapScreenBloc(),
+      dispose: (_, bloc) => bloc.dispose(),
+      child: const MapScreen(),
+    );
   }
 }

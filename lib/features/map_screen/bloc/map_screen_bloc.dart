@@ -8,7 +8,8 @@ import 'package:zip_way/common/bloc/zip_bloc.dart';
 class MapScreenBloc extends ZipBloc {
   MapScreenBloc() {
     locationStream.skip(1).listen((event) {
-      _mapControllerSubject.valueOrNull?.move(LatLng(event.latitude, event.longitude), 10);
+      _mapControllerSubject.valueOrNull
+          ?.move(LatLng(event.latitude, event.longitude), 10);
     });
     _init();
   }
@@ -24,7 +25,8 @@ class MapScreenBloc extends ZipBloc {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
-    _locationServiceEnabled.add(permission == LocationPermission.whileInUse || permission != LocationPermission.always);
+    _locationServiceEnabled.add(permission == LocationPermission.whileInUse ||
+        permission != LocationPermission.always);
   }
 
   void onMapCreated(Position latLang) {
@@ -38,11 +40,14 @@ class MapScreenBloc extends ZipBloc {
   }
 
   Stream<Position> get locationStream => Geolocator.getPositionStream();
-  ValueStream<bool> get locationServiceEnabled => _locationServiceEnabled.stream;
+  ValueStream<bool> get locationServiceEnabled =>
+      _locationServiceEnabled.stream;
 
   MapController get mapController => _mapControllerSubject.value;
 
-  final BehaviorSubject<MapController> _mapControllerSubject = BehaviorSubject<MapController>();
+  final BehaviorSubject<MapController> _mapControllerSubject =
+      BehaviorSubject<MapController>();
 
-  final BehaviorSubject<bool> _locationServiceEnabled = BehaviorSubject<bool>.seeded(false);
+  final BehaviorSubject<bool> _locationServiceEnabled =
+      BehaviorSubject<bool>.seeded(false);
 }

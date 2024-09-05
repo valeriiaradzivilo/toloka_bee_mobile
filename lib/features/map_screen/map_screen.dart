@@ -37,7 +37,8 @@ class MapScreen extends StatelessWidget {
                     ),
                     children: [
                       TileLayer(
-                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                           tileBuilder: (context, widget, tile) => widget),
                     ],
                   )),

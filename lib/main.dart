@@ -3,7 +3,8 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:zip_way/features/main_screen/main_screen.dart';
 
 void main() async {
-  final delegate = await LocalizationDelegate.create(fallbackLocale: 'en_US', supportedLocales: ['en_US']);
+  final delegate = await LocalizationDelegate.create(
+      fallbackLocale: 'en_US', supportedLocales: ['en_US']);
 
   runApp(LocalizedApp(delegate, const MyApp()));
 }
@@ -11,7 +12,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(final BuildContext context) {
     return MaterialApp(
