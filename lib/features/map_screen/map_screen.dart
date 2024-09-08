@@ -36,9 +36,9 @@ class MapScreen extends StatelessWidget {
                       initialCenter: LatLng(data.latitude, data.longitude),
                     ),
                     children: [
+                      const Icon(Icons.abc),
                       TileLayer(
-                          urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                           tileBuilder: (context, widget, tile) => widget),
                     ],
                   )),

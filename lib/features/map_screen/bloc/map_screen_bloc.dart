@@ -7,9 +7,9 @@ import 'package:zip_way/common/bloc/zip_bloc.dart';
 
 class MapScreenBloc extends ZipBloc {
   MapScreenBloc() {
-    locationStream.skip(1).listen((event) {
-      mapController.move(LatLng(event.latitude, event.longitude), 10);
-    });
+    // locationStream.skip(2).listen((event) {
+    //   mapController.move(LatLng(event.latitude, event.longitude), 10);
+    // });
     _init();
   }
 
@@ -28,7 +28,7 @@ class MapScreenBloc extends ZipBloc {
   }
 
   void onMapCreated(Position latLang) {
-    mapController.move(LatLng(latLang.latitude, latLang.longitude), 10);
+    mapController.camera.latLngToScreenPoint(LatLng(latLang.latitude, latLang.longitude));
   }
 
   @override
