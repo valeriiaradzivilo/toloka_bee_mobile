@@ -10,6 +10,6 @@ enum ZipFonts {
   TextStyle get style => switch (this) {
         big => const TextStyle(fontSize: 24),
         medium => const TextStyle(fontSize: 18),
-        small => const TextStyle(fontSize: 12),
+        small => const TextStyle(fontSize: 16),
       };
 }

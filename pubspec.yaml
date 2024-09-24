@@ -29,6 +29,7 @@ dependencies:
   http: ^1.2.1
   flutter_map: ^7.0.2
   geolocator: ^13.0.1
+  font_awesome_flutter: ^10.1.0
 
   # Firebase packages
   # firebase_core: ^2.14.0
@@ -69,6 +70,7 @@ dependencies:
   collection: ^1.17.2
   flutter_translate: ^4.1.0
   latlong2: ^0.9.1
+  google_fonts: ^6.2.1
   # google_maps_flutter: ^2.9.0
 
 # Development dependencies
