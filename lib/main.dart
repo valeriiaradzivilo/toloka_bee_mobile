@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:zip_way/features/main_screen/main_screen.dart';
-import 'package:zip_way/theme/theme.dart';
-import 'package:zip_way/theme/util.dart';
+
+import 'data/di.dart';
+import 'features/main_screen/main_screen.dart';
+import 'theme/theme.dart';
+import 'theme/util.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   final delegate = await LocalizationDelegate.create(fallbackLocale: 'en_US', supportedLocales: ['en_US']);
 
+  await init();
   runApp(LocalizedApp(delegate, const MyApp()));
 }
 

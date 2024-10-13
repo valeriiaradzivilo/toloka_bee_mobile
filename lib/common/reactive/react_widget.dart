@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:zip_way/common/theme/zip_fonts.dart';
+import '../theme/zip_fonts.dart';
 
 class ReactWidget<T> extends StatelessWidget {
   const ReactWidget({super.key, required this.stream, required this.builder});

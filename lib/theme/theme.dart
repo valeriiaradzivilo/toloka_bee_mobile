@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zip_way/theme/zip_color.dart';
+import 'zip_color.dart';
 
 class MaterialTheme {
   final TextTheme textTheme;

@@ -5,11 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:zip_way/common/condition_widget.dart';
-import 'package:zip_way/common/reactive/react_widget.dart';
-import 'package:zip_way/common/theme/zip_fonts.dart';
-import 'package:zip_way/features/map_screen/bloc/map_screen_bloc.dart';
-import 'package:zip_way/theme/zip_color.dart';
+import '../../common/condition_widget.dart';
+import '../../common/reactive/react_widget.dart';
+import '../../common/theme/zip_fonts.dart';
+import 'bloc/map_screen_bloc.dart';
+import '../../theme/zip_color.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});

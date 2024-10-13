@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:zip_way/common/bloc/zip_bloc.dart';
+import '../../../common/bloc/zip_bloc.dart';
 
 class MapScreenBloc extends ZipBloc {
   MapScreenBloc() {

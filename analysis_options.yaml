@@ -22,5 +22,6 @@ linter:
     prefer_asserts_with_message: true
     cancel_subscriptions: true
     close_sinks: true
-    use_relative_imports: true
+    unawaited_futures: true
+    prefer_relative_imports: true
     
