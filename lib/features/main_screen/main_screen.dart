@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+
 import '../map_screen/bloc/map_screen_bloc.dart';
 import '../map_screen/map_screen.dart';
 
@@ -9,7 +11,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Provider(
-      create: (_) => MapScreenBloc(),
+      create: (_) => MapScreenBloc(GetIt.I),
       dispose: (_, bloc) => bloc.dispose(),
       child: const MapScreen(),
     );

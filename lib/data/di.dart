@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+
 import 'repository/geo_repository.dart';
 import 'repository/geo_repository_imp.dart';
 import 'source/geo_data_source.dart';
