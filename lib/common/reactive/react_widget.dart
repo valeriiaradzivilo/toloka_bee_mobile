@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+
 import '../theme/zip_fonts.dart';
 
 class ReactWidget<T> extends StatelessWidget {
@@ -29,5 +30,37 @@ class ReactWidget<T> extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
         });
+  }
+}
+
+class ReactWidget2<T, A> extends StatelessWidget {
+  const ReactWidget2({super.key, required this.stream1, required this.stream2, required this.builder});
+  final Stream<T> stream1;
+  final Stream<A> stream2;
+  final Function(T data1, A data2) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: stream1,
+      builder: (context, data1) {
+        if (data1.hasData) {
+          if (data1.data case final T d1) {
+            return ReactWidget<A>(stream: stream2, builder: (a) => builder(d1, a));
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        }
+        if (data1.hasError) {
+          return Center(
+              child: Text(
+            translate('oops.error.occurred'),
+            style: ZipFonts.small.error,
+          ));
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 }
