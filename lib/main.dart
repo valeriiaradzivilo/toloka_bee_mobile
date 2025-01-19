@@ -5,9 +5,11 @@ import 'common/routes.dart';
 import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'data/di.dart';
+import 'data/usecase/authenticate_user_usecase.dart';
 import 'features/authentication/ui/create_account_screen.dart';
 import 'features/authentication/ui/login_screen.dart';
 import 'features/main_screen/main_screen.dart';
+import 'features/profile/ui/profile_screen.dart';
 import 'gen/assets.gen.dart';
 
 void main() async {
@@ -38,6 +40,22 @@ class MyApp extends StatelessWidget {
         Routes.createAccountScreen: (context) => const CreateAccountScreen(),
         // Routes.profileScreen: (context) => const ProfileScreen(),
         // Routes.requestsScreen: (context) => const RequestsScreen(),
+      },
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case Routes.loginScreen:
+            serviceLocator.registerLazySingleton<AuthenticateUserUsecase>(() => AuthenticateUserUsecase());
+            return MaterialPageRoute(builder: (context) => const LoginScreen());
+          case Routes.createAccountScreen:
+            serviceLocator.registerLazySingleton<AuthenticateUserUsecase>(() => AuthenticateUserUsecase());
+            return MaterialPageRoute(builder: (context) => const CreateAccountScreen());
+          case Routes.profileScreen:
+            return MaterialPageRoute(builder: (context) => const ProfileScreen());
+          // case Routes.requestsScreen:
+          //   return MaterialPageRoute(builder: (context) => const RequestsScreen());
+          default:
+            return MaterialPageRoute(builder: (context) => const MainScreen());
+        }
       },
       builder: (context, child) => SafeArea(
         child: Stack(

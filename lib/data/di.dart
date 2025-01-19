@@ -4,7 +4,6 @@ import 'repository/geo_repository.dart';
 import 'repository/geo_repository_imp.dart';
 import 'source/geo_data_source.dart';
 import 'source/geo_data_source_imp.dart';
-import 'usecase/authenticate_user_usecase.dart';
 import 'usecase/update_location_usecase.dart';
 
 final GetIt serviceLocator = GetIt.instance;
@@ -30,5 +29,4 @@ Future<void> initRepository() async {
 
 Future<void> initUseCases() async {
   serviceLocator.registerLazySingleton<UpdateLocationUsecase>(() => UpdateLocationUsecase(serviceLocator()));
-  serviceLocator.registerLazySingleton<AuthenticateUserUsecase>(() => AuthenticateUserUsecase());
 }

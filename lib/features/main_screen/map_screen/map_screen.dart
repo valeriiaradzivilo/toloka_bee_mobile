@@ -32,8 +32,9 @@ class MapScreen extends StatelessWidget {
                   mapController: bloc.mapController,
                   options: MapOptions(
                     interactionOptions: const InteractionOptions(
-                      enableMultiFingerGestureRace: true,
-                      pinchMoveWinGestures: MultiFingerGesture.pinchMove,
+                      enableMultiFingerGestureRace: false,
+                      pinchMoveWinGestures: MultiFingerGesture.none,
+                      pinchZoomWinGestures: MultiFingerGesture.none,
                     ),
                     onMapReady: () => bloc.onMapCreated(data),
                     initialZoom: 12,
@@ -81,7 +82,7 @@ class _BottomSheet extends StatelessWidget {
         children: [
           const Flexible(child: _AccountInfo()),
           const Divider(),
-          const Gap(20),
+          const Gap(10),
           Text(
             translate('map.actions.question'),
             style: ZipFonts.medium.style,
@@ -135,7 +136,7 @@ class _AccountInfo extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              onPressed: () => Navigator.of(context).pushNamed(Routes.loginScreen),
+              onPressed: () => Navigator.of(context).pushNamed(Routes.profileScreen),
               icon: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: ZipColor.primary, width: 2),
@@ -153,7 +154,7 @@ class _AccountInfo extends StatelessWidget {
                 child: Text(translate('map.actions.logout'))),
           ],
         ),
-        const Gap(10),
+        const Gap(20),
         Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
