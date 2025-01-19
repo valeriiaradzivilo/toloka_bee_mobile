@@ -1,0 +1,32 @@
+import 'package:get_it/get_it.dart';
+import 'package:rxdart/streams.dart';
+import 'package:rxdart/subjects.dart';
+
+import '../../../common/bloc/zip_bloc.dart';
+import '../../../data/usecase/authenticate_user_usecase.dart';
+
+class AuthenticationBloc extends ZipBloc {
+  AuthenticationBloc(GetIt locator) : _authenticateUserUsecase = locator<AuthenticateUserUsecase>() {
+    _init();
+  }
+
+  Future<void> _init() async {
+    // Initialize any required resources or states
+  }
+
+  Future<void> authenticate(String username, String password) async {
+    final isAuthenticated = await _authenticateUserUsecase(username, password);
+    _isAuthenticated.add(isAuthenticated);
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _isAuthenticated.close();
+  }
+
+  ValueStream<bool> get isAuthenticated => _isAuthenticated.stream;
+
+  final BehaviorSubject<bool> _isAuthenticated = BehaviorSubject<bool>.seeded(false);
+
+  final AuthenticateUserUsecase _authenticateUserUsecase;
+}

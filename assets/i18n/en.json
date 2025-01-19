@@ -4,8 +4,7 @@
     "oops.error.occurred": "Oops! An error occurred. Please restart the app.",
     "map.hello.title": "Hello, {name}!",
     "map.hello.subtitle": "What a great day to give somebody a hand!",
-    "map.actions.question":"What are we doing today?",
-    "map.actions.give.hand":"Give a hand",
-    "map.actions.ask.hand":"Ask for a hand"
-
+    "map.actions.question": "What are we doing today?",
+    "map.actions.give.hand": "Give a hand",
+    "map.actions.ask.hand": "Need a hand"
 }

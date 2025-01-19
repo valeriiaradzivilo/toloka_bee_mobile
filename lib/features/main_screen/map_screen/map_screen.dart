@@ -5,11 +5,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import '../../common/condition_widget.dart';
-import '../../common/reactive/react_widget.dart';
-import '../../common/theme/zip_fonts.dart';
+
+import '../../../common/condition_widget.dart';
+import '../../../common/reactive/react_widget.dart';
+import '../../../common/theme/zip_color.dart';
+import '../../../common/theme/zip_fonts.dart';
 import 'bloc/map_screen_bloc.dart';
-import '../../theme/zip_color.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
@@ -118,7 +119,7 @@ class MapScreen extends StatelessWidget {
                               icon: const Icon(Icons.handshake_outlined),
                             ),
                           ),
-                          const Gap(20),
+                          const Gap(10),
                           Expanded(
                             child: ElevatedButton.icon(
                               onPressed: () {},
@@ -133,6 +134,17 @@ class MapScreen extends StatelessWidget {
                       ),
                       const Gap(40),
                     ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: FloatingActionButton(
+                    onPressed: () {},
+                    shape: const CircleBorder(),
+                    child: const Icon(Icons.person_2),
                   ),
                 ),
               )

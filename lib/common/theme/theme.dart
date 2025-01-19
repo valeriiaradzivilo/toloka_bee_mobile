@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'zip_color.dart';
 
 class MaterialTheme {
@@ -346,6 +347,13 @@ class MaterialTheme {
         ),
         scaffoldBackgroundColor: colorScheme.surface,
         canvasColor: colorScheme.surface,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all(colorScheme.primary),
+            foregroundColor: WidgetStateProperty.all(colorScheme.onPrimary),
+            iconSize: WidgetStateProperty.all(20),
+          ),
+        ),
       );
 
   List<ExtendedColor> get extendedColors => [];

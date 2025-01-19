@@ -5,9 +5,9 @@ import 'package:latlong2/latlong.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../../../common/bloc/zip_bloc.dart';
-import '../../../data/models/location_model.dart';
-import '../../../data/usecase/update_location_usecase.dart';
+import '../../../../common/bloc/zip_bloc.dart';
+import '../../../../data/models/location_model.dart';
+import '../../../../data/usecase/update_location_usecase.dart';
 
 class MapScreenBloc extends ZipBloc {
   MapScreenBloc(GetIt locator) : _updateLocationUsecase = locator<UpdateLocationUsecase>() {

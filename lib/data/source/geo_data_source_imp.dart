@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+
 import '../models/location_model.dart';
 import 'geo_data_source.dart';
 
@@ -22,6 +24,7 @@ class GeoDataSourceImp implements GeoDataSource {
         throw Exception('Failed to send location');
       }
     } catch (e) {
+      debugPrint('EXCEPTION: $e');
       throw Exception('Failed to send location: $e');
     }
   }

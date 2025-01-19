@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
+import 'common/theme/theme.dart';
+import 'common/theme/util.dart';
 import 'data/di.dart';
 import 'features/main_screen/main_screen.dart';
-import 'theme/theme.dart';
-import 'theme/util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
