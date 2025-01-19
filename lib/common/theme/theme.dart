@@ -351,7 +351,7 @@ class MaterialTheme {
           style: ButtonStyle(
             backgroundColor: WidgetStateProperty.all(colorScheme.primary),
             foregroundColor: WidgetStateProperty.all(colorScheme.onPrimary),
-            iconSize: WidgetStateProperty.all(20),
+            iconSize: WidgetStateProperty.all(24),
           ),
         ),
       );

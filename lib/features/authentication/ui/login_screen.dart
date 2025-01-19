@@ -1,33 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
-import '../../../common/reactive/react_widget.dart';
+import '../../../common/routes.dart';
+import '../../../common/theme/zip_fonts.dart';
 import '../bloc/authentication_bloc.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  Widget build(BuildContext context) {
+    return Provider(
+      create: (_) => AuthenticationBloc(GetIt.I),
+      dispose: (_, bloc) => bloc.dispose(),
+      child: const _LoginScreen(),
+    );
+  }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreen extends StatefulWidget {
+  const _LoginScreen();
+
+  @override
+  State<_LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<_LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  late AuthenticationBloc _authenticationBloc;
+  late final AuthenticationBloc _authenticationBloc;
 
   @override
   void initState() {
+    _authenticationBloc = context.read<AuthenticationBloc>();
     super.initState();
-    _authenticationBloc = AuthenticationBloc(GetIt.instance);
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
-    _authenticationBloc.dispose();
+
     super.dispose();
   }
 
@@ -39,38 +56,44 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(translate('login.title')),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(labelText: translate('login.username')),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: translate('login.password')),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _login,
-              child: Text(translate('login.button')),
-            ),
-            ReactWidget(
-                stream: _authenticationBloc.isAuthenticated,
-                builder: (isAuthenticated) {
-                  if (isAuthenticated) {
-                    return Text(translate('login.success'));
-                  } else {
-                    return Text(translate('login.failure'));
-                  }
-                }),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(labelText: translate('login.username')),
+              ),
+              TextField(
+                controller: _passwordController,
+                decoration: InputDecoration(labelText: translate('login.password')),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _login,
+                child: Text(translate('login.button')),
+              ),
+              const Gap(20),
+              Text(
+                translate('login.or'),
+                style: ZipFonts.medium.style,
+              ),
+              const Gap(20),
+              ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, Routes.createAccountScreen),
+                  child: Text(translate('login.register'))),
+              OutlinedButton.icon(
+                onPressed: () {},
+                label: Text(translate('login.google')),
+                icon: const Icon(FontAwesomeIcons.google),
+              ),
+            ],
+          ),
         ),
       ),
     );

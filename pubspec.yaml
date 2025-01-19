@@ -72,6 +72,7 @@ dependencies:
   flutter_translate: ^4.1.0
   latlong2: ^0.9.1
   google_fonts: ^6.2.1
+  flutter_gen: ^5.8.0
   # google_maps_flutter: ^2.9.0
 
 # Development dependencies
@@ -80,6 +81,8 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
+
+  flutter_gen_runner: any
 
   # Linting and code analysis
   flutter_lints: ^4.0.0
@@ -95,5 +98,5 @@ flutter:
   # Assets
   assets:
     - assets/
-    # - assets/logo/
+    - assets/logo/
     - assets/i18n/

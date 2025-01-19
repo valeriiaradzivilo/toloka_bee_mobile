@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../../common/condition_widget.dart';
 import '../../../common/reactive/react_widget.dart';
+import '../../../common/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import 'bloc/map_screen_bloc.dart';
@@ -35,8 +36,8 @@ class MapScreen extends StatelessWidget {
                       pinchMoveWinGestures: MultiFingerGesture.pinchMove,
                     ),
                     onMapReady: () => bloc.onMapCreated(data),
-                    initialZoom: 14,
-                    maxZoom: 14,
+                    initialZoom: 12,
+                    maxZoom: 12,
                     minZoom: 1,
                     keepAlive: true,
                     initialCenter: LatLng(data.latitude, data.longitude),
@@ -48,106 +49,7 @@ class MapScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  // height: MediaQuery.of(context).size.height * 0.3,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: ZipColor.surfaceBright,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: ZipColor.primary, width: 2),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Icon(
-                                Icons.person_4_rounded,
-                                size: 50,
-                                color: ZipColor.primary,
-                              ),
-                            ),
-                            const Gap(10),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    translate('map.hello.title', args: {'name': 'John'}),
-                                    style: ZipFonts.big.style,
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                      translate('map.hello.subtitle'),
-                                      style: ZipFonts.medium.style,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(),
-                      const Gap(20),
-                      Text(
-                        translate('map.actions.question'),
-                        style: ZipFonts.medium.style,
-                      ),
-                      const Gap(20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {},
-                              label: Text(
-                                translate('map.actions.give.hand'),
-                                style: ZipFonts.small.style,
-                              ),
-                              icon: const Icon(Icons.handshake_outlined),
-                            ),
-                          ),
-                          const Gap(10),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {},
-                              label: Text(
-                                translate('map.actions.ask.hand'),
-                                style: ZipFonts.small.style,
-                              ),
-                              icon: const Icon(FontAwesomeIcons.handHoldingHeart),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Gap(40),
-                    ],
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: FloatingActionButton(
-                    onPressed: () {},
-                    shape: const CircleBorder(),
-                    child: const Icon(Icons.person_2),
-                  ),
-                ),
-              )
+              const Align(alignment: Alignment.bottomCenter, child: _BottomSheet()),
             ],
           ),
           onFalse: Center(
@@ -157,6 +59,121 @@ class MapScreen extends StatelessWidget {
           )),
         ),
       ),
+    );
+  }
+}
+
+class _BottomSheet extends StatelessWidget {
+  const _BottomSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // height: MediaQuery.of(context).size.height * 0.3,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: ZipColor.surfaceBright,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Flexible(child: _AccountInfo()),
+          const Divider(),
+          const Gap(20),
+          Text(
+            translate('map.actions.question'),
+            style: ZipFonts.medium.style,
+          ),
+          const Gap(20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  label: Text(
+                    translate('map.actions.give.hand'),
+                    style: ZipFonts.small.style,
+                  ),
+                  icon: const Icon(Icons.handshake_outlined),
+                ),
+              ),
+              const Gap(10),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  label: Text(
+                    translate('map.actions.ask.hand'),
+                    style: ZipFonts.small.style,
+                  ),
+                  icon: const Icon(FontAwesomeIcons.handHoldingHeart),
+                ),
+              ),
+            ],
+          ),
+          const Gap(40),
+        ],
+      ),
+    );
+  }
+}
+
+class _AccountInfo extends StatelessWidget {
+  const _AccountInfo();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: () => Navigator.of(context).pushNamed(Routes.loginScreen),
+              icon: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: ZipColor.primary, width: 2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.person_4_rounded,
+                  size: 50,
+                  color: ZipColor.primary,
+                ),
+              ),
+            ),
+            OutlinedButton(
+                onPressed: () => Navigator.of(context).pushNamed(Routes.loginScreen),
+                child: Text(translate('map.actions.logout'))),
+          ],
+        ),
+        const Gap(10),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                translate('map.hello.title', args: {'name': 'John'}),
+                style: ZipFonts.big.style,
+              ),
+              const Gap(10),
+              Flexible(
+                child: Text(
+                  translate('map.hello.subtitle'),
+                  style: ZipFonts.medium.style,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

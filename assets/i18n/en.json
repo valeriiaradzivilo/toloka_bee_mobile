@@ -2,9 +2,35 @@
     "app.name": "Zip Way",
     "location.disabled": "Location service is disabled",
     "oops.error.occurred": "Oops! An error occurred. Please restart the app.",
-    "map.hello.title": "Hello, {name}!",
-    "map.hello.subtitle": "What a great day to give somebody a hand!",
-    "map.actions.question": "What are we doing today?",
-    "map.actions.give.hand": "Give a hand",
-    "map.actions.ask.hand": "Need a hand"
+    "map": {
+        "hello": {
+            "title": "Hello, {name}!",
+            "subtitle": "What a great day to give somebody a hand!"
+        },
+        "actions": {
+            "question": "What are we doing today?",
+            "give.hand": "Give a hand",
+            "ask.hand": "Need a hand",
+            "logout": "Logout"
+        }
+    },
+    "login": {
+        "username": "Username",
+        "password": "Password",
+        "button": "Login",
+        "error": "Invalid username or password",
+        "forgot": "Forgot password?",
+        "title": "Login",
+        "register": "Create an account",
+        "or": "OR"
+    },
+    "create.account": {
+        "title": "Create an account",
+        "username": "Username",
+        "password": "Password",
+        "confirm.password": "Confirm password",
+        "email": "Email",
+        "phone": "Phone",
+        "button": "Create"
+    }
 }
