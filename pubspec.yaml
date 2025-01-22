@@ -30,6 +30,7 @@ dependencies:
   flutter_map: ^7.0.2
   geolocator: ^13.0.1
   font_awesome_flutter: ^10.1.0
+  flutter_native_splash: ^2.4.4
 
   # Firebase packages
   # firebase_core: ^2.14.0
@@ -89,6 +90,12 @@ dev_dependencies:
   class_match_file_name: ^0.2.2
   lints: ^5.0.0
   build_runner: ^2.4.6
+  flutter_launcher_icons: "^0.14.3"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo/logo.png"
 
 # Flutter configuration
 flutter:

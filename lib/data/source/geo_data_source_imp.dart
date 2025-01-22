@@ -7,15 +7,19 @@ import '../models/location_model.dart';
 import 'geo_data_source.dart';
 
 class GeoDataSourceImp implements GeoDataSource {
-  final String backendUrl = 'http://localhost:8080';
-  final Dio _dio = Dio();
+  final String backendUrl = 'http://10.0.2.2:8080';
+  late final Dio _dio = Dio(BaseOptions(baseUrl: backendUrl,
+  sendTimeout: const Duration(seconds: 5),
+  receiveTimeout: const Duration(seconds: 5),
+  connectTimeout: const Duration(seconds: 5)));
+  
+
 
   @override
   Future<void> updateLocation(LocationModel location) async {
     try {
-      final updateLocationUrl = '$backendUrl/update-location';
       final response = await _dio.post(
-        updateLocationUrl,
+        '/update-location',
         options: Options(headers: {'Content-Type': 'application/json'}),
         data: jsonEncode(location.toJson()),
       );
