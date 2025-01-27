@@ -8,9 +8,11 @@ import 'package:rxdart/subjects.dart';
 import '../../../../common/bloc/zip_bloc.dart';
 import '../../../../data/models/location_model.dart';
 import '../../../../data/usecase/update_location_usecase.dart';
+import '../data/location_service_state.dart';
 
 class MapScreenBloc extends ZipBloc {
-  MapScreenBloc(GetIt locator) : _updateLocationUsecase = locator<UpdateLocationUsecase>() {
+  MapScreenBloc(GetIt locator)
+      : _updateLocationUsecase = locator<UpdateLocationUsecase>() {
     // locationStream.skip(2).listen((event) {
     //   mapController.move(LatLng(event.latitude, event.longitude), 10);
     // });
@@ -29,16 +31,21 @@ class MapScreenBloc extends ZipBloc {
       permission = await Geolocator.requestPermission();
     }
     final locationServiceEnabled =
-        permission == LocationPermission.whileInUse || permission != LocationPermission.always;
-    _locationServiceEnabled.add(locationServiceEnabled);
+        permission == LocationPermission.whileInUse ||
+            permission != LocationPermission.always;
+    _locationServiceEnabled.add(locationServiceEnabled
+        ? LocationServiceState.enabled
+        : LocationServiceState.disabled);
     if (locationServiceEnabled) {
       final location = await Geolocator.getCurrentPosition();
-      await _updateLocationUsecase(LocationModel(latitude: location.latitude, longitude: location.longitude));
+      await _updateLocationUsecase(LocationModel(
+          latitude: location.latitude, longitude: location.longitude));
     }
   }
 
   void onMapCreated(Position latLang) {
-    mapController.camera.latLngToScreenPoint(LatLng(latLang.latitude, latLang.longitude));
+    mapController.camera
+        .latLngToScreenPoint(LatLng(latLang.latitude, latLang.longitude));
   }
 
   @override
@@ -47,11 +54,14 @@ class MapScreenBloc extends ZipBloc {
   }
 
   Stream<Position> get locationStream => Geolocator.getPositionStream();
-  ValueStream<bool> get locationServiceEnabled => _locationServiceEnabled.stream;
+  ValueStream<LocationServiceState> get locationServiceEnabled =>
+      _locationServiceEnabled.stream;
 
   MapController mapController = MapController();
 
-  final BehaviorSubject<bool> _locationServiceEnabled = BehaviorSubject<bool>.seeded(false);
+  final BehaviorSubject<LocationServiceState> _locationServiceEnabled =
+      BehaviorSubject<LocationServiceState>.seeded(
+          LocationServiceState.loading);
 
   final UpdateLocationUsecase _updateLocationUsecase;
 }

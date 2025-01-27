@@ -6,12 +6,12 @@ import 'package:gap/gap.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
-import '../../../common/condition_widget.dart';
 import '../../../common/reactive/react_widget.dart';
 import '../../../common/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import 'bloc/map_screen_bloc.dart';
+import 'data/location_service_state.dart';
 
 class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
@@ -22,43 +22,60 @@ class MapScreen extends StatelessWidget {
     return Scaffold(
       body: ReactWidget(
         stream: bloc.locationServiceEnabled,
-        builder: (locationEnabled) => ConditionWidget(
-          condition: locationEnabled,
-          onTrue: Stack(
-            children: [
-              ReactWidget(
-                stream: bloc.locationStream,
-                builder: (data) => FlutterMap(
-                  mapController: bloc.mapController,
-                  options: MapOptions(
-                    interactionOptions: const InteractionOptions(
-                      enableMultiFingerGestureRace: false,
-                      pinchMoveWinGestures: MultiFingerGesture.none,
-                      pinchZoomWinGestures: MultiFingerGesture.none,
+        builder: (locationEnabled) => switch (locationEnabled) {
+          LocationServiceState.enabled => Stack(
+              children: [
+                ReactWidget(
+                  stream: bloc.locationStream,
+                  builder: (data) => FlutterMap(
+                    mapController: bloc.mapController,
+                    options: MapOptions(
+                      interactionOptions: const InteractionOptions(
+                        enableMultiFingerGestureRace: false,
+                        pinchMoveWinGestures: MultiFingerGesture.none,
+                        pinchZoomWinGestures: MultiFingerGesture.none,
+                      ),
+                      onMapReady: () => bloc.onMapCreated(data),
+                      initialZoom: 12,
+                      maxZoom: 12,
+                      minZoom: 1,
+                      keepAlive: true,
+                      initialCenter: LatLng(data.latitude, data.longitude),
                     ),
-                    onMapReady: () => bloc.onMapCreated(data),
-                    initialZoom: 12,
-                    maxZoom: 12,
-                    minZoom: 1,
-                    keepAlive: true,
-                    initialCenter: LatLng(data.latitude, data.longitude),
+                    children: [
+                      TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          tileBuilder: (context, widget, tile) => widget),
+                      MarkerLayer(markers: [
+                        Marker(
+                          point: LatLng(data.latitude, data.longitude),
+                          child: Icon(
+                            FontAwesomeIcons.userNinja,
+                            color: ZipColor.randomZipColor,
+                            size: 50,
+                          ),
+                        ),
+                      ]),
+                    ],
                   ),
-                  children: [
-                    TileLayer(
-                        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        tileBuilder: (context, widget, tile) => widget),
-                  ],
                 ),
-              ),
-              const Align(alignment: Alignment.bottomCenter, child: _BottomSheet()),
-            ],
-          ),
-          onFalse: Center(
-              child: Text(
-            translate('location.disabled'),
-            style: ZipFonts.big.error,
-          )),
-        ),
+                const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: _BottomSheet(),
+                ),
+              ],
+            ),
+          LocationServiceState.disabled => Center(
+                child: Text(
+              translate('location.disabled'),
+              style: ZipFonts.big.error,
+            )),
+          LocationServiceState.loading => const Center(
+                child: CircularProgressIndicator(
+              color: ZipColor.primary,
+            )),
+        },
       ),
     );
   }
@@ -98,7 +115,10 @@ class _BottomSheet extends StatelessWidget {
                     translate('map.actions.give.hand'),
                     style: ZipFonts.small.style,
                   ),
-                  icon: const Icon(Icons.handshake_outlined),
+                  icon: const Icon(
+                    Icons.handshake_outlined,
+                    color: ZipColor.onPrimary,
+                  ),
                 ),
               ),
               const Gap(10),
@@ -109,7 +129,10 @@ class _BottomSheet extends StatelessWidget {
                     translate('map.actions.ask.hand'),
                     style: ZipFonts.small.style,
                   ),
-                  icon: const Icon(FontAwesomeIcons.handHoldingHeart),
+                  icon: const Icon(
+                    FontAwesomeIcons.handHoldingHeart,
+                    color: ZipColor.onPrimary,
+                  ),
                 ),
               ),
             ],
@@ -136,7 +159,8 @@ class _AccountInfo extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              onPressed: () => Navigator.of(context).pushNamed(Routes.profileScreen),
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(Routes.profileScreen),
               icon: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: ZipColor.primary, width: 2),
@@ -150,7 +174,8 @@ class _AccountInfo extends StatelessWidget {
               ),
             ),
             OutlinedButton(
-                onPressed: () => Navigator.of(context).pushNamed(Routes.loginScreen),
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(Routes.loginScreen),
                 child: Text(translate('map.actions.logout'))),
           ],
         ),

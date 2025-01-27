@@ -45,8 +45,35 @@ class MyApp extends StatelessWidget {
         Routes.mainScreen: (context) => const MainScreen(),
         Routes.loginScreen: (context) => const LoginScreen(),
         Routes.createAccountScreen: (context) => const CreateAccountScreen(),
-        // Routes.profileScreen: (context) => const ProfileScreen(),
-        // Routes.requestsScreen: (context) => const RequestsScreen(),
+      },
+      debugShowCheckedModeBanner: false,
+      darkTheme: theme.dark(),
+      themeMode: ThemeMode.system,
+      onGenerateInitialRoutes: (initialRoute) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(translate('start.app.warning')),
+            content: Text(translate('start.app.warning.message')),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(translate('start.app.warning.accept')),
+              ),
+            ],
+          ),
+        ).then((value) {
+          if (value == true) {
+            return [
+              MaterialPageRoute(builder: (context) => const MainScreen())
+            ];
+          }
+        });
+        return [
+          MaterialPageRoute(
+              builder: (context) =>
+                  const Center(child: CircularProgressIndicator()))
+        ];
       },
       onGenerateRoute: (settings) {
         switch (settings.name) {
@@ -62,8 +89,7 @@ class MyApp extends StatelessWidget {
           case Routes.profileScreen:
             return MaterialPageRoute(
                 builder: (context) => const ProfileScreen());
-          // case Routes.requestsScreen:
-          //   return MaterialPageRoute(builder: (context) => const RequestsScreen());
+
           default:
             return MaterialPageRoute(builder: (context) => const MainScreen());
         }
@@ -72,16 +98,19 @@ class MyApp extends StatelessWidget {
         child: Stack(
           children: [
             child!,
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: Assets.logo.logo.image(),
                 ),
-                clipBehavior: Clip.hardEdge,
-                child: Assets.logo.logo.image(),
               ),
             ),
           ],

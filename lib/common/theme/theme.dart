@@ -354,6 +354,11 @@ class MaterialTheme {
             iconSize: WidgetStateProperty.all(24),
           ),
         ),
+        iconTheme: IconThemeData(color: colorScheme.onSurface),
+        iconButtonTheme: IconButtonThemeData(
+            style: ButtonStyle(
+          iconColor: WidgetStatePropertyAll(colorScheme.onSurface),
+        )),
       );
 
   List<ExtendedColor> get extendedColors => [];

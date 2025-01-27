@@ -45,4 +45,13 @@ class ZipColor {
   static const surfaceContainer = Color(0xffe9efed);
   static const surfaceContainerHigh = Color(0xffe3eae7);
   static const surfaceContainerHighest = Color(0xffdde4e1);
+
+  static final Color randomZipColor = [
+    primary,
+    onSecondaryFixed,
+    onPrimaryContainer,
+    onErrorContainer,
+    secondary,
+    tertiary
+  ].elementAt(DateTime.now().microsecond % 6);
 }
