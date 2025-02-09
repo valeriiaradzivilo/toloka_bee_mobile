@@ -31,22 +31,24 @@ class MapScreen extends StatelessWidget {
                     mapController: bloc.mapController,
                     options: MapOptions(
                       interactionOptions: const InteractionOptions(
+                        flags: InteractiveFlag.none,
                         enableMultiFingerGestureRace: false,
                         pinchMoveWinGestures: MultiFingerGesture.none,
                         pinchZoomWinGestures: MultiFingerGesture.none,
                       ),
                       onMapReady: () => bloc.onMapCreated(data),
-                      initialZoom: 12,
-                      maxZoom: 12,
+                      initialZoom: 10,
+                      maxZoom: 10,
                       minZoom: 1,
                       keepAlive: true,
                       initialCenter: LatLng(data.latitude, data.longitude),
                     ),
                     children: [
                       TileLayer(
-                          urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          tileBuilder: (context, widget, tile) => widget),
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        tileBuilder: (context, widget, tile) => widget,
+                      ),
                       MarkerLayer(markers: [
                         Marker(
                           point: LatLng(data.latitude, data.longitude),
