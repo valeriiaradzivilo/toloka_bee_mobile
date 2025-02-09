@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
@@ -11,7 +12,7 @@ import '../../../../data/usecase/update_location_usecase.dart';
 import '../data/location_service_state.dart';
 
 class MapScreenBloc extends ZipBloc {
-  MapScreenBloc(GetIt locator)
+  MapScreenBloc(GetIt locator, BuildContext context)
       : _updateLocationUsecase = locator<UpdateLocationUsecase>() {
     // locationStream.skip(2).listen((event) {
     //   mapController.move(LatLng(event.latitude, event.longitude), 10);

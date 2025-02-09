@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -7,7 +8,6 @@ import 'common/routes.dart';
 import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'data/di.dart';
-import 'data/usecase/authenticate_user_usecase.dart';
 import 'features/authentication/ui/create_account_screen.dart';
 import 'features/authentication/ui/login_screen.dart';
 import 'features/main_screen/main_screen.dart';
@@ -25,26 +25,40 @@ void main() async {
   await init();
 
   ErrorWidget.builder = (FlutterErrorDetails details) {
-    return Center(
-      child: Padding(
+    return Scaffold(
+      body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.red),
-              borderRadius: BorderRadius.circular(20)),
-          child: Column(
-            children: [
-              Text(
-                translate('error.message'),
-                style: const TextStyle(color: Colors.red),
+        child: Center(
+          child: Container(
+            height: 500,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.red),
+                borderRadius: BorderRadius.circular(20)),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    translate('error.screen.title'),
+                    style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    translate('error.screen.message'),
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                  const Gap(8),
+                  if (kDebugMode)
+                    Text(
+                      details.exceptionAsString(),
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                ],
               ),
-              const Gap(8),
-              Text(
-                details.exceptionAsString(),
-                style: const TextStyle(color: Colors.red),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -80,12 +94,8 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Routes.loginScreen:
-            serviceLocator.registerLazySingleton<AuthenticateUserUsecase>(
-                () => AuthenticateUserUsecase());
             return MaterialPageRoute(builder: (context) => const LoginScreen());
           case Routes.createAccountScreen:
-            serviceLocator.registerLazySingleton<AuthenticateUserUsecase>(
-                () => AuthenticateUserUsecase());
             return MaterialPageRoute(
                 builder: (context) => const CreateAccountScreen());
           case Routes.profileScreen:
@@ -95,46 +105,28 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(builder: (context) => const MainScreen());
         }
       },
-      builder: (context, child) {
-        // Schedule the warning dialog after the first frame.
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(translate('start.app.warning')),
-              content: Text(translate('start.app.warning.message')),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(translate('start.app.warning.accept')),
-                ),
-              ],
-            ),
-          );
-        });
-        return SafeArea(
-          child: Stack(
-            children: [
-              if (child != null) child,
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    clipBehavior: Clip.hardEdge,
-                    child: Assets.logo.logo.image(),
+      builder: (context, child) => SafeArea(
+        child: Stack(
+          children: [
+            if (child != null) child,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
                   ),
+                  clipBehavior: Clip.hardEdge,
+                  child: Assets.logo.logo.image(),
                 ),
               ),
-            ],
-          ),
-        );
-      },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
