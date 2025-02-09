@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:gap/gap.dart';
 
 import 'common/routes.dart';
 import 'common/theme/theme.dart';
@@ -22,6 +23,33 @@ void main() async {
       fallbackLocale: 'en_US', supportedLocales: ['en_US']);
 
   await init();
+
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.red),
+              borderRadius: BorderRadius.circular(20)),
+          child: Column(
+            children: [
+              Text(
+                translate('error.message'),
+                style: const TextStyle(color: Colors.red),
+              ),
+              const Gap(8),
+              Text(
+                details.exceptionAsString(),
+                style: const TextStyle(color: Colors.red),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  };
   runApp(LocalizedApp(delegate, const MyApp()));
 }
 
@@ -49,32 +77,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: theme.dark(),
       themeMode: ThemeMode.system,
-      onGenerateInitialRoutes: (initialRoute) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(translate('start.app.warning')),
-            content: Text(translate('start.app.warning.message')),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(translate('start.app.warning.accept')),
-              ),
-            ],
-          ),
-        ).then((value) {
-          if (value == true) {
-            return [
-              MaterialPageRoute(builder: (context) => const MainScreen())
-            ];
-          }
-        });
-        return [
-          MaterialPageRoute(
-              builder: (context) =>
-                  const Center(child: CircularProgressIndicator()))
-        ];
-      },
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Routes.loginScreen:
@@ -89,33 +91,50 @@ class MyApp extends StatelessWidget {
           case Routes.profileScreen:
             return MaterialPageRoute(
                 builder: (context) => const ProfileScreen());
-
           default:
             return MaterialPageRoute(builder: (context) => const MainScreen());
         }
       },
-      builder: (context, child) => SafeArea(
-        child: Stack(
-          children: [
-            child!,
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
+      builder: (context, child) {
+        // Schedule the warning dialog after the first frame.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(translate('start.app.warning')),
+              content: Text(translate('start.app.warning.message')),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(translate('start.app.warning.accept')),
+                ),
+              ],
+            ),
+          );
+        });
+        return SafeArea(
+          child: Stack(
+            children: [
+              if (child != null) child,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: Assets.logo.logo.image(),
                   ),
-                  clipBehavior: Clip.hardEdge,
-                  child: Assets.logo.logo.image(),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

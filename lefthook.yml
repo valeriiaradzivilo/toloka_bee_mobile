@@ -1,0 +1,27 @@
+pre-commit:
+  piped: true
+  commands:
+    1_preview_lint:
+      tags: lint
+      glob: "*.dart"
+      run: dart fix lib --dry-run
+    2_lint_code:
+      tags: lint
+      glob: "*.dart"
+      run: dart fix lib --apply && git add {staged_files}
+    3_format_code:
+      tags: format
+      glob: "*.dart"
+      run: dart format {staged_files} && git add {staged_files}
+    4_static_code_analysis:
+      tags: analyze
+      run: flutter analyze
+    5_tests:
+      tags: test
+      run: flutter test
+
+post-merge:
+  commands:
+    1_get_packages:
+      tags: pubget
+      run: flutter pub get

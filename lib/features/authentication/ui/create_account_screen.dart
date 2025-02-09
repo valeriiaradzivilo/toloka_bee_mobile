@@ -27,6 +27,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
+    debugPrint(
+        'Username: $username, Password: $password, Confirm Password: $confirmPassword');
+
     if (password == confirmPassword) {
       // Implement account creation logic here
     } else {
@@ -45,16 +48,19 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           children: [
             TextField(
               controller: _usernameController,
-              decoration: InputDecoration(labelText: translate('create.account.username')),
+              decoration: InputDecoration(
+                  labelText: translate('create.account.username')),
             ),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: translate('create.account.password')),
+              decoration: InputDecoration(
+                  labelText: translate('create.account.password')),
               obscureText: true,
             ),
             TextField(
               controller: _confirmPasswordController,
-              decoration: InputDecoration(labelText: translate('create.account.confirm.password')),
+              decoration: InputDecoration(
+                  labelText: translate('create.account.confirm.password')),
               obscureText: true,
             ),
             const SizedBox(height: 20),
