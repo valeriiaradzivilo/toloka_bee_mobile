@@ -33,6 +33,6 @@ Future<void> initUseCases() async {
   serviceLocator.registerLazySingleton<UpdateLocationUsecase>(
       () => UpdateLocationUsecase(serviceLocator()));
 
-  serviceLocator.registerLazySingleton<AuthenticateUserUsecase>(
-      () => AuthenticateUserUsecase());
+  serviceLocator.registerLazySingleton<LoginUserUsecase>(
+      () => LoginUserUsecase(serviceLocator()));
 }

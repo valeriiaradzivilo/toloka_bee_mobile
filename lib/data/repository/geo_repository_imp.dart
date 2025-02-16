@@ -1,6 +1,8 @@
+import 'package:dartz/dartz.dart';
+
 import '../models/location_model.dart';
-import 'geo_repository.dart';
 import '../source/geo_data_source.dart';
+import 'geo_repository.dart';
 
 class GeoRepositoryImp implements GeoRepository {
   final GeoDataSource geoDataSource;
@@ -10,5 +12,14 @@ class GeoRepositoryImp implements GeoRepository {
   @override
   Future<void> updateLocation(LocationModel location) async {
     return await geoDataSource.updateLocation(location);
+  }
+
+  @override
+  Future<Either<Fail, bool>> login(String username, String password) async {
+    try {
+      return Right(await geoDataSource.login(username, password));
+    } catch (e) {
+      return Left(Fail('Failed to login'));
+    }
   }
 }

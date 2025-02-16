@@ -46,11 +46,11 @@ dependencies:
   get_it: ^8.0.3
 
   # Serialization
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
   json_serializable: any
 
   # Logging
-  simple_logger: ^1.9.0+2
+  simple_logger: ^1.10.0
 
   # Database
   # cloud_firestore: ^4.8.4
@@ -68,7 +68,7 @@ dependencies:
   url_launcher: ^6.2.1
   badges: ^3.1.2
   flutter_rating_bar: ^4.0.1
-  freezed_annotation: ^2.4.1
+  freezed_annotation: ^2.4.4
   collection: ^1.17.2
   flutter_translate: ^4.1.0
   latlong2: ^0.9.1
@@ -89,7 +89,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   class_match_file_name: ^0.2.2
   lints: ^5.0.0
-  build_runner: ^2.4.6
+  build_runner: ^2.4.15
   flutter_launcher_icons: "^0.14.3"
 
 flutter_launcher_icons:

@@ -1,7 +1,13 @@
-class AuthenticateUserUsecase {
-  Future<bool> call(String username, String password) async {
-    // Implement your authentication logic here
-    // Return true if authentication is successful, otherwise false
-    return username == 'user' && password == 'password';
+import 'package:dartz/dartz.dart';
+
+import '../repository/geo_repository.dart';
+
+class LoginUserUsecase {
+  final GeoRepository _geoRepository;
+
+  LoginUserUsecase(this._geoRepository);
+
+  Future<Either<Fail, bool>> call(String username, String password) async {
+    return _geoRepository.login(username, password);
   }
 }

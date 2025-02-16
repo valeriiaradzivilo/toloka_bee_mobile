@@ -12,8 +12,9 @@ get_deps:
 	$(FLUTTER) pub get
 
 # Generate code
-generate:
-	$(GEN_CMD)
+gen:
+	$(FLUTTER) pub get
+	dart run build_runner build
 
 # Build the project
 build:
