@@ -9,6 +9,21 @@ pre-commit:
       tags: lint
       glob: "*.dart"
       run: dart fix lib --apply && git add {staged_files}
+    3_static_code_analysis:
+      tags: analyze
+      run: flutter analyze
+
+pre-push:
+  piped: true
+  commands:
+    1_preview_lint:
+      tags: lint
+      glob: "*.dart"
+      run: dart fix lib --dry-run
+    2_lint_code:
+      tags: lint
+      glob: "*.dart"
+      run: dart fix lib --apply && git add {staged_files}
     3_format_code:
       tags: format
       glob: "*.dart"
