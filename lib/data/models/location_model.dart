@@ -1,22 +1,11 @@
-class LocationModel {
-  final double latitude;
-  final double longitude;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  LocationModel({required this.latitude, required this.longitude});
+part '../../generated/data/models/location_model.freezed.dart';
+part '../../generated/data/models/location_model.g.dart';
 
-  // Method to convert Location object to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'latitude': latitude,
-      'longitude': longitude,
-    };
-  }
+@freezed
+class LocationModel with _$LocationModel {
+  factory LocationModel({required double latitude, required double longitude}) = _LocationModel;
 
-  // Method to create Location object from JSON
-  factory LocationModel.fromJson(Map<String, dynamic> json) {
-    return LocationModel(
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-    );
-  }
+  factory LocationModel.fromJson(Map<String, dynamic> json) => _$LocationModelFromJson(json);
 }

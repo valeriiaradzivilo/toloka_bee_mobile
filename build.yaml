@@ -6,19 +6,19 @@ targets:
           - lib/data/models/**.dart
         options:
           build_extensions:
-            # I want this line to "work":
             # '^lib/**/{{}}.dart': 'lib/generated/model/{{}}.g.dart'
             'lib/{{path}}/{{file}}.dart': 'lib/generated/{{path}}/{{file}}.g.dart'
       freezed:
         options:
           build_extensions:
-            # I want this line to "work":
             # '^lib/**/{{}}.dart': 'lib/generated/model/{{}}.freezed.dart'
             'lib/{{path}}/{{file}}.dart': 'lib/generated/{{path}}/{{file}}.freezed.dart'
           field_rename: snake
           explicit_to_json: true
           map: false
+          enum_class: false
       json_serializable:
         options:
           field_rename: snake
           explicit_to_json: true
+          

@@ -3,6 +3,8 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
 exclude:
     - generated/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
 plugins:
     - custom_lint
 
