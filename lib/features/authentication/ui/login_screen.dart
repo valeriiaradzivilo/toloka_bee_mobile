@@ -61,16 +61,17 @@ class _LoginScreenState extends State<_LoginScreen> {
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextField(
                 controller: _usernameController,
-                decoration: InputDecoration(labelText: translate('login.username')),
+                decoration:
+                    InputDecoration(labelText: translate('login.username')),
               ),
               TextField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: translate('login.password')),
+                decoration:
+                    InputDecoration(labelText: translate('login.password')),
                 obscureText: true,
               ),
               const SizedBox(height: 20),
@@ -85,7 +86,8 @@ class _LoginScreenState extends State<_LoginScreen> {
               ),
               const Gap(20),
               ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, Routes.createAccountScreen),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, Routes.createAccountScreen),
                   child: Text(translate('login.register'))),
               OutlinedButton.icon(
                 onPressed: () {},

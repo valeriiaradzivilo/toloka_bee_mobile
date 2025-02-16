@@ -32,7 +32,6 @@ class MapScreen extends StatelessWidget {
                     options: MapOptions(
                       interactionOptions: const InteractionOptions(
                         flags: InteractiveFlag.none,
-                        enableMultiFingerGestureRace: false,
                         pinchMoveWinGestures: MultiFingerGesture.none,
                         pinchZoomWinGestures: MultiFingerGesture.none,
                       ),
@@ -89,7 +88,6 @@ class _BottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: MediaQuery.of(context).size.height * 0.3,
       width: double.infinity,
       decoration: const BoxDecoration(
         color: ZipColor.surfaceBright,
@@ -102,9 +100,43 @@ class _BottomSheet extends StatelessWidget {
           const Flexible(child: _AccountInfo()),
           const Divider(),
           const Gap(10),
-          Text(
-            translate('map.actions.question'),
-            style: ZipFonts.medium.style,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                translate('map.actions.question'),
+                style: ZipFonts.medium.style,
+              ),
+              const Gap(10),
+              IconButton(
+                onPressed: () => showAdaptiveDialog(
+                  context: context,
+                  builder: (context) => Dialog(
+                    child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: ZipColor.surface,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(translate('map.actions.dialog.header')),
+                            const Gap(10),
+                            Text(translate('map.actions.dialog.explanation')),
+                            const Gap(20),
+                            Text(translate('map.actions.dialog.note.one')),
+                            const Gap(20),
+                            Text(translate('map.actions.dialog.note.location')),
+                            const BackButton(),
+                          ],
+                        )),
+                  ),
+                ),
+                icon: const Icon(Icons.info_outline),
+              ),
+            ],
           ),
           const Gap(20),
           Row(
@@ -153,10 +185,8 @@ class _AccountInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -24,4 +24,8 @@ linter:
     close_sinks: true
     unawaited_futures: true
     prefer_relative_imports: true
+    use_setters_to_change_properties: true
+    avoid_redundant_argument_values: true
+    
+    
     

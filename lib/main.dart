@@ -90,7 +90,6 @@ class MyApp extends StatelessWidget {
       },
       debugShowCheckedModeBanner: false,
       darkTheme: theme.dark(),
-      themeMode: ThemeMode.system,
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case Routes.loginScreen:
