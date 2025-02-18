@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../models/location_model.dart';
+import '../models/user_model.dart';
 import '../source/geo_data_source.dart';
 import 'geo_repository.dart';
 
@@ -20,6 +21,15 @@ class GeoRepositoryImp implements GeoRepository {
       return Right(await geoDataSource.login(username, password));
     } catch (e) {
       return Left(Fail('Failed to login'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> register(UserModel user) async {
+    try {
+      return Right(await geoDataSource.register(user));
+    } catch (e) {
+      return Left(Fail('Failed to register'));
     }
   }
 }

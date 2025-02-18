@@ -51,6 +51,7 @@ class GeoDataSourceImp implements GeoDataSource {
       final response = await _dio.post(
         '/register',
         options: Options(headers: {'Content-Type': 'application/json'}),
+        data: jsonEncode(user.toJson()),
       );
 
       if (response.statusCode != 200) {

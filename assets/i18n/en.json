@@ -35,6 +35,8 @@
             "username": "Username",
             "password": "Password",
             "confirm.password": "Confirm password",
+            "name": "Name",
+            "surname": "Surname",
             "email": "Email",
             "phone": "Phone",
             "button": "Create"
