@@ -1,0 +1,2 @@
+/Users/lerazip/Development/zip_way/android/app/.cxx/Debug/6v3p1u59/x86/CMakeFiles/edit_cache.dir
+/Users/lerazip/Development/zip_way/android/app/.cxx/Debug/6v3p1u59/x86/CMakeFiles/rebuild_cache.dir
