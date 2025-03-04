@@ -1,16 +1,16 @@
 import 'package:dartz/dartz.dart';
 
-import '../models/user_model.dart';
-import '../repository/geo_repository.dart';
+import '../models/user_auth_model.dart';
+import '../repository/authentication/auth_repository.dart';
 import 'usecase.dart';
 
-class RegisterUserUsecase extends UseCase<Either, UserModel> {
-  final GeoRepository _geoRepository;
+class RegisterUserUsecase extends UseCase<Either, UserAuthModel> {
+  final AuthRepository _authRepo;
 
-  RegisterUserUsecase(this._geoRepository);
+  RegisterUserUsecase(this._authRepo);
 
   @override
-  Future<Either> call(UserModel params) async {
-    return await _geoRepository.register(params);
+  Future<Either> call(UserAuthModel params) async {
+    return await _authRepo.register(params);
   }
 }

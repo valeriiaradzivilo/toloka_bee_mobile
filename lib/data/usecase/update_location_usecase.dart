@@ -1,5 +1,5 @@
 import '../models/location_model.dart';
-import '../repository/geo_repository.dart';
+import '../repository/geolocation/geo_repository.dart';
 import 'usecase.dart';
 
 class UpdateLocationUsecase extends UseCase<void, LocationModel> {

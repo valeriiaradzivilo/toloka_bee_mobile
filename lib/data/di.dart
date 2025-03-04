@@ -1,9 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
-import 'repository/geo_repository.dart';
-import 'repository/geo_repository_imp.dart';
-import 'source/geo_data_source.dart';
-import 'source/geo_data_source_imp.dart';
+import 'repository/authentication/auth_repository.dart';
+import 'repository/authentication/auth_repository_impl.dart';
+import 'repository/geolocation/geo_repository.dart';
+import 'repository/geolocation/geo_repository_imp.dart';
+import 'source/authentication/auth_data_source.dart';
+import 'source/authentication/auth_data_source_impl.dart';
+import 'source/geolocation/geo_data_source.dart';
+import 'source/geolocation/geo_data_source_imp.dart';
 import 'usecase/authenticate_user_usecase.dart';
 import 'usecase/register_user_usecase.dart';
 import 'usecase/update_location_usecase.dart';
@@ -22,19 +27,37 @@ Future<void> init() async {
 }
 
 Future<void> initDatasources() async {
-  serviceLocator.registerLazySingleton<GeoDataSource>(() => GeoDataSourceImp());
+  final String backendUrl = 'http://10.0.2.2:8080';
+  late final Dio dio = Dio(
+    BaseOptions(
+      baseUrl: backendUrl,
+      sendTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 5),
+      connectTimeout: const Duration(seconds: 5),
+    ),
+  );
+
+  serviceLocator
+      .registerLazySingleton<GeoDataSource>(() => GeoDataSourceImp(dio));
+  serviceLocator
+      .registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(dio));
 }
 
 Future<void> initRepository() async {
-  serviceLocator.registerLazySingleton<GeoRepository>(() => GeoRepositoryImp(serviceLocator()));
+  serviceLocator.registerLazySingleton<GeoRepository>(
+      () => GeoRepositoryImp(serviceLocator()));
+
+  serviceLocator.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryImpl(serviceLocator()));
 }
 
 Future<void> initUseCases() async {
-  serviceLocator
-      .registerLazySingleton<UpdateLocationUsecase>(() => UpdateLocationUsecase(serviceLocator()));
+  serviceLocator.registerLazySingleton<UpdateLocationUsecase>(
+      () => UpdateLocationUsecase(serviceLocator()));
 
-  serviceLocator.registerLazySingleton<LoginUserUsecase>(() => LoginUserUsecase(serviceLocator()));
+  serviceLocator.registerLazySingleton<LoginUserUsecase>(
+      () => LoginUserUsecase(serviceLocator()));
 
-  serviceLocator
-      .registerLazySingleton<RegisterUserUsecase>(() => RegisterUserUsecase(serviceLocator()));
+  serviceLocator.registerLazySingleton<RegisterUserUsecase>(
+      () => RegisterUserUsecase(serviceLocator()));
 }

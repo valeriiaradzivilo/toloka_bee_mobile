@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/widgets/lin_text_editing_field.dart';
-import '../../../data/models/user_model.dart';
+import '../../../data/models/user_auth_model.dart';
 import '../bloc/register_bloc.dart';
 
 class CreateAccountScreen extends StatelessWidget {
@@ -60,13 +60,9 @@ class _CreateAccountScreenState extends State<_CreateAccountScreen> {
       return;
     }
 
-    _registerBloc.register(UserModel(
-      id: '',
-      username: username,
+    _registerBloc.register(UserAuthModel(
       password: password,
       email: email,
-      name: name,
-      surname: surname,
     ));
   }
 

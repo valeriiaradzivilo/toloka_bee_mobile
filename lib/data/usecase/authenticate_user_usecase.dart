@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
 
-import '../repository/geo_repository.dart';
+import '../repository/authentication/auth_repository.dart';
 
 class LoginUserUsecase {
-  final GeoRepository _geoRepository;
+  final AuthRepository _authRepository;
 
-  LoginUserUsecase(this._geoRepository);
+  LoginUserUsecase(this._authRepository);
 
   Future<Either<Fail, bool>> call(String username, String password) async {
-    return _geoRepository.login(username, password);
+    return _authRepository.login(username, password);
   }
 }
