@@ -5,7 +5,7 @@ class ConditionWidget extends StatelessWidget {
       {super.key,
       required this.condition,
       required this.onTrue,
-      required this.onFalse});
+      required this.onFalse,});
   final bool condition;
   final Widget onTrue;
   final Widget onFalse;

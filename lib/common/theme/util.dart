@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ZipTheme {
   static TextTheme createTextTheme(final BuildContext context,
-      final String bodyFontString, final String displayFontString) {
+      final String bodyFontString, final String displayFontString,) {
     final TextTheme baseTextTheme = Theme.of(context).textTheme;
     final TextTheme bodyTextTheme =
         GoogleFonts.getTextTheme(bodyFontString, baseTextTheme);

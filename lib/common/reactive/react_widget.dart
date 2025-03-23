@@ -25,11 +25,11 @@ class ReactWidget<T> extends StatelessWidget {
                 child: Text(
               translate('oops.error.occurred'),
               style: ZipFonts.small.error,
-            ));
+            ),);
           } else {
             return const Center(child: CircularProgressIndicator());
           }
-        });
+        },);
   }
 }
 
@@ -38,7 +38,7 @@ class ReactWidget2<T, A> extends StatelessWidget {
       {super.key,
       required this.stream1,
       required this.stream2,
-      required this.builder});
+      required this.builder,});
   final Stream<T> stream1;
   final Stream<A> stream2;
   final Function(T data1, A data2) builder;
@@ -51,7 +51,7 @@ class ReactWidget2<T, A> extends StatelessWidget {
         if (data1.hasData) {
           if (data1.data case final T d1) {
             return ReactWidget<A>(
-                stream: stream2, builder: (final a) => builder(d1, a));
+                stream: stream2, builder: (final a) => builder(d1, a),);
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -61,7 +61,7 @@ class ReactWidget2<T, A> extends StatelessWidget {
               child: Text(
             translate('oops.error.occurred'),
             style: ZipFonts.small.error,
-          ));
+          ),);
         } else {
           return const Center(child: CircularProgressIndicator());
         }

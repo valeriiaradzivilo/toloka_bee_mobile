@@ -349,16 +349,22 @@ class MaterialTheme {
         canvasColor: colorScheme.surface,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(colorScheme.primary),
+            backgroundColor: WidgetStateProperty.resolveWith((final state) {
+              if (state.contains(WidgetState.disabled)) {
+                return colorScheme.surfaceContainerLow;
+              }
+              return colorScheme.primary;
+            }),
             foregroundColor: WidgetStateProperty.all(colorScheme.onPrimary),
             iconSize: WidgetStateProperty.all(24),
           ),
         ),
         iconTheme: IconThemeData(color: colorScheme.onSurface),
         iconButtonTheme: IconButtonThemeData(
-            style: ButtonStyle(
-          iconColor: WidgetStatePropertyAll(colorScheme.onSurface),
-        )),
+          style: ButtonStyle(
+            iconColor: WidgetStatePropertyAll(colorScheme.onSurface),
+          ),
+        ),
       );
 
   List<ExtendedColor> get extendedColors => [];

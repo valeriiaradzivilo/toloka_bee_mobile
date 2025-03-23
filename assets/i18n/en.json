@@ -39,7 +39,13 @@
             "surname": "Surname",
             "email": "Email",
             "phone": "Phone",
-            "button": "Create"
+            "button": "Create",
+            "next": "Next",
+            "back": "Back",
+            "cancel": "Cancel",
+            "date.of.birth": "Date of birth",
+            "age.limitations": "You must be at least 18 years old to use this app.",
+            "register": "Register"
         }
     },
     "profile": {

@@ -16,7 +16,7 @@ class AuthenticationBloc extends ZipBloc {
   }
 
   Future<void> authenticate(
-      final String username, final String password) async {
+      final String username, final String password,) async {
     final isAuthenticated = await _loginUserUsecase(username, password);
     logger.info('User $username isAuthenticated: $isAuthenticated');
     throw UnimplementedError();

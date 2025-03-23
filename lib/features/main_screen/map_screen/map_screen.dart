@@ -49,16 +49,18 @@ class MapScreen extends StatelessWidget {
                         tileBuilder:
                             (final context, final widget, final tile) => widget,
                       ),
-                      MarkerLayer(markers: [
-                        Marker(
-                          point: LatLng(data.latitude, data.longitude),
-                          child: Icon(
-                            FontAwesomeIcons.userNinja,
-                            color: ZipColor.randomZipColor,
-                            size: 50,
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: LatLng(data.latitude, data.longitude),
+                            child: Icon(
+                              FontAwesomeIcons.userNinja,
+                              color: ZipColor.randomZipColor,
+                              size: 50,
+                            ),
                           ),
-                        ),
-                      ]),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -69,14 +71,16 @@ class MapScreen extends StatelessWidget {
               ],
             ),
           LocationServiceState.disabled => Center(
-                child: Text(
-              translate('location.disabled'),
-              style: ZipFonts.big.error,
-            )),
+              child: Text(
+                translate('location.disabled'),
+                style: ZipFonts.big.error,
+              ),
+            ),
           LocationServiceState.loading => const Center(
-                child: CircularProgressIndicator(
-              color: ZipColor.primary,
-            )),
+              child: CircularProgressIndicator(
+                color: ZipColor.primary,
+              ),
+            ),
         },
       ),
     );
@@ -114,25 +118,26 @@ class _BottomSheet extends StatelessWidget {
                   context: context,
                   builder: (final context) => Dialog(
                     child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: ZipColor.surface,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(translate('map.actions.dialog.header')),
-                            const Gap(10),
-                            Text(translate('map.actions.dialog.explanation')),
-                            const Gap(20),
-                            Text(translate('map.actions.dialog.note.one')),
-                            const Gap(20),
-                            Text(translate('map.actions.dialog.note.location')),
-                            const BackButton(),
-                          ],
-                        )),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: ZipColor.surface,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(translate('map.actions.dialog.header')),
+                          const Gap(10),
+                          Text(translate('map.actions.dialog.explanation')),
+                          const Gap(20),
+                          Text(translate('map.actions.dialog.note.one')),
+                          const Gap(20),
+                          Text(translate('map.actions.dialog.note.location')),
+                          const BackButton(),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 icon: const Icon(Icons.info_outline),
@@ -192,8 +197,8 @@ class _AccountInfo extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(Routes.profileScreen),
+              onPressed: () => Navigator.of(context)
+                  .pushReplacementNamed(Routes.profileScreen),
               icon: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: ZipColor.primary, width: 2),
@@ -207,9 +212,10 @@ class _AccountInfo extends StatelessWidget {
               ),
             ),
             OutlinedButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(Routes.loginScreen),
-                child: Text(translate('map.actions.logout'))),
+              onPressed: () => Navigator.of(context)
+                  .pushReplacementNamed(Routes.loginScreen),
+              child: Text(translate('map.actions.logout')),
+            ),
           ],
         ),
         const Gap(20),

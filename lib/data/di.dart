@@ -45,19 +45,19 @@ Future<void> initDatasources() async {
 
 Future<void> initRepository() async {
   serviceLocator.registerLazySingleton<GeoRepository>(
-      () => GeoRepositoryImp(serviceLocator()));
+      () => GeoRepositoryImp(serviceLocator()),);
 
   serviceLocator.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(serviceLocator()));
+      () => AuthRepositoryImpl(serviceLocator()),);
 }
 
 Future<void> initUseCases() async {
   serviceLocator.registerLazySingleton<UpdateLocationUsecase>(
-      () => UpdateLocationUsecase(serviceLocator()));
+      () => UpdateLocationUsecase(serviceLocator()),);
 
   serviceLocator.registerLazySingleton<LoginUserUsecase>(
-      () => LoginUserUsecase(serviceLocator()));
+      () => LoginUserUsecase(serviceLocator()),);
 
   serviceLocator.registerLazySingleton<RegisterUserUsecase>(
-      () => RegisterUserUsecase(serviceLocator()));
+      () => RegisterUserUsecase(serviceLocator()),);
 }

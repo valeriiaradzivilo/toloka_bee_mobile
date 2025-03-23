@@ -29,6 +29,7 @@ linter:
     use_setters_to_change_properties: true
     avoid_redundant_argument_values: true
     prefer_final_parameters: true
+    require_trailing_commas: true
 
     
     

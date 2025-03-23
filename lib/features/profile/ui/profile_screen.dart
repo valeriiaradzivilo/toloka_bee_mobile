@@ -20,14 +20,14 @@ class ProfileScreen extends StatelessWidget {
         body: SizedBox(
           width: MediaQuery.sizeOf(context).width,
           child: BlocBuilder<ProfileCubit, ProfileState>(
-              builder: (final context, final state) => switch (state) {
-                    ProfileLoadingState() ||
-                    ProfileInitialState() =>
-                      const Center(child: CircularProgressIndicator()),
-                    ProfileLoadedState(:final user) => _LoadedProfile(user),
-                    ProfileErrorState(:final message) =>
-                      Center(child: Text(message)),
-                  }),
+            builder: (final context, final state) => switch (state) {
+              ProfileLoadingState() ||
+              ProfileInitialState() =>
+                const Center(child: CircularProgressIndicator()),
+              ProfileLoadedState(:final user) => _LoadedProfile(user),
+              ProfileErrorState(:final message) => Center(child: Text(message)),
+            },
+          ),
         ),
       ),
     );
@@ -45,13 +45,18 @@ class _LoadedProfile extends StatelessWidget {
       children: [
         CircleAvatar(radius: 40, child: Text(user.name[0])),
         const Gap(20),
-        Text('${user.name} ${user.surname}',
-            style: const TextStyle(fontSize: 18)),
-        Text('@${user.username}',
-            style: const TextStyle(fontSize: 16, color: Colors.grey)),
+        Text(
+          '${user.name} ${user.surname}',
+          style: const TextStyle(fontSize: 18),
+        ),
+        Text(
+          '@${user.username}',
+          style: const TextStyle(fontSize: 16, color: Colors.grey),
+        ),
         const Gap(40),
         TextButton(
-          onPressed: () => Navigator.pushNamed(context, Routes.mainScreen),
+          onPressed: () =>
+              Navigator.pushReplacementNamed(context, Routes.mainScreen),
           child: Text(translate('profile.actions.back')),
         ),
       ],

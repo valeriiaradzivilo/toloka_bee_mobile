@@ -86,9 +86,12 @@ class _LoginScreenState extends State<_LoginScreen> {
               ),
               const Gap(20),
               ElevatedButton(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, Routes.createAccountScreen),
-                  child: Text(translate('login.register'))),
+                onPressed: () => Navigator.pushReplacementNamed(
+                  context,
+                  Routes.createAccountScreen,
+                ),
+                child: Text(translate('login.register')),
+              ),
               OutlinedButton.icon(
                 onPressed: () {},
                 label: Text(translate('login.google')),

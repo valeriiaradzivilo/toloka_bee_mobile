@@ -36,11 +36,11 @@ class MapScreenBloc extends ZipBloc {
             permission != LocationPermission.always;
     _locationServiceEnabled.add(locationServiceEnabled
         ? LocationServiceState.enabled
-        : LocationServiceState.disabled);
+        : LocationServiceState.disabled,);
     if (locationServiceEnabled) {
       final location = await Geolocator.getCurrentPosition();
       await _updateLocationUsecase(LocationModel(
-          latitude: location.latitude, longitude: location.longitude));
+          latitude: location.latitude, longitude: location.longitude,),);
     }
   }
 
@@ -62,7 +62,7 @@ class MapScreenBloc extends ZipBloc {
 
   final BehaviorSubject<LocationServiceState> _locationServiceEnabled =
       BehaviorSubject<LocationServiceState>.seeded(
-          LocationServiceState.loading);
+          LocationServiceState.loading,);
 
   final UpdateLocationUsecase _updateLocationUsecase;
 }

@@ -24,6 +24,7 @@ class LinTextField extends StatefulWidget {
     this.label,
     this.option = TextFieldOption.undefined,
     this.textToMatch,
+    this.onChanged,
   });
   final TextEditingController controller;
   final String? initialValue;
@@ -31,6 +32,7 @@ class LinTextField extends StatefulWidget {
   final String? label;
   final TextFieldOption option;
   final String? textToMatch;
+  final Function(String)? onChanged;
 
   @override
   State<LinTextField> createState() => _LinTextFieldState();
@@ -70,7 +72,8 @@ class _LinTextFieldState extends State<LinTextField> {
   Widget build(final BuildContext context) {
     return Container(
       constraints: BoxConstraints(
-          maxWidth: widget.option.maxFieldWidth ?? double.infinity),
+        maxWidth: widget.option.maxFieldWidth ?? double.infinity,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -84,25 +87,28 @@ class _LinTextFieldState extends State<LinTextField> {
               autocorrect: widget.option != TextFieldOption.password,
               validator: (final value) => _validate(value, context),
               decoration: InputDecoration(
-                  label: Text(widget.label ?? ''),
-                  errorText: errorText,
-                  errorMaxLines: 10),
-              onChanged: (final value) =>
-                  setState(() => errorText = _validate(value, context)),
+                label: Text(widget.label ?? ''),
+                errorText: errorText,
+                errorMaxLines: 10,
+              ),
+              onChanged: (final value) {
+                widget.onChanged?.call(value);
+                setState(() => errorText = _validate(value, context));
+              },
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
           if (widget.option == TextFieldOption.password) ...[
             IconButton(
-                onPressed: () => setState(() => obscureText = !obscureText),
-                icon:
-                    Icon(obscureText ? FeatherIcons.eye : FeatherIcons.eyeOff)),
+              onPressed: () => setState(() => obscureText = !obscureText),
+              icon: Icon(obscureText ? FeatherIcons.eye : FeatherIcons.eyeOff),
+            ),
             SizedBox(width: PaddingConstants.medium),
             Tooltip(
               message: translate('password.rules'),
               child: const Icon(Icons.info_outline_rounded),
-            )
-          ]
+            ),
+          ],
         ],
       ),
     );

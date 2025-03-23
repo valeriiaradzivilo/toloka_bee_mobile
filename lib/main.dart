@@ -9,10 +9,10 @@ import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'common/widgets/app_icon.dart';
 import 'data/di.dart';
-import 'features/authentication/ui/create_account_screen.dart';
 import 'features/authentication/ui/login_screen.dart';
 import 'features/main_screen/main_screen.dart';
 import 'features/profile/ui/profile_screen.dart';
+import 'features/registration/ui/create_account_screen.dart';
 
 void main() async {
   final WidgetsBinding widgetsBinding =
@@ -20,7 +20,9 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   final delegate = await LocalizationDelegate.create(
-      fallbackLocale: 'en_US', supportedLocales: ['en_US']);
+    fallbackLocale: 'en_US',
+    supportedLocales: ['en_US'],
+  );
 
   await init();
 
@@ -33,18 +35,20 @@ void main() async {
             height: 500,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.red),
-                borderRadius: BorderRadius.circular(20)),
+              color: Colors.white,
+              border: Border.all(color: Colors.red),
+              borderRadius: BorderRadius.circular(20),
+            ),
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   Text(
                     translate('error.screen.title'),
                     style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     translate('error.screen.message'),
@@ -70,13 +74,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
   @override
   Widget build(final BuildContext context) {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
     final TextTheme textTheme =
         ZipTheme.createTextTheme(context, 'Roboto Serif', 'Roboto');
+
     final MaterialTheme theme = MaterialTheme(textTheme);
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
     FlutterNativeSplash.remove();
 
@@ -97,16 +104,20 @@ class MyApp extends StatelessWidget {
         switch (settings.name) {
           case Routes.loginScreen:
             return MaterialPageRoute(
-                builder: (final context) => const LoginScreen());
+              builder: (final context) => const LoginScreen(),
+            );
           case Routes.createAccountScreen:
             return MaterialPageRoute(
-                builder: (final context) => const CreateAccountScreen());
+              builder: (final context) => const CreateAccountScreen(),
+            );
           case Routes.profileScreen:
             return MaterialPageRoute(
-                builder: (final context) => const ProfileScreen());
+              builder: (final context) => const ProfileScreen(),
+            );
           default:
             return MaterialPageRoute(
-                builder: (final context) => const MainScreen());
+              builder: (final context) => const MainScreen(),
+            );
         }
       },
       builder: (final context, final child) => SafeArea(

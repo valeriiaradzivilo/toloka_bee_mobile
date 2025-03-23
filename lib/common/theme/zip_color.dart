@@ -52,6 +52,6 @@ class ZipColor {
     onPrimaryContainer,
     onErrorContainer,
     secondary,
-    tertiary
+    tertiary,
   ].elementAt(DateTime.now().microsecond % 6);
 }

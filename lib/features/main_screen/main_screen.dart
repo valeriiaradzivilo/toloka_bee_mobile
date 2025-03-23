@@ -44,7 +44,7 @@ class _WarningPage extends StatelessWidget {
                     TextButton(
                       onPressed: () => bloc.readWarning(),
                       child: Text(translate('start.app.warning.accept')),
-                    )
+                    ),
                   ],
                 ),
               ),
