@@ -13,8 +13,12 @@ class RegisterBloc extends ZipBloc {
       : _registerUserUsecase = serviceLocator<RegisterUserUsecase>();
 
   ValueStream<ESteps> get stepCounterStream => _stepController.stream;
+  ValueStream<bool> get validateNextStepStream =>
+      _valdateNextStepController.stream;
   ValueStream<Optional<DateTime>> get dateOfBirthStream =>
       _dateOfBirthController.stream;
+  ValueStream<String> get nameStream => _nameController.stream;
+  ValueStream<String> get surnameStream => _surnameController.stream;
 
   Future<void> register() async {
     final isRegistered = await _registerUserUsecase(
@@ -76,7 +80,7 @@ class RegisterBloc extends ZipBloc {
         return _valdateNextStepController.value &&
             _nameController.value.isNotEmpty &&
             _surnameController.value.isNotEmpty &&
-            _dateOfBirthController.valueOrNull != null;
+            _dateOfBirthController.value.valueOrNull != null;
 
       case ESteps.addRegistartInfo:
         return _valdateNextStepController.value;

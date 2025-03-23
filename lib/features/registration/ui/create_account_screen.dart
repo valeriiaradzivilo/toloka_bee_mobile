@@ -8,6 +8,8 @@ import '../bloc/register_bloc.dart';
 import 'data/e_steps.dart';
 import 'widget/step_counter.dart';
 import 'widget/steps/first_step_create_account.dart';
+import 'widget/steps/second_step_create_account.dart';
+import 'widget/steps/third_step_create_account.dart';
 
 class CreateAccountScreen extends StatelessWidget {
   const CreateAccountScreen({super.key});
@@ -44,43 +46,48 @@ class _Screen extends StatelessWidget {
             Expanded(
               child: switch (step) {
                 ESteps.checkGeneralInfo => const FirstStepCreateAccount(),
-                _ => const Placeholder()
+                ESteps.addRegistartInfo => const SecondStepCreateAccount(),
+                ESteps.addExtraInfo => const ThirdStepCreateAccount(),
               },
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 20,
-              children: [
-                ...switch (step) {
-                  _ when step.nextStep != null && step.previousStep != null => [
-                      ElevatedButton(
-                        onPressed: () => registerBloc.previousStep(),
-                        child: Text(translate('create.account.back')),
-                      ),
-                      ElevatedButton(
-                        onPressed: registerBloc.isValid()
-                            ? () => registerBloc.nextStep()
-                            : null,
-                        child: Text(translate('create.account.next')),
-                      ),
-                    ],
-                  _ when step.nextStep != null => [
-                      ElevatedButton(
-                        onPressed: registerBloc.isValid()
-                            ? () => registerBloc.nextStep()
-                            : null,
-                        child: Text(translate('create.account.next')),
-                      ),
-                    ],
-                  _ when step.previousStep != null => [
-                      ElevatedButton(
-                        onPressed: () => registerBloc.register(),
-                        child: Text(translate('create.account.register')),
-                      ),
-                    ],
-                  _ => [],
-                },
-              ],
+            ReactWidget(
+              stream: registerBloc.validateNextStepStream,
+              builder: (final isValid) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 20,
+                children: [
+                  ...switch (step) {
+                    _ when step.nextStep != null && step.previousStep != null =>
+                      [
+                        ElevatedButton(
+                          onPressed: () => registerBloc.previousStep(),
+                          child: Text(translate('create.account.back')),
+                        ),
+                        ElevatedButton(
+                          onPressed: registerBloc.isValid()
+                              ? () => registerBloc.nextStep()
+                              : null,
+                          child: Text(translate('create.account.next')),
+                        ),
+                      ],
+                    _ when step.nextStep != null => [
+                        ElevatedButton(
+                          onPressed: registerBloc.isValid()
+                              ? () => registerBloc.nextStep()
+                              : null,
+                          child: Text(translate('create.account.next')),
+                        ),
+                      ],
+                    _ when step.previousStep != null => [
+                        ElevatedButton(
+                          onPressed: () => registerBloc.register(),
+                          child: Text(translate('create.account.register')),
+                        ),
+                      ],
+                    _ => [],
+                  },
+                ],
+              ),
             ),
           ],
         ),

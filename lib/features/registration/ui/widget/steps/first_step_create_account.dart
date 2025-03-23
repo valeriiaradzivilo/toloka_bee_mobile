@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../common/reactive/react_widget.dart';
@@ -33,6 +32,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
       spacing: 20,
       children: [
         LinTextField(
+          initialValue: registerBloc.nameStream.value,
           controller: _nameController,
           label: translate('create.account.name'),
           option: TextFieldOption.name,
@@ -40,6 +40,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
           onValidate: (final p0) => registerBloc.onValidateFieldsOnThePage(p0),
         ),
         LinTextField(
+          initialValue: registerBloc.surnameStream.value,
           controller: _surnameController,
           label: translate('create.account.surname'),
           option: TextFieldOption.name,
@@ -76,9 +77,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
                     builder: (final data) => Text(
                       data.valueOrNull == null
                           ? translate('create.account.date.of.birth')
-                          : DateFormat.yMd()
-                              .format(data.valueOrNull!)
-                              .toString(),
+                          : data.valueOrNull!.toString(),
                     ),
                   ),
                   const Icon(Icons.calendar_today),
