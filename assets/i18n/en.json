@@ -65,6 +65,7 @@
             }
         }
     },
+    "step.of": "Step {current} of {total}",
     "error": {
         "screen": {
             "title": "Error",

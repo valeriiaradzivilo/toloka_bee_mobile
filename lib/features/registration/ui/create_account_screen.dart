@@ -58,7 +58,7 @@ class _Screen extends StatelessWidget {
                         child: Text(translate('create.account.back')),
                       ),
                       ElevatedButton(
-                        onPressed: registerBloc.validateNextStep()
+                        onPressed: registerBloc.isValid()
                             ? () => registerBloc.nextStep()
                             : null,
                         child: Text(translate('create.account.next')),
@@ -66,7 +66,7 @@ class _Screen extends StatelessWidget {
                     ],
                   _ when step.nextStep != null => [
                       ElevatedButton(
-                        onPressed: registerBloc.validateNextStep()
+                        onPressed: registerBloc.isValid()
                             ? () => registerBloc.nextStep()
                             : null,
                         child: Text(translate('create.account.next')),

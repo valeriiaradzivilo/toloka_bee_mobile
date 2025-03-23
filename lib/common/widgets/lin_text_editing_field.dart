@@ -25,6 +25,7 @@ class LinTextField extends StatefulWidget {
     this.option = TextFieldOption.undefined,
     this.textToMatch,
     this.onChanged,
+    this.onValidate,
   });
   final TextEditingController controller;
   final String? initialValue;
@@ -33,6 +34,7 @@ class LinTextField extends StatefulWidget {
   final TextFieldOption option;
   final String? textToMatch;
   final Function(String)? onChanged;
+  final Function(bool)? onValidate;
 
   @override
   State<LinTextField> createState() => _LinTextFieldState();
@@ -94,6 +96,7 @@ class _LinTextFieldState extends State<LinTextField> {
               onChanged: (final value) {
                 widget.onChanged?.call(value);
                 setState(() => errorText = _validate(value, context));
+                widget.onValidate?.call(errorText == null);
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),

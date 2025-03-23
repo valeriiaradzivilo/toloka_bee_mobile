@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class StepCounter extends StatelessWidget {
   const StepCounter({
@@ -32,7 +33,15 @@ class StepCounter extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'Step $currentStep of $totalSteps',
+          translate(
+            translate(
+              'step.of',
+              args: {
+                'current': currentStep,
+                'total': totalSteps,
+              },
+            ),
+          ),
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
