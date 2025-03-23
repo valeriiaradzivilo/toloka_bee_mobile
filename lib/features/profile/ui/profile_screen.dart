@@ -11,21 +11,22 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return BlocProvider(
       //TODO: THIS IS A CRUTCH, REMOVE IT
-      create: (_) => ProfileCubit()..loadUser(UserModel.test()),
+      create: (final _) => ProfileCubit()..loadUser(UserModel.test()),
       child: Scaffold(
         appBar: AppBar(),
         body: SizedBox(
           width: MediaQuery.sizeOf(context).width,
           child: BlocBuilder<ProfileCubit, ProfileState>(
-              builder: (context, state) => switch (state) {
+              builder: (final context, final state) => switch (state) {
                     ProfileLoadingState() ||
                     ProfileInitialState() =>
                       const Center(child: CircularProgressIndicator()),
                     ProfileLoadedState(:final user) => _LoadedProfile(user),
-                    ProfileErrorState(:final message) => Center(child: Text(message)),
+                    ProfileErrorState(:final message) =>
+                      Center(child: Text(message)),
                   }),
         ),
       ),
@@ -38,14 +39,16 @@ class _LoadedProfile extends StatelessWidget {
   final UserModel user;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircleAvatar(radius: 40, child: Text(user.name[0])),
         const Gap(20),
-        Text('${user.name} ${user.surname}', style: const TextStyle(fontSize: 18)),
-        Text('@${user.username}', style: const TextStyle(fontSize: 16, color: Colors.grey)),
+        Text('${user.name} ${user.surname}',
+            style: const TextStyle(fontSize: 18)),
+        Text('@${user.username}',
+            style: const TextStyle(fontSize: 16, color: Colors.grey)),
         const Gap(40),
         TextButton(
           onPressed: () => Navigator.pushNamed(context, Routes.mainScreen),

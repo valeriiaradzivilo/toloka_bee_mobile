@@ -13,10 +13,10 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Provider(
-      create: (_) => AuthenticationBloc(GetIt.I),
-      dispose: (_, bloc) => bloc.dispose(),
+      create: (final _) => AuthenticationBloc(GetIt.I),
+      dispose: (final _, final bloc) => bloc.dispose(),
       child: const _LoginScreen(),
     );
   }
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<_LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Padding(

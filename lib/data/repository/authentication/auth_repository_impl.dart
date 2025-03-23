@@ -10,7 +10,8 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._authDataSource);
 
   @override
-  Future<Either<Fail, bool>> login(String username, String password) async {
+  Future<Either<Fail, bool>> login(
+      final String username, final String password) async {
     try {
       return Right(await _authDataSource.login(username, password));
     } catch (e) {
@@ -19,7 +20,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Fail, void>> register(UserAuthModel user) async {
+  Future<Either<Fail, void>> register(final UserAuthModel user) async {
     try {
       return Right(await _authDataSource.register(user));
     } catch (e) {

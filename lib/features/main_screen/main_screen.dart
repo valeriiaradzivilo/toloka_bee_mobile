@@ -15,8 +15,8 @@ class MainScreen extends StatelessWidget {
   Widget build(final BuildContext context) {
     return SafeArea(
       child: Provider(
-        create: (_) => MainScreenBloc(),
-        dispose: (_, bloc) => bloc.dispose(),
+        create: (final _) => MainScreenBloc(),
+        dispose: (final _, final bloc) => bloc.dispose(),
         child: const _WarningPage(),
       ),
     );
@@ -27,11 +27,11 @@ class _WarningPage extends StatelessWidget {
   const _WarningPage();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final bloc = context.read<MainScreenBloc>();
     return ReactWidget(
       stream: bloc.isWarningRead,
-      builder: (isWarningRead) => isWarningRead
+      builder: (final isWarningRead) => isWarningRead
           ? Scaffold(
               body: Center(
                 child: Column(
@@ -58,10 +58,10 @@ class _Map extends StatelessWidget {
   const _Map();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Provider(
-      create: (_) => MapScreenBloc(GetIt.I, context),
-      dispose: (_, bloc) => bloc.dispose(),
+      create: (final _) => MapScreenBloc(GetIt.I, context),
+      dispose: (final _, final bloc) => bloc.dispose(),
       child: const MapScreen(),
     );
   }

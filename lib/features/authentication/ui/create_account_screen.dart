@@ -12,10 +12,10 @@ class CreateAccountScreen extends StatelessWidget {
   const CreateAccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Provider(
-      create: (_) => RegisterBloc(GetIt.I),
-      builder: (context, child) => const _CreateAccountScreen(),
+      create: (final _) => RegisterBloc(GetIt.I),
+      builder: (final context, final child) => const _CreateAccountScreen(),
     );
   }
 }
@@ -63,11 +63,15 @@ class _CreateAccountScreenState extends State<_CreateAccountScreen> {
     _registerBloc.register(UserAuthModel(
       password: password,
       email: email,
+      username: username,
+      name: name,
+      surname: surname,
+      birthDate: DateTime.now(),
     ));
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     _registerBloc = context.read<RegisterBloc>();
     return Scaffold(
       body: Padding(

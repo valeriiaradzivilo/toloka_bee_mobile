@@ -11,7 +11,7 @@ class ConditionWidget extends StatelessWidget {
   final Widget onFalse;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return condition ? onTrue : onFalse;
   }
 }

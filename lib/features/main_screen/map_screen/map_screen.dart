@@ -17,17 +17,17 @@ class MapScreen extends StatelessWidget {
   const MapScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     final bloc = context.read<MapScreenBloc>();
     return Scaffold(
       body: ReactWidget(
         stream: bloc.locationServiceEnabled,
-        builder: (locationEnabled) => switch (locationEnabled) {
+        builder: (final locationEnabled) => switch (locationEnabled) {
           LocationServiceState.enabled => Stack(
               children: [
                 ReactWidget(
                   stream: bloc.locationStream,
-                  builder: (data) => FlutterMap(
+                  builder: (final data) => FlutterMap(
                     mapController: bloc.mapController,
                     options: MapOptions(
                       interactionOptions: const InteractionOptions(
@@ -46,7 +46,8 @@ class MapScreen extends StatelessWidget {
                       TileLayer(
                         urlTemplate:
                             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        tileBuilder: (context, widget, tile) => widget,
+                        tileBuilder:
+                            (final context, final widget, final tile) => widget,
                       ),
                       MarkerLayer(markers: [
                         Marker(
@@ -86,7 +87,7 @@ class _BottomSheet extends StatelessWidget {
   const _BottomSheet();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: const BoxDecoration(
@@ -111,7 +112,7 @@ class _BottomSheet extends StatelessWidget {
               IconButton(
                 onPressed: () => showAdaptiveDialog(
                   context: context,
-                  builder: (context) => Dialog(
+                  builder: (final context) => Dialog(
                     child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
@@ -182,7 +183,7 @@ class _AccountInfo extends StatelessWidget {
   const _AccountInfo();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

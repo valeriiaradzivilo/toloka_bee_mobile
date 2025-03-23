@@ -12,7 +12,7 @@ import '../../../../data/usecase/update_location_usecase.dart';
 import '../data/location_service_state.dart';
 
 class MapScreenBloc extends ZipBloc {
-  MapScreenBloc(GetIt locator, BuildContext context)
+  MapScreenBloc(final GetIt locator, final BuildContext context)
       : _updateLocationUsecase = locator<UpdateLocationUsecase>() {
     // locationStream.skip(2).listen((event) {
     //   mapController.move(LatLng(event.latitude, event.longitude), 10);
@@ -44,7 +44,7 @@ class MapScreenBloc extends ZipBloc {
     }
   }
 
-  void onMapCreated(Position latLang) {
+  void onMapCreated(final Position latLang) {
     mapController.camera
         .latLngToScreenPoint(LatLng(latLang.latitude, latLang.longitude));
   }

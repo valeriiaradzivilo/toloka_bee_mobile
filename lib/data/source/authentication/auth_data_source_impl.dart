@@ -13,7 +13,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   static const _basePath = '/auth';
 
   @override
-  Future<bool> login(String username, String password) {
+  Future<bool> login(final String username, final String password) {
     // TODO: implement login
     throw UnimplementedError();
   }
@@ -25,7 +25,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<void> register(UserAuthModel user) async {
+  Future<void> register(final UserAuthModel user) async {
     try {
       final response = await _dio.post(
         '$_basePath/register',

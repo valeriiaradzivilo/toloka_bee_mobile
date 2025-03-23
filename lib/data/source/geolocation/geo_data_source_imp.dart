@@ -14,7 +14,7 @@ class GeoDataSourceImp implements GeoDataSource {
   static const basePath = '/location';
 
   @override
-  Future<void> updateLocation(LocationModel location) async {
+  Future<void> updateLocation(final LocationModel location) async {
     try {
       final response = await _dio.post(
         '$basePath/update-location',

@@ -39,7 +39,7 @@ class LinTextField extends StatefulWidget {
 class _LinTextFieldState extends State<LinTextField> {
   bool obscureText = true;
   String? errorText;
-  String? _validate(String? value, BuildContext context) {
+  String? _validate(final String? value, final BuildContext context) {
     if (widget.textToMatch != null) {
       if (widget.controller.text != widget.textToMatch) {
         return translate('validation.error.password.match');
@@ -60,14 +60,17 @@ class _LinTextFieldState extends State<LinTextField> {
 
   @override
   void initState() {
-    if (widget.initialValue != null) widget.controller.text = widget.initialValue!;
+    if (widget.initialValue != null) {
+      widget.controller.text = widget.initialValue!;
+    }
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: widget.option.maxFieldWidth ?? double.infinity),
+      constraints: BoxConstraints(
+          maxWidth: widget.option.maxFieldWidth ?? double.infinity),
       child: Row(
         children: [
           Expanded(
@@ -75,20 +78,25 @@ class _LinTextFieldState extends State<LinTextField> {
               controller: widget.controller,
               minLines: widget.option == TextFieldOption.password ? null : 1,
               maxLines: widget.option == TextFieldOption.password ? 1 : 100,
-              obscureText: widget.option == TextFieldOption.password && obscureText,
+              obscureText:
+                  widget.option == TextFieldOption.password && obscureText,
               enableSuggestions: widget.option != TextFieldOption.password,
               autocorrect: widget.option != TextFieldOption.password,
-              validator: (value) => _validate(value, context),
+              validator: (final value) => _validate(value, context),
               decoration: InputDecoration(
-                  label: Text(widget.label ?? ''), errorText: errorText, errorMaxLines: 10),
-              onChanged: (value) => setState(() => errorText = _validate(value, context)),
+                  label: Text(widget.label ?? ''),
+                  errorText: errorText,
+                  errorMaxLines: 10),
+              onChanged: (final value) =>
+                  setState(() => errorText = _validate(value, context)),
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
           ),
           if (widget.option == TextFieldOption.password) ...[
             IconButton(
                 onPressed: () => setState(() => obscureText = !obscureText),
-                icon: Icon(obscureText ? FeatherIcons.eye : FeatherIcons.eyeOff)),
+                icon:
+                    Icon(obscureText ? FeatherIcons.eye : FeatherIcons.eyeOff)),
             SizedBox(width: PaddingConstants.medium),
             Tooltip(
               message: translate('password.rules'),

@@ -8,7 +8,7 @@ class GeoRepositoryImp implements GeoRepository {
   GeoRepositoryImp(this.geoDataSource);
 
   @override
-  Future<void> updateLocation(LocationModel location) async {
+  Future<void> updateLocation(final LocationModel location) async {
     return await geoDataSource.updateLocation(location);
   }
 }

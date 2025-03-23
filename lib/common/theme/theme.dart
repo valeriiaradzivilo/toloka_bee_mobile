@@ -337,7 +337,7 @@ class MaterialTheme {
     return theme(darkHighContrastScheme());
   }
 
-  ThemeData theme(ColorScheme colorScheme) => ThemeData(
+  ThemeData theme(final ColorScheme colorScheme) => ThemeData(
         useMaterial3: true,
         brightness: colorScheme.brightness,
         colorScheme: colorScheme,

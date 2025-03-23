@@ -8,7 +8,7 @@ class AppIcon extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Container(
       width: size,
       height: size,

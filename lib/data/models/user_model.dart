@@ -6,15 +6,16 @@ part '../../generated/data/models/user_model.g.dart';
 @freezed
 class UserModel with _$UserModel {
   factory UserModel({
-    required String id,
-    required String name,
-    required String surname,
-    required String username,
-    required String email,
-    required String password,
+    required final String id,
+    required final String name,
+    required final String surname,
+    required final String username,
+    required final String email,
+    required final String password,
   }) = _UserModel;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(final Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   factory UserModel.test() => UserModel(
         id: '1',

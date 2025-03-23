@@ -8,7 +8,7 @@ class UpdateLocationUsecase extends UseCase<void, LocationModel> {
   UpdateLocationUsecase(this.geoRepository);
 
   @override
-  Future<void> call(LocationModel params) async {
+  Future<void> call(final LocationModel params) async {
     return await geoRepository.updateLocation(params);
   }
 }

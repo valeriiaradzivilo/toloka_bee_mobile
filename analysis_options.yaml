@@ -1,12 +1,12 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-exclude:
-    - generated/**
+  exclude:
+    - "**/generated/**"
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-plugins:
-    - custom_lint
+    - "gen/**"
+
 
 custom_lint:
 class_match_file_name: true
@@ -28,6 +28,8 @@ linter:
     prefer_relative_imports: true
     use_setters_to_change_properties: true
     avoid_redundant_argument_values: true
+    prefer_final_parameters: true
+
     
     
     

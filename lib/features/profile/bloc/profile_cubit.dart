@@ -10,7 +10,7 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileInitialState());
 
-  void loadUser(UserModel user) {
+  void loadUser(final UserModel user) {
     emit(ProfileLoadingState());
     try {
       // Simulate data load

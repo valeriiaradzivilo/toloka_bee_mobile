@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 class ValidationConstant {
-  static String? email(String? email, BuildContext context) {
+  static String? email(final String? email, final BuildContext context) {
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
     if (email == null) {
       return translate('validation.error.field.not.empty');
@@ -12,7 +12,7 @@ class ValidationConstant {
     return null;
   }
 
-  static String? password(String? password, BuildContext context) {
+  static String? password(final String? password, final BuildContext context) {
     final uppercaseRegExp = RegExp('[A-Z]+.+');
     final lowercaseRegExp = RegExp('[a-z]+.+');
     final digitsRegExp = RegExp('\\d+');
@@ -37,7 +37,7 @@ class ValidationConstant {
     return null;
   }
 
-  static String? name(String? name, BuildContext context) {
+  static String? name(final String? name, final BuildContext context) {
     if (name == null) {
       return translate('validation.error.field.not.empty');
     } else if (name.isEmpty) {

@@ -15,15 +15,16 @@ import 'features/main_screen/main_screen.dart';
 import 'features/profile/ui/profile_screen.dart';
 
 void main() async {
-  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  final delegate =
-      await LocalizationDelegate.create(fallbackLocale: 'en_US', supportedLocales: ['en_US']);
+  final delegate = await LocalizationDelegate.create(
+      fallbackLocale: 'en_US', supportedLocales: ['en_US']);
 
   await init();
 
-  ErrorWidget.builder = (FlutterErrorDetails details) {
+  ErrorWidget.builder = (final FlutterErrorDetails details) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -41,7 +42,9 @@ void main() async {
                   Text(
                     translate('error.screen.title'),
                     style: const TextStyle(
-                        color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
+                        color: Colors.red,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
                   ),
                   Text(
                     translate('error.screen.message'),
@@ -70,7 +73,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
-    final TextTheme textTheme = ZipTheme.createTextTheme(context, 'Roboto Serif', 'Roboto');
+    final TextTheme textTheme =
+        ZipTheme.createTextTheme(context, 'Roboto Serif', 'Roboto');
     final MaterialTheme theme = MaterialTheme(textTheme);
     final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -82,25 +86,30 @@ class MyApp extends StatelessWidget {
       initialRoute: Routes.mainScreen,
       navigatorKey: navigatorKey,
       routes: {
-        Routes.mainScreen: (context) => const MainScreen(),
-        Routes.loginScreen: (context) => const LoginScreen(),
-        Routes.createAccountScreen: (context) => const CreateAccountScreen(),
+        Routes.mainScreen: (final context) => const MainScreen(),
+        Routes.loginScreen: (final context) => const LoginScreen(),
+        Routes.createAccountScreen: (final context) =>
+            const CreateAccountScreen(),
       },
       debugShowCheckedModeBanner: false,
       darkTheme: theme.dark(),
-      onGenerateRoute: (settings) {
+      onGenerateRoute: (final settings) {
         switch (settings.name) {
           case Routes.loginScreen:
-            return MaterialPageRoute(builder: (context) => const LoginScreen());
+            return MaterialPageRoute(
+                builder: (final context) => const LoginScreen());
           case Routes.createAccountScreen:
-            return MaterialPageRoute(builder: (context) => const CreateAccountScreen());
+            return MaterialPageRoute(
+                builder: (final context) => const CreateAccountScreen());
           case Routes.profileScreen:
-            return MaterialPageRoute(builder: (context) => const ProfileScreen());
+            return MaterialPageRoute(
+                builder: (final context) => const ProfileScreen());
           default:
-            return MaterialPageRoute(builder: (context) => const MainScreen());
+            return MaterialPageRoute(
+                builder: (final context) => const MainScreen());
         }
       },
-      builder: (context, child) => SafeArea(
+      builder: (final context, final child) => SafeArea(
         child: Stack(
           children: [
             if (child != null) child,

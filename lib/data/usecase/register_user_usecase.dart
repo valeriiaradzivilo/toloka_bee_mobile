@@ -10,7 +10,7 @@ class RegisterUserUsecase extends UseCase<Either, UserAuthModel> {
   RegisterUserUsecase(this._authRepo);
 
   @override
-  Future<Either> call(UserAuthModel params) async {
+  Future<Either> call(final UserAuthModel params) async {
     return await _authRepo.register(params);
   }
 }
