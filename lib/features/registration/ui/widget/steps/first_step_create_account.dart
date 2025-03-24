@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../../../common/reactive/react_widget.dart';
 import '../../../../../common/widgets/lin_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
+import '../../data/e_steps.dart';
+import '../next_back_button_row.dart';
 
 class FirstStepCreateAccount extends StatefulWidget {
   const FirstStepCreateAccount({super.key});
@@ -16,6 +18,9 @@ class FirstStepCreateAccount extends StatefulWidget {
 class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
   final _nameController = TextEditingController();
   final _surnameController = TextEditingController();
+
+  bool _isValidName = false;
+  bool _isValidSurname = false;
 
   @override
   void dispose() {
@@ -31,13 +36,16 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 20,
       children: [
+        const Spacer(),
         LinTextField(
           initialValue: registerBloc.nameStream.value,
           controller: _nameController,
           label: translate('create.account.name'),
           option: TextFieldOption.name,
           onChanged: (final p0) => registerBloc.setName(p0),
-          onValidate: (final p0) => registerBloc.onValidateFieldsOnThePage(p0),
+          onValidate: (final p0) => setState(() {
+            _isValidName = p0;
+          }),
         ),
         LinTextField(
           initialValue: registerBloc.surnameStream.value,
@@ -45,7 +53,9 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
           label: translate('create.account.surname'),
           option: TextFieldOption.name,
           onChanged: (final p0) => registerBloc.setSurname(p0),
-          onValidate: (final p0) => registerBloc.onValidateFieldsOnThePage(p0),
+          onValidate: (final p0) => setState(() {
+            _isValidSurname = p0;
+          }),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -67,7 +77,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
                 if (dateOfBirth == null) {
                   return;
                 }
-                await registerBloc.setDateOfBirth(dateOfBirth);
+                registerBloc.setDateOfBirth(dateOfBirth);
               },
               child: Row(
                 spacing: 20,
@@ -93,6 +103,18 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
               ),
             ),
           ],
+        ),
+        const Spacer(),
+        ReactWidget(
+          stream: registerBloc.dateOfBirthStream,
+          builder: (final data) => NextBackButtonRow(
+            step: ESteps.checkGeneralInfo,
+            areFieldsValid: _isValidName &&
+                _isValidSurname &&
+                data.valueOrNull != null &&
+                _nameController.text.isNotEmpty &&
+                _surnameController.text.isNotEmpty,
+          ),
         ),
       ],
     );

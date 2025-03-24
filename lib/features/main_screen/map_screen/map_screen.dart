@@ -91,8 +91,7 @@ class _BottomSheet extends StatelessWidget {
   const _BottomSheet();
 
   @override
-  Widget build(final BuildContext context) {
-    return Container(
+  Widget build(final BuildContext context) => Container(
       width: double.infinity,
       decoration: const BoxDecoration(
         color: ZipColor.surfaceBright,
@@ -181,15 +180,13 @@ class _BottomSheet extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 class _AccountInfo extends StatelessWidget {
   const _AccountInfo();
 
   @override
-  Widget build(final BuildContext context) {
-    return Row(
+  Widget build(final BuildContext context) => Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
@@ -240,5 +237,4 @@ class _AccountInfo extends StatelessWidget {
         ),
       ],
     );
-  }
 }

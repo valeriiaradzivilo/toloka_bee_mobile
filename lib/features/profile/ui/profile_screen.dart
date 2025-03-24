@@ -11,8 +11,7 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(final BuildContext context) {
-    return BlocProvider(
+  Widget build(final BuildContext context) => BlocProvider(
       //TODO: THIS IS A CRUTCH, REMOVE IT
       create: (final _) => ProfileCubit()..loadUser(UserModel.test()),
       child: Scaffold(
@@ -31,7 +30,6 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 class _LoadedProfile extends StatelessWidget {
@@ -39,8 +37,7 @@ class _LoadedProfile extends StatelessWidget {
   final UserModel user;
 
   @override
-  Widget build(final BuildContext context) {
-    return Column(
+  Widget build(final BuildContext context) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CircleAvatar(radius: 40, child: Text(user.name[0])),
@@ -61,5 +58,4 @@ class _LoadedProfile extends StatelessWidget {
         ),
       ],
     );
-  }
 }

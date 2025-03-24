@@ -71,8 +71,7 @@ class _LinTextFieldState extends State<LinTextField> {
   }
 
   @override
-  Widget build(final BuildContext context) {
-    return Container(
+  Widget build(final BuildContext context) => Container(
       constraints: BoxConstraints(
         maxWidth: widget.option.maxFieldWidth ?? double.infinity,
       ),
@@ -115,5 +114,4 @@ class _LinTextFieldState extends State<LinTextField> {
         ],
       ),
     );
-  }
 }

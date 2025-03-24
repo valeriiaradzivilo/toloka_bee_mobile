@@ -12,15 +12,13 @@ class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
-  Widget build(final BuildContext context) {
-    return SafeArea(
+  Widget build(final BuildContext context) => SafeArea(
       child: Provider(
         create: (final _) => MainScreenBloc(),
         dispose: (final _, final bloc) => bloc.dispose(),
         child: const _WarningPage(),
       ),
     );
-  }
 }
 
 class _WarningPage extends StatelessWidget {
@@ -58,11 +56,9 @@ class _Map extends StatelessWidget {
   const _Map();
 
   @override
-  Widget build(final BuildContext context) {
-    return Provider(
+  Widget build(final BuildContext context) => Provider(
       create: (final _) => MapScreenBloc(GetIt.I, context),
       dispose: (final _, final bloc) => bloc.dispose(),
       child: const MapScreen(),
     );
-  }
 }

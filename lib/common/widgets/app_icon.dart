@@ -8,8 +8,7 @@ class AppIcon extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(final BuildContext context) {
-    return Container(
+  Widget build(final BuildContext context) => Container(
       width: size,
       height: size,
       decoration: const BoxDecoration(
@@ -18,5 +17,4 @@ class AppIcon extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       child: Assets.logo.logo.image(),
     );
-  }
 }

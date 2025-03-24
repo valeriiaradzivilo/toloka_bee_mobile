@@ -30,6 +30,8 @@ linter:
     avoid_redundant_argument_values: true
     prefer_final_parameters: true
     require_trailing_commas: true
+    prefer_expression_function_bodies: true
+    constant_identifier_names: true
 
     
     

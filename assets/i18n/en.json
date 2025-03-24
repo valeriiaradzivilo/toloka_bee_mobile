@@ -45,7 +45,20 @@
             "cancel": "Cancel",
             "date.of.birth": "Date of birth",
             "age.limitations": "You must be at least 18 years old to use this app.",
-            "register": "Register"
+            "register": "Register",
+            "preffered": {
+                "position": {
+                    "title": "Who do you want to be?",
+                    "subtitle": "Select what applies to you the best",
+                    "volunteer": "I want to be Volunteer",
+                    "requester": "I need help",
+                    "both": "I want to be both"
+                }
+            },
+            "about": {
+                "title": "About you",
+                "subtitle": "Tell us a bit more about yourself. People will see this information when they see your request.\nTell your story and why you might need extra help."
+            }
         }
     },
     "profile": {
@@ -70,6 +83,30 @@
         "screen": {
             "title": "Error",
             "message": "An error occurred. Please restart the app."
+        }
+    },
+    "validation": {
+        "error": {
+            "field": {
+                "not.empty": "This field cannot be empty."
+            },
+            "email": {
+                "invalid": "Please enter a valid email address."
+            },
+            "password": {
+                "min.length": "Password must be at least 8 characters long.",
+                "rules": {
+                    "lowercase": "Password must contain at least one lowercase letter.",
+                    "uppercase": "Password must contain at least one uppercase letter.",
+                    "digits": "Password must contain at least one digit.",
+                    "other.characters": "Password must contain at least one special character (@, !).",
+                    "forbidden.characters": "Password contains forbidden characters."
+                },
+                "match": "Passwords do not match."
+            },
+            "name": {
+                "no.spaces": "Name cannot contain spaces."
+            }
         }
     }
 }

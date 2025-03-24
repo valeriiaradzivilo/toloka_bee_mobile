@@ -13,8 +13,7 @@ class ReactWidget<T> extends StatelessWidget {
   final Function(T data) builder;
 
   @override
-  Widget build(final BuildContext context) {
-    return StreamBuilder(
+  Widget build(final BuildContext context) => StreamBuilder(
       stream: stream,
       builder: (final context, final data) {
         if (data.hasData) {
@@ -36,7 +35,6 @@ class ReactWidget<T> extends StatelessWidget {
         }
       },
     );
-  }
 }
 
 class ReactWidget2<T, A> extends StatelessWidget {
@@ -51,8 +49,7 @@ class ReactWidget2<T, A> extends StatelessWidget {
   final Function(T data1, A data2) builder;
 
   @override
-  Widget build(final BuildContext context) {
-    return StreamBuilder(
+  Widget build(final BuildContext context) => StreamBuilder(
       stream: stream1,
       builder: (final context, final data1) {
         if (data1.hasData) {
@@ -77,5 +74,4 @@ class ReactWidget2<T, A> extends StatelessWidget {
         }
       },
     );
-  }
 }

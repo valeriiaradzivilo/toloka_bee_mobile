@@ -16,7 +16,9 @@ class AuthenticationBloc extends ZipBloc {
   }
 
   Future<void> authenticate(
-      final String username, final String password,) async {
+    final String username,
+    final String password,
+  ) async {
     final isAuthenticated = await _loginUserUsecase(username, password);
     logger.info('User $username isAuthenticated: $isAuthenticated');
     throw UnimplementedError();
@@ -25,6 +27,7 @@ class AuthenticationBloc extends ZipBloc {
   @override
   Future<void> dispose() async {
     await _isAuthenticated.close();
+    await super.dispose();
   }
 
   ValueStream<bool> get isAuthenticated => _isAuthenticated.stream;

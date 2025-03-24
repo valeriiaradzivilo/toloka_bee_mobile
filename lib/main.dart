@@ -26,8 +26,7 @@ void main() async {
 
   await init();
 
-  ErrorWidget.builder = (final FlutterErrorDetails details) {
-    return Scaffold(
+  ErrorWidget.builder = (final FlutterErrorDetails details) => Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
@@ -67,7 +66,6 @@ void main() async {
         ),
       ),
     );
-  };
   runApp(LocalizedApp(delegate, const MyApp()));
 }
 

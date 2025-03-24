@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -15,15 +14,13 @@ class CreateAccountScreen extends StatelessWidget {
   const CreateAccountScreen({super.key});
 
   @override
-  Widget build(final BuildContext context) {
-    return Scaffold(
+  Widget build(final BuildContext context) => Scaffold(
       body: Provider(
         create: (final _) => RegisterBloc(GetIt.I),
         dispose: (final _, final value) => value.dispose(),
         child: const _Screen(),
       ),
     );
-  }
 }
 
 class _Screen extends StatelessWidget {
@@ -49,45 +46,6 @@ class _Screen extends StatelessWidget {
                 ESteps.addRegistartInfo => const SecondStepCreateAccount(),
                 ESteps.addExtraInfo => const ThirdStepCreateAccount(),
               },
-            ),
-            ReactWidget(
-              stream: registerBloc.validateNextStepStream,
-              builder: (final isValid) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 20,
-                children: [
-                  ...switch (step) {
-                    _ when step.nextStep != null && step.previousStep != null =>
-                      [
-                        ElevatedButton(
-                          onPressed: () => registerBloc.previousStep(),
-                          child: Text(translate('create.account.back')),
-                        ),
-                        ElevatedButton(
-                          onPressed: registerBloc.isValid()
-                              ? () => registerBloc.nextStep()
-                              : null,
-                          child: Text(translate('create.account.next')),
-                        ),
-                      ],
-                    _ when step.nextStep != null => [
-                        ElevatedButton(
-                          onPressed: registerBloc.isValid()
-                              ? () => registerBloc.nextStep()
-                              : null,
-                          child: Text(translate('create.account.next')),
-                        ),
-                      ],
-                    _ when step.previousStep != null => [
-                        ElevatedButton(
-                          onPressed: () => registerBloc.register(),
-                          child: Text(translate('create.account.register')),
-                        ),
-                      ],
-                    _ => [],
-                  },
-                ],
-              ),
             ),
           ],
         ),

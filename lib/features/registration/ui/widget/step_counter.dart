@@ -12,8 +12,7 @@ class StepCounter extends StatelessWidget {
   final int totalSteps;
 
   @override
-  Widget build(final BuildContext context) {
-    return Column(
+  Widget build(final BuildContext context) => Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,5 +48,4 @@ class StepCounter extends StatelessWidget {
         ),
       ],
     );
-  }
 }

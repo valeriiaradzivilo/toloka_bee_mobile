@@ -7,8 +7,7 @@ class MaterialTheme {
 
   const MaterialTheme(this.textTheme);
 
-  static ColorScheme lightScheme() {
-    return const ColorScheme(
+  static ColorScheme lightScheme() => const ColorScheme(
       brightness: Brightness.light,
       primary: ZipColor.primary,
       surfaceTint: ZipColor.primary,
@@ -56,14 +55,10 @@ class MaterialTheme {
       surfaceContainerHigh: ZipColor.surfaceContainerHigh,
       surfaceContainerHighest: ZipColor.surfaceContainerHighest,
     );
-  }
 
-  ThemeData light() {
-    return theme(lightScheme());
-  }
+  ThemeData light() => theme(lightScheme());
 
-  static ColorScheme lightMediumContrastScheme() {
-    return const ColorScheme(
+  static ColorScheme lightMediumContrastScheme() => const ColorScheme(
       brightness: Brightness.light,
       primary: ZipColor.primary,
       surfaceTint: ZipColor.primary,
@@ -111,14 +106,10 @@ class MaterialTheme {
       surfaceContainerHigh: ZipColor.surfaceContainerHigh,
       surfaceContainerHighest: ZipColor.surfaceContainerHighest,
     );
-  }
 
-  ThemeData lightMediumContrast() {
-    return theme(lightMediumContrastScheme());
-  }
+  ThemeData lightMediumContrast() => theme(lightMediumContrastScheme());
 
-  static ColorScheme lightHighContrastScheme() {
-    return const ColorScheme(
+  static ColorScheme lightHighContrastScheme() => const ColorScheme(
       brightness: Brightness.light,
       primary: ZipColor.primary,
       surfaceTint: ZipColor.primary,
@@ -166,14 +157,10 @@ class MaterialTheme {
       surfaceContainerHigh: ZipColor.surfaceContainerHigh,
       surfaceContainerHighest: ZipColor.surfaceContainerHighest,
     );
-  }
 
-  ThemeData lightHighContrast() {
-    return theme(lightHighContrastScheme());
-  }
+  ThemeData lightHighContrast() => theme(lightHighContrastScheme());
 
-  static ColorScheme darkScheme() {
-    return const ColorScheme(
+  static ColorScheme darkScheme() => const ColorScheme(
       brightness: Brightness.dark,
       primary: ZipColor.primary,
       surfaceTint: ZipColor.primary,
@@ -221,14 +208,10 @@ class MaterialTheme {
       surfaceContainerHigh: ZipColor.surfaceContainerHigh,
       surfaceContainerHighest: ZipColor.surfaceContainerHighest,
     );
-  }
 
-  ThemeData dark() {
-    return theme(darkScheme());
-  }
+  ThemeData dark() => theme(darkScheme());
 
-  static ColorScheme darkMediumContrastScheme() {
-    return const ColorScheme(
+  static ColorScheme darkMediumContrastScheme() => const ColorScheme(
       brightness: Brightness.dark,
       primary: ZipColor.primary,
       surfaceTint: ZipColor.primary,
@@ -276,14 +259,10 @@ class MaterialTheme {
       surfaceContainerHigh: ZipColor.surfaceContainerHigh,
       surfaceContainerHighest: ZipColor.surfaceContainerHighest,
     );
-  }
 
-  ThemeData darkMediumContrast() {
-    return theme(darkMediumContrastScheme());
-  }
+  ThemeData darkMediumContrast() => theme(darkMediumContrastScheme());
 
-  static ColorScheme darkHighContrastScheme() {
-    return const ColorScheme(
+  static ColorScheme darkHighContrastScheme() => const ColorScheme(
       brightness: Brightness.dark,
       primary: ZipColor.primary,
       surfaceTint: ZipColor.primary,
@@ -331,11 +310,8 @@ class MaterialTheme {
       surfaceContainerHigh: ZipColor.surfaceContainerHigh,
       surfaceContainerHighest: ZipColor.surfaceContainerHighest,
     );
-  }
 
-  ThemeData darkHighContrast() {
-    return theme(darkHighContrastScheme());
-  }
+  ThemeData darkHighContrast() => theme(darkHighContrastScheme());
 
   ThemeData theme(final ColorScheme colorScheme) => ThemeData(
         useMaterial3: true,

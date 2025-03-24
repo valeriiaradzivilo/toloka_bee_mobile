@@ -14,5 +14,7 @@ class MainScreenBloc extends ZipBloc {
       BehaviorSubject<bool>.seeded(false);
 
   @override
-  Future<void> dispose() async {}
+  Future<void> dispose() async {
+    await super.dispose();
+  }
 }

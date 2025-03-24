@@ -1,11 +1,11 @@
 import 'package:get_it/get_it.dart';
-import 'package:rxdart/streams.dart';
-import 'package:rxdart/subjects.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../common/bloc/zip_bloc.dart';
 import '../../../common/optional_value.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../../data/usecase/register_user_usecase.dart';
+import '../ui/data/e_position.dart';
 import '../ui/data/e_steps.dart';
 
 class RegisterBloc extends ZipBloc {
@@ -13,14 +13,13 @@ class RegisterBloc extends ZipBloc {
       : _registerUserUsecase = serviceLocator<RegisterUserUsecase>();
 
   ValueStream<ESteps> get stepCounterStream => _stepController.stream;
-  ValueStream<bool> get validateNextStepStream =>
-      _valdateNextStepController.stream;
+
   ValueStream<Optional<DateTime>> get dateOfBirthStream =>
       _dateOfBirthController.stream;
   ValueStream<String> get nameStream => _nameController.stream;
   ValueStream<String> get surnameStream => _surnameController.stream;
 
-  Future<void> register() async {
+  Future<void> register(final EPosition position) async {
     final isRegistered = await _registerUserUsecase(
       UserAuthModel(
         email: _emailController.value,
@@ -29,64 +28,50 @@ class RegisterBloc extends ZipBloc {
         name: _nameController.value,
         surname: _surnameController.value,
         birthDate: _dateOfBirthController.value.valueOrNull!,
+        position: position,
       ),
     );
     logger.info('User registered: ${isRegistered.isRight()}');
   }
 
-  Future<void> setName(final String name) async {
+  void setName(final String name) {
     _nameController.add(name);
   }
 
-  Future<void> setSurname(final String surname) async {
+  void setSurname(final String surname) {
     _surnameController.add(surname);
   }
 
-  Future<void> setUsername(final String username) async {
+  void setUsername(final String username) {
     _usernameController.add(username);
   }
 
-  Future<void> setPassword(final String password) async {
+  void setPassword(final String password) {
     _passwordController.add(password);
   }
 
-  Future<void> setEmail(final String email) async {
+  void setEmail(final String email) {
     _emailController.add(email);
   }
 
-  Future<void> setDateOfBirth(final DateTime dateOfBirth) async {
+  void setDateOfBirth(final DateTime dateOfBirth) {
     _dateOfBirthController.add(OptionalValue(dateOfBirth));
   }
 
-  Future<void> nextStep() async {
+  void nextStep() {
     if (_stepController.value.nextStep == null) return;
 
     _stepController.add(_stepController.value.nextStep!);
   }
 
-  Future<void> previousStep() async {
+  void previousStep() {
     if (_stepController.value.previousStep == null) return;
 
     _stepController.add(_stepController.value.previousStep!);
   }
 
-  Future<void> onValidateFieldsOnThePage(final bool isValid) async {
-    _valdateNextStepController.add(isValid);
-  }
-
-  bool isValid() {
-    switch (_stepController.value) {
-      case ESteps.checkGeneralInfo:
-        return _valdateNextStepController.value &&
-            _nameController.value.isNotEmpty &&
-            _surnameController.value.isNotEmpty &&
-            _dateOfBirthController.value.valueOrNull != null;
-
-      case ESteps.addRegistartInfo:
-        return _valdateNextStepController.value;
-      case ESteps.addExtraInfo:
-        return _valdateNextStepController.value;
-    }
+  void setAboutMe(final String aboutMe) {
+    _aboutMeController.add(aboutMe);
   }
 
   @override
@@ -98,6 +83,9 @@ class RegisterBloc extends ZipBloc {
     await _emailController.close();
     await _dateOfBirthController.close();
     await _stepController.close();
+    await _aboutMeController.close();
+
+    await super.dispose();
   }
 
   final RegisterUserUsecase _registerUserUsecase;
@@ -118,8 +106,9 @@ class RegisterBloc extends ZipBloc {
     const OptionalNull<DateTime>(),
   );
 
+  final BehaviorSubject<String> _aboutMeController =
+      BehaviorSubject<String>.seeded('');
+
   final BehaviorSubject<ESteps> _stepController =
       BehaviorSubject<ESteps>.seeded(ESteps.checkGeneralInfo);
-  final BehaviorSubject<bool> _valdateNextStepController =
-      BehaviorSubject<bool>.seeded(false);
 }

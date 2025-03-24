@@ -13,13 +13,11 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(final BuildContext context) {
-    return Provider(
+  Widget build(final BuildContext context) => Provider(
       create: (final _) => AuthenticationBloc(GetIt.I),
       dispose: (final _, final bloc) => bloc.dispose(),
       child: const _LoginScreen(),
     );
-  }
 }
 
 class _LoginScreen extends StatefulWidget {
@@ -55,8 +53,7 @@ class _LoginScreenState extends State<_LoginScreen> {
   }
 
   @override
-  Widget build(final BuildContext context) {
-    return SafeArea(
+  Widget build(final BuildContext context) => SafeArea(
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -102,5 +99,4 @@ class _LoginScreenState extends State<_LoginScreen> {
         ),
       ),
     );
-  }
 }
