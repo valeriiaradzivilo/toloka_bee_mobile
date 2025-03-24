@@ -14,7 +14,7 @@ get_deps:
 # Generate code
 gen:
 	$(FLUTTER) pub get
-	dart run build_runner build
+	dart run build_runner build --delete-conflicting-outputs
 
 # Build the project
 build:

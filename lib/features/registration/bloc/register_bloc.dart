@@ -27,8 +27,10 @@ class RegisterBloc extends ZipBloc {
         username: _usernameController.value,
         name: _nameController.value,
         surname: _surnameController.value,
-        birthDate: _dateOfBirthController.value.valueOrNull!,
-        position: position,
+        birthDate: _dateOfBirthController.value.valueOrNull!.toIso8601String(),
+        position: position.text,
+        about: _aboutMeController.value,
+        photoId: '',
       ),
     );
     logger.info('User registered: ${isRegistered.isRight()}');
