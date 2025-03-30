@@ -30,7 +30,7 @@
         "register": "Create an account",
         "or": "OR",
         "google": "Login with Google",
-        "welcome": "Welcome back,{name}!"
+        "welcome": "Welcome back, {name}!"
     },
     "create": {
         "account": {
@@ -91,7 +91,10 @@
     "validation": {
         "error": {
             "field": {
-                "not.empty": "This field cannot be empty."
+                "not.empty": "This field cannot be empty.",
+                "not.number": "This field must be a number.",
+                "min.value": "This value must be at least {min}.",
+                "max.value": "This value must be at most {max}."
             },
             "email": {
                 "invalid": "Please enter a valid email address."
@@ -110,6 +113,30 @@
             "name": {
                 "no.spaces": "Name cannot contain spaces."
             }
+        }
+    },
+    "request": {
+        "hand": {
+            "title": "What help do you need?",
+            "description": "Describe the service that you need",
+            "remote": {
+                "title": "Can be done remotely",
+                "description": "Pick if the task does not require a physical presence, it can be done remotely."
+            },
+            "physical": {
+                "title": "Requires physical presence",
+                "description": "Pick if the task requires holding or moving large objects."
+            },
+            "deadline": {
+                "title": "Select deadline",
+                "description": "When do you need this task to be done? The request will be deleted after this date."
+            },
+            "price": {
+                "title": "Price",
+                "description": "What is the approximate price for this task? For example, if the task is to go to the shop, write approximate price of the shopping list. Leave empty if there is no price.",
+                "label": "Price (hryvnya)"
+            },
+            "submit": "Create request"
         }
     }
 }

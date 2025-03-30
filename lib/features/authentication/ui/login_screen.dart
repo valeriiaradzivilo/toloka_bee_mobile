@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +30,8 @@ class _LoginScreenState extends State<_LoginScreen> {
   final _passwordController = TextEditingController();
   late final AuthenticationBloc _authenticationBloc;
 
+  bool loggingInProgress = false;
+
   @override
   void initState() {
     _authenticationBloc = context.read<AuthenticationBloc>();
@@ -46,9 +47,14 @@ class _LoginScreenState extends State<_LoginScreen> {
   }
 
   void _login() {
+    loggingInProgress = true;
     final username = _usernameController.text;
     final password = _passwordController.text;
-    _authenticationBloc.login(username, password);
+    _authenticationBloc.login(username, password).then(
+      (final value) {
+        loggingInProgress = false;
+      },
+    );
   }
 
   @override
@@ -90,8 +96,18 @@ class _LoginScreenState extends State<_LoginScreen> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: _login,
-                      child: Text(translate('login.button')),
+                      onPressed: loggingInProgress ? null : _login,
+                      child: loggingInProgress
+                          ? Container(
+                              width: 100,
+                              margin: const EdgeInsets.all(8),
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Text(translate('login.button')),
                     ),
                     const Gap(20),
                     Text(
@@ -106,11 +122,11 @@ class _LoginScreenState extends State<_LoginScreen> {
                       ),
                       child: Text(translate('login.register')),
                     ),
-                    OutlinedButton.icon(
-                      onPressed: () {},
-                      label: Text(translate('login.google')),
-                      icon: const Icon(FontAwesomeIcons.google),
-                    ),
+                    // OutlinedButton.icon(
+                    //   onPressed: () {},
+                    //   label: Text(translate('login.google')),
+                    //   icon: const Icon(FontAwesomeIcons.google),
+                    // ),
                   ],
                 ),
               ),

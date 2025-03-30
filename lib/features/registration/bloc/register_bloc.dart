@@ -19,6 +19,8 @@ class RegisterBloc extends ZipBloc {
   ValueStream<String> get nameStream => _nameController.stream;
   ValueStream<String> get surnameStream => _surnameController.stream;
 
+  ValueStream<String> get emailStream => _emailController.stream;
+
   Future<void> register(final EPosition position) async {
     final isRegistered = await _registerUserUsecase(
       UserAuthModel(

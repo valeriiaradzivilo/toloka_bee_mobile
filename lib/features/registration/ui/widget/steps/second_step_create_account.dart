@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../common/reactive/react_widget.dart';
 import '../../../../../common/widgets/lin_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
 import '../../data/e_steps.dart';
@@ -20,7 +21,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  bool _isEmailValid = false;
+  bool _isEmailValid = true;
   bool _isPasswordValid = false;
   bool _isConfirmPasswordValid = false;
 
@@ -40,14 +41,17 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
       spacing: 20,
       children: [
         const Spacer(),
-        LinTextField(
-          controller: _emailController,
-          label: translate('create.account.email'),
-          option: TextFieldOption.email,
-          onChanged: (final p0) => registerBloc.setEmail(p0),
-          onValidate: (final p0) => setState(() {
-            _isEmailValid = p0;
-          }),
+        ReactWidget(
+          stream: registerBloc.emailStream,
+          builder: (final email) => LinTextField(
+            controller: _emailController..text = email,
+            label: translate('create.account.email'),
+            option: TextFieldOption.email,
+            onChanged: (final p0) => registerBloc.setEmail(p0),
+            onValidate: (final p0) => setState(() {
+              _isEmailValid = p0;
+            }),
+          ),
         ),
         LinTextField(
           controller: _passwordController,

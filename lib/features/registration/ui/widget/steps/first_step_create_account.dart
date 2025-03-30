@@ -19,8 +19,8 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
   final _nameController = TextEditingController();
   final _surnameController = TextEditingController();
 
-  bool _isValidName = false;
-  bool _isValidSurname = false;
+  bool _isValidName = true;
+  bool _isValidSurname = true;
 
   @override
   void dispose() {
@@ -46,6 +46,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
           onValidate: (final p0) => setState(() {
             _isValidName = p0;
           }),
+          maxLines: 1,
         ),
         LinTextField(
           initialValue: registerBloc.surnameStream.value,
@@ -56,6 +57,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
           onValidate: (final p0) => setState(() {
             _isValidSurname = p0;
           }),
+          maxLines: 1,
         ),
         Row(
           mainAxisSize: MainAxisSize.min,

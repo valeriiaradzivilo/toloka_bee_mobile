@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:provider/provider.dart';
 
 import '../../../common/reactive/react_widget.dart';
 import '../../../common/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../authentication/bloc/authentication_bloc.dart';
+import '../../request_hand/bloc/create_request_bloc.dart';
+import '../../request_hand/ui/request_hand.dart';
 import 'bloc/map_screen_bloc.dart';
 import 'data/location_service_state.dart';
 
@@ -182,7 +184,16 @@ class _BottomSheet extends StatelessWidget {
                         const Gap(10),
                         Expanded(
                           child: ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () => showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              showDragHandle: true,
+                              useSafeArea: true,
+                              builder: (final context) => BlocProvider(
+                                create: (final context) => CreateRequestBloc(),
+                                child: const RequestHandModal(),
+                              ),
+                            ),
                             label: Text(
                               translate('map.actions.ask.hand'),
                               style: ZipFonts.small.style,

@@ -4,11 +4,13 @@ import 'package:flutter_translate/flutter_translate.dart';
 
 import '../constants/padding_constants.dart';
 import '../constants/validation_constant.dart';
+import '../theme/zip_fonts.dart';
 
 enum TextFieldOption {
   undefined,
   email,
   password,
+
   name;
 
   double? get maxFieldWidth =>
@@ -26,6 +28,7 @@ class LinTextField extends StatefulWidget {
     this.textToMatch,
     this.onChanged,
     this.onValidate,
+    this.maxLines,
   });
   final TextEditingController controller;
   final String? initialValue;
@@ -33,6 +36,7 @@ class LinTextField extends StatefulWidget {
   final String? label;
   final TextFieldOption option;
   final String? textToMatch;
+  final int? maxLines;
   final Function(String)? onChanged;
   final Function(bool)? onValidate;
 
@@ -50,7 +54,7 @@ class _LinTextFieldState extends State<LinTextField> {
       }
       return null;
     }
-    if (value?.isEmpty ?? widget.isRequired) {
+    if ((value?.isEmpty ?? true) && widget.isRequired) {
       return translate('validation.error.field.not.empty');
     } else if (widget.option == TextFieldOption.email) {
       return ValidationConstant.email(value, context);
@@ -72,46 +76,52 @@ class _LinTextFieldState extends State<LinTextField> {
 
   @override
   Widget build(final BuildContext context) => Container(
-      constraints: BoxConstraints(
-        maxWidth: widget.option.maxFieldWidth ?? double.infinity,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              controller: widget.controller,
-              minLines: widget.option == TextFieldOption.password ? null : 1,
-              maxLines: widget.option == TextFieldOption.password ? 1 : 100,
-              obscureText:
-                  widget.option == TextFieldOption.password && obscureText,
-              enableSuggestions: widget.option != TextFieldOption.password,
-              autocorrect: widget.option != TextFieldOption.password,
-              validator: (final value) => _validate(value, context),
-              decoration: InputDecoration(
-                label: Text(widget.label ?? ''),
-                errorText: errorText,
-                errorMaxLines: 10,
+        constraints: BoxConstraints(
+          maxWidth: widget.option.maxFieldWidth ?? double.infinity,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: widget.controller,
+                minLines: widget.option == TextFieldOption.password ? null : 1,
+                maxLines: widget.option == TextFieldOption.password
+                    ? 1
+                    : (widget.maxLines ?? 10),
+                obscureText:
+                    widget.option == TextFieldOption.password && obscureText,
+                enableSuggestions: widget.option != TextFieldOption.password,
+                autocorrect: widget.option != TextFieldOption.password,
+                validator: (final value) => _validate(value, context),
+                decoration: InputDecoration(
+                  label: Text(
+                    widget.label ?? '',
+                    style: ZipFonts.small.style,
+                  ),
+                  errorText: errorText,
+                  errorMaxLines: 10,
+                ),
+                onChanged: (final value) {
+                  widget.onChanged?.call(value);
+                  setState(() => errorText = _validate(value, context));
+                  widget.onValidate?.call(errorText == null);
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
-              onChanged: (final value) {
-                widget.onChanged?.call(value);
-                setState(() => errorText = _validate(value, context));
-                widget.onValidate?.call(errorText == null);
-              },
-              autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
-          ),
-          if (widget.option == TextFieldOption.password) ...[
-            IconButton(
-              onPressed: () => setState(() => obscureText = !obscureText),
-              icon: Icon(obscureText ? FeatherIcons.eye : FeatherIcons.eyeOff),
-            ),
-            SizedBox(width: PaddingConstants.medium),
-            Tooltip(
-              message: translate('password.rules'),
-              child: const Icon(Icons.info_outline_rounded),
-            ),
+            if (widget.option == TextFieldOption.password) ...[
+              IconButton(
+                onPressed: () => setState(() => obscureText = !obscureText),
+                icon:
+                    Icon(obscureText ? FeatherIcons.eye : FeatherIcons.eyeOff),
+              ),
+              SizedBox(width: PaddingConstants.medium),
+              Tooltip(
+                message: translate('password.rules'),
+                child: const Icon(Icons.info_outline_rounded),
+              ),
+            ],
           ],
-        ],
-      ),
-    );
+        ),
+      );
 }

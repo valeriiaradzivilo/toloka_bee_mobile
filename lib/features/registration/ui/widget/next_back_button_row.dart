@@ -45,6 +45,10 @@ class NextBackButtonRow extends StatelessWidget {
             ],
           _ when step.previousStep != null => [
               ElevatedButton(
+                onPressed: () => registerBloc.previousStep(),
+                child: Text(translate('create.account.back')),
+              ),
+              ElevatedButton(
                 onPressed: areFieldsValid && position != null
                     ? () => registerBloc.register(position!)
                     : null,
