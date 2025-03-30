@@ -1,39 +1,62 @@
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../../common/bloc/zip_bloc.dart';
+import '../../../common/optional_value.dart';
+import '../../../data/models/ui/e_popup_type.dart';
+import '../../../data/models/ui/popup_model.dart';
+import '../../../data/models/user_auth_model.dart';
 import '../../../data/usecase/authenticate_user_usecase.dart';
 
 class AuthenticationBloc extends ZipBloc {
   AuthenticationBloc(final GetIt locator)
-      : _loginUserUsecase = locator<LoginUserUsecase>() {
-    _init();
-  }
+      : _loginUserUsecase = locator<LoginUserUsecase>();
 
-  Future<void> _init() async {
-    // Initialize any required resources or states
-  }
+  ValueStream<Optional<UserAuthModel>> get userStream => _user.stream;
+  Stream<bool> get isAuthenticated =>
+      _user.stream.map((final user) => user is OptionalValue);
+  ValueStream<PopupModel> get authPopupStream => _popupController.stream;
 
-  Future<void> authenticate(
+  Future<void> login(
     final String username,
     final String password,
   ) async {
     final isAuthenticated = await _loginUserUsecase(username, password);
-    logger.info('User $username isAuthenticated: $isAuthenticated');
-    throw UnimplementedError();
+    isAuthenticated.fold(
+      (final error) {
+        _popupController.add(
+          PopupModel(
+            title: translate('login.unable'),
+            message: translate('login.error'),
+            type: EPopupType.error,
+          ),
+        );
+      },
+      (final user) {
+        _user.add(OptionalValue(user));
+        _popupController.add(
+          PopupModel(
+            title: translate('login.success'),
+            message: translate('login.welcome', args: {'name': user.name}),
+            type: EPopupType.success,
+          ),
+        );
+      },
+    );
   }
 
   @override
   Future<void> dispose() async {
-    await _isAuthenticated.close();
+    await _user.close();
+    await _popupController.close();
     await super.dispose();
   }
 
-  ValueStream<bool> get isAuthenticated => _isAuthenticated.stream;
-
-  final BehaviorSubject<bool> _isAuthenticated =
-      BehaviorSubject<bool>.seeded(false);
+  final BehaviorSubject<PopupModel> _popupController = BehaviorSubject();
+  final BehaviorSubject<Optional<UserAuthModel>> _user =
+      BehaviorSubject<Optional<UserAuthModel>>.seeded(const OptionalNull());
 
   final LoginUserUsecase _loginUserUsecase;
 }

@@ -28,7 +28,7 @@ class RegisterBloc extends ZipBloc {
         name: _nameController.value,
         surname: _surnameController.value,
         birthDate: _dateOfBirthController.value.valueOrNull!.toIso8601String(),
-        position: position.text,
+        position: position.name.toLowerCase(),
         about: _aboutMeController.value,
         photoId: '',
       ),

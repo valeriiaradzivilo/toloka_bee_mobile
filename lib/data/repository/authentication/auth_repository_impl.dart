@@ -10,8 +10,10 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._authDataSource);
 
   @override
-  Future<Either<Fail, bool>> login(
-      final String username, final String password,) async {
+  Future<Either<Fail, UserAuthModel>> login(
+    final String username,
+    final String password,
+  ) async {
     try {
       return Right(await _authDataSource.login(username, password));
     } catch (e) {

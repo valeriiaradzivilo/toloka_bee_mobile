@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:simple_logger/simple_logger.dart';
 
 import '../../models/user_auth_model.dart';
 import 'auth_data_source.dart';
@@ -10,11 +11,34 @@ class AuthDataSourceImpl implements AuthDataSource {
   AuthDataSourceImpl(this._dio);
 
   static const _basePath = '/auth';
+  static final logger = SimpleLogger();
 
   @override
-  Future<bool> login(final String username, final String password) {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<UserAuthModel> login(
+    final String username,
+    final String password,
+  ) async {
+    final response = await _dio.post(
+      '$_basePath/login',
+      data: {
+        'email': username,
+        'password': password,
+        'returnSecureToken': true,
+      },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final userRecord = response.data;
+      logger.info('User logged in successfully...');
+      return UserAuthModel.fromJson(userRecord);
+    } else {
+      throw Exception('Failed to login: ${response.statusCode}');
+    }
   }
 
   @override

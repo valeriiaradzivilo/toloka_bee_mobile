@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import 'common/routes.dart';
 import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'common/widgets/app_icon.dart';
 import 'data/di.dart';
+import 'features/authentication/bloc/authentication_bloc.dart';
 import 'features/authentication/ui/login_screen.dart';
 import 'features/main_screen/main_screen.dart';
 import 'features/profile/ui/profile_screen.dart';
@@ -27,45 +30,45 @@ void main() async {
   await init();
 
   ErrorWidget.builder = (final FlutterErrorDetails details) => Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Container(
-            height: 500,
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.red),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(
-                    translate('error.screen.title'),
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    translate('error.screen.message'),
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                  const Gap(8),
-                  if (kDebugMode)
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Container(
+              height: 500,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.red),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
                     Text(
-                      details.exceptionAsString(),
+                      translate('error.screen.title'),
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      translate('error.screen.message'),
                       style: const TextStyle(color: Colors.red),
                     ),
-                ],
+                    const Gap(8),
+                    if (kDebugMode)
+                      Text(
+                        details.exceptionAsString(),
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
   runApp(LocalizedApp(delegate, const MyApp()));
 }
 
@@ -85,61 +88,69 @@ class MyApp extends StatelessWidget {
 
     FlutterNativeSplash.remove();
 
-    return MaterialApp(
-      title: translate('app.name'),
-      theme: brightness == Brightness.light ? theme.light() : theme.dark(),
-      initialRoute: Routes.mainScreen,
-      navigatorKey: navigatorKey,
-      routes: {
-        Routes.mainScreen: (final context) => const MainScreen(),
-        Routes.loginScreen: (final context) => const LoginScreen(),
-        Routes.createAccountScreen: (final context) =>
-            const CreateAccountScreen(),
-      },
-      debugShowCheckedModeBanner: false,
-      darkTheme: theme.dark(),
-      onGenerateRoute: (final settings) {
-        switch (settings.name) {
-          case Routes.loginScreen:
-            return MaterialPageRoute(
-              builder: (final context) => const LoginScreen(),
-            );
-          case Routes.createAccountScreen:
-            return MaterialPageRoute(
-              builder: (final context) => const CreateAccountScreen(),
-            );
-          case Routes.profileScreen:
-            return MaterialPageRoute(
-              builder: (final context) => const ProfileScreen(),
-            );
-          default:
-            return MaterialPageRoute(
-              builder: (final context) => const MainScreen(),
-            );
-        }
-      },
-      builder: (final context, final child) => SafeArea(
-        child: Stack(
-          children: [
-            if (child != null) child,
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                onPressed: () {
-                  final ctx = navigatorKey.currentState?.context;
-                  if (ctx == null) return;
-                  showAboutDialog(
-                    context: ctx,
-                    applicationVersion: 'v1.0.0',
-                    applicationIcon: const AppIcon(),
-                    applicationLegalese:
-                        'This app was created to connect volunteers and people in need. Be kind and open but do not share any sensitive info.\nIf the app requires any data about you to be shown to other people - you will be notified.\n\nThe map does not reflect user location accurately to protect user data. Some "user locations" might be generated by the app. Please do not use this app for navigation.\n\nCreated by KPI Student as final project. © 2025',
-                  );
-                },
-                icon: const AppIcon(),
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (final _) => AuthenticationBloc(GetIt.I),
+          dispose: (final _, final bloc) => bloc.dispose(),
+        ),
+      ],
+      child: MaterialApp(
+        title: translate('app.name'),
+        theme: brightness == Brightness.light ? theme.light() : theme.dark(),
+        initialRoute: Routes.mainScreen,
+        navigatorKey: navigatorKey,
+        routes: {
+          Routes.mainScreen: (final context) => const MainScreen(),
+          Routes.loginScreen: (final context) => const LoginScreen(),
+          Routes.createAccountScreen: (final context) =>
+              const CreateAccountScreen(),
+        },
+        debugShowCheckedModeBanner: false,
+        darkTheme: theme.dark(),
+        onGenerateRoute: (final settings) {
+          switch (settings.name) {
+            case Routes.loginScreen:
+              return MaterialPageRoute(
+                builder: (final context) => const LoginScreen(),
+              );
+            case Routes.createAccountScreen:
+              return MaterialPageRoute(
+                builder: (final context) => const CreateAccountScreen(),
+              );
+            case Routes.profileScreen:
+              return MaterialPageRoute(
+                builder: (final context) => const ProfileScreen(),
+              );
+            default:
+              return MaterialPageRoute(
+                builder: (final context) => const MainScreen(),
+              );
+          }
+        },
+        builder: (final context, final child) => SafeArea(
+          child: Stack(
+            children: [
+              if (child != null) child,
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    final ctx = navigatorKey.currentState?.context;
+                    if (ctx == null) return;
+                    showAboutDialog(
+                      context: ctx,
+                      applicationVersion: 'v1.0.0',
+                      applicationIcon: const AppIcon(),
+                      applicationLegalese:
+                          'This app was created to connect volunteers and people in need. Be kind and open but do not share any sensitive info.\nIf the app requires any data about you to be shown to other people - you will be notified.\n\nThe map does not reflect user location accurately to protect user data. Some "user locations" might be generated by the app. Please do not use this app for navigation.\n\nCreated by KPI Student as final project. © 2025',
+                    );
+                  },
+                  icon: const AppIcon(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

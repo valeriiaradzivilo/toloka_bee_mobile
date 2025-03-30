@@ -4,7 +4,7 @@
     "oops.error.occurred": "Oops! An error occurred. Please restart the app.",
     "map": {
         "hello": {
-            "title": "Hello, {name}!",
+            "title": "Hello{name}!",
             "subtitle": "What a great day to give somebody a hand!"
         },
         "actions": {
@@ -15,19 +15,22 @@
             "dialog.note.location": "Exact location of any user is not accurately reflected on the map to protect your and others privacy. More information can be found in the request form or by clicking on app logo at the top-right corner.",
             "give.hand": "Give a hand",
             "ask.hand": "Need a hand",
-            "logout": "Logout"
+            "logout": "Logout",
+            "login": "Login"
         }
     },
     "login": {
         "username": "Username",
         "password": "Password",
         "button": "Login",
+        "unable": "Unable to login",
         "error": "Invalid username or password",
         "forgot": "Forgot password?",
         "title": "Login",
         "register": "Create an account",
         "or": "OR",
-        "google": "Login with Google"
+        "google": "Login with Google",
+        "welcome": "Welcome back,{name}!"
     },
     "create": {
         "account": {
