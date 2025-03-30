@@ -61,7 +61,9 @@
             "about": {
                 "title": "About you",
                 "subtitle": "Tell us a bit more about yourself. People will see this information when they see your request.\nTell your story and why you might need extra help."
-            }
+            },
+            "error": "Error occurred while creating an account. Please try again later.",
+            "success": "Account created successfully. Welcome to Zip Way!"
         }
     },
     "profile": {

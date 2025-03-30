@@ -21,7 +21,7 @@ class RegisterBloc extends ZipBloc {
 
   ValueStream<String> get emailStream => _emailController.stream;
 
-  Future<void> register(final EPosition position) async {
+  Future<bool> register(final EPosition position) async {
     final isRegistered = await _registerUserUsecase(
       UserAuthModel(
         email: _emailController.value,
@@ -36,6 +36,7 @@ class RegisterBloc extends ZipBloc {
       ),
     );
     logger.info('User registered: ${isRegistered.isRight()}');
+    return isRegistered.isRight();
   }
 
   void setName(final String name) {

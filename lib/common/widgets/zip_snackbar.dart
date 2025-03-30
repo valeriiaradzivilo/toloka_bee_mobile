@@ -17,11 +17,23 @@ class ZipSnackbar extends StatelessWidget {
               color: model.type.color,
             ),
             Expanded(
-              child: Text(
-                model.message,
-                style: ZipFonts.medium.style.copyWith(
-                  color: Colors.black,
-                ),
+              child: Column(
+                spacing: 4,
+                children: [
+                  Text(
+                    model.title,
+                    style: ZipFonts.medium.style.copyWith(
+                      color: Colors.black,
+                    ),
+                  ),
+                  if (model.message != null)
+                    Text(
+                      model.message!,
+                      style: ZipFonts.small.style.copyWith(
+                        color: Colors.black,
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

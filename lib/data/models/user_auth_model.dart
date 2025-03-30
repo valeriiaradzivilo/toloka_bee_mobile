@@ -7,7 +7,8 @@ part '../../generated/data/models/user_auth_model.g.dart';
 class UserAuthModel with _$UserAuthModel {
   factory UserAuthModel({
     required final String email,
-    @JsonKey(includeFromJson: false) final String? password,
+    @JsonKey(includeFromJson: false, includeToJson: true)
+    final String? password,
     required final String username,
     required final String name,
     required final String surname,

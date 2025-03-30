@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../common/routes.dart';
+import '../../../../common/widgets/zip_snackbar.dart';
+import '../../../../data/models/ui/e_popup_type.dart';
+import '../../../../data/models/ui/popup_model.dart';
 import '../../bloc/register_bloc.dart';
 import '../data/e_position.dart';
 import '../data/e_steps.dart';
@@ -50,7 +54,28 @@ class NextBackButtonRow extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: areFieldsValid && position != null
-                    ? () => registerBloc.register(position!)
+                    ? () {
+                        registerBloc.register(position!).then((final value) {
+                          if (context.mounted) {
+                            ZipSnackbar.show(
+                              context,
+                              value
+                                  ? PopupModel(
+                                      title:
+                                          translate('create.account.success'),
+                                      type: EPopupType.success,
+                                    )
+                                  : PopupModel(
+                                      title: translate('create.account.error'),
+                                      type: EPopupType.error,
+                                    ),
+                            );
+
+                            Navigator.of(context)
+                                .pushReplacementNamed(Routes.mainScreen);
+                          }
+                        });
+                      }
                     : null,
                 child: Text(translate('create.account.register')),
               ),
