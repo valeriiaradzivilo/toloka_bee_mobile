@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1205836066-cesjb9mo8ep0tj4jbn8afc0julmc26rp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1205836066-cesjb9mo8ep0tj4jbn8afc0julmc26rp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB7SOPY1FphTCleXb8dOlj2_0WN8PUAkCI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1205836066</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.zipWay</string>
+	<key>PROJECT_ID</key>
+	<string>zip-way</string>
+	<key>STORAGE_BUCKET</key>
+	<string>zip-way.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1205836066:ios:d41b4ea298aa8a92d5ad7b</string>
+	<key>DATABASE_URL</key>
+	<string>https://zip-way-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

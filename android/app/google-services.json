@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1205836066",
+    "firebase_url": "https://zip-way-default-rtdb.firebaseio.com",
+    "project_id": "zip-way",
+    "storage_bucket": "zip-way.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1205836066:android:2f1dbc43e6c4c1dbd5ad7b",
+        "android_client_info": {
+          "package_name": "com.example.zip_way"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1205836066-pn20looqcp01d5sumle6evmp414rbab1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCihLWKE8FyAxwKdQ01wNc_949xnlWZVzA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1205836066-pn20looqcp01d5sumle6evmp414rbab1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1205836066-cesjb9mo8ep0tj4jbn8afc0julmc26rp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.zipWay"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

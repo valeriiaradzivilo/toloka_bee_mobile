@@ -126,7 +126,7 @@
                 "description": "Pick if the task does not require a physical presence, it can be done remotely."
             },
             "physical": {
-                "title": "Requires physical presence",
+                "title": "Requires physical strength",
                 "description": "Pick if the task requires holding or moving large objects."
             },
             "deadline": {
