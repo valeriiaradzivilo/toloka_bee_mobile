@@ -33,6 +33,7 @@ class FcmService {
 
   void listenToMessages() {
     FirebaseMessaging.onMessage.listen((final RemoteMessage message) {
+      print('🔕 Фонове повідомлення: ${message.messageId}');
       print('📲 Отримано повідомлення у Foreground:');
       print('🔔 Заголовок: ${message.notification?.title}');
       print('📝 Тіло: ${message.notification?.body}');

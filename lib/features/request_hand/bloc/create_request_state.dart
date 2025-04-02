@@ -1,3 +1,5 @@
+import '../../../data/models/request_notification_model.dart';
+
 class CreateRequestState {
   final String description;
   final bool isRemote;
@@ -26,5 +28,20 @@ class CreateRequestState {
         isPhysicalStrength: isPhysicalStrength ?? this.isPhysicalStrength,
         deadline: deadline ?? this.deadline,
         price: price ?? this.price,
+      );
+
+  RequestNotificationModel toRequestNotificationModel() =>
+      RequestNotificationModel(
+        id: '',
+        requestId: '',
+        userId: '',
+        status: '',
+        deadline: deadline ?? DateTime.now(),
+        latitude: 0.0,
+        longitude: 0.0,
+        isRemote: isRemote,
+        requiresPhysicalStrength: isPhysicalStrength,
+        price: price?.toInt(),
+        description: description,
       );
 }

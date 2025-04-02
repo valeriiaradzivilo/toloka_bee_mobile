@@ -13,6 +13,7 @@ import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'common/widgets/app_icon.dart';
 import 'data/di.dart';
+import 'data/service/fcm_service.dart';
 import 'features/authentication/bloc/authentication_bloc.dart';
 import 'features/authentication/ui/login_screen.dart';
 import 'features/main_screen/main_screen.dart';
@@ -168,5 +169,5 @@ class MyApp extends StatelessWidget {
 Future<void> _firebaseMessagingBackgroundHandler(
   final RemoteMessage message,
 ) async {
-  print('🔕 Фонове повідомлення: ${message.messageId}');
+  FcmService().listenToMessages();
 }

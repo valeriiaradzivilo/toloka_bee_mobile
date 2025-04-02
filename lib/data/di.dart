@@ -5,12 +5,16 @@ import 'repository/authentication/auth_repository.dart';
 import 'repository/authentication/auth_repository_impl.dart';
 import 'repository/geolocation/geo_repository.dart';
 import 'repository/geolocation/geo_repository_imp.dart';
+import 'repository/notifications/notification_repository.dart';
+import 'repository/notifications/notification_repository_impl.dart';
 import 'source/authentication/auth_data_source.dart';
 import 'source/authentication/auth_data_source_impl.dart';
 import 'source/geolocation/geo_data_source.dart';
 import 'source/geolocation/geo_data_source_imp.dart';
+import 'source/notifications/fcm_data_source.dart';
 import 'usecase/authenticate_user_usecase.dart';
 import 'usecase/register_user_usecase.dart';
+import 'usecase/send_notification_usecase.dart';
 import 'usecase/update_location_usecase.dart';
 
 final GetIt serviceLocator = GetIt.instance;
@@ -41,23 +45,37 @@ Future<void> initDatasources() async {
       .registerLazySingleton<GeoDataSource>(() => GeoDataSourceImp(dio));
   serviceLocator
       .registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(dio));
+  serviceLocator.registerLazySingleton<FcmDataSource>(() => FcmDataSource(dio));
 }
 
 Future<void> initRepository() async {
   serviceLocator.registerLazySingleton<GeoRepository>(
-      () => GeoRepositoryImp(serviceLocator()),);
+    () => GeoRepositoryImp(serviceLocator()),
+  );
 
   serviceLocator.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(serviceLocator()),);
+    () => AuthRepositoryImpl(serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepositoryImpl(serviceLocator()),
+  );
 }
 
 Future<void> initUseCases() async {
   serviceLocator.registerLazySingleton<UpdateLocationUsecase>(
-      () => UpdateLocationUsecase(serviceLocator()),);
+    () => UpdateLocationUsecase(serviceLocator()),
+  );
 
   serviceLocator.registerLazySingleton<LoginUserUsecase>(
-      () => LoginUserUsecase(serviceLocator()),);
+    () => LoginUserUsecase(serviceLocator()),
+  );
 
   serviceLocator.registerLazySingleton<RegisterUserUsecase>(
-      () => RegisterUserUsecase(serviceLocator()),);
+    () => RegisterUserUsecase(serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton<SendNotificationUsecase>(
+    () => SendNotificationUsecase(serviceLocator()),
+  );
 }

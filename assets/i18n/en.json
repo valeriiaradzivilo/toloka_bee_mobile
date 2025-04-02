@@ -30,7 +30,8 @@
         "register": "Create an account",
         "or": "OR",
         "google": "Login with Google",
-        "welcome": "Welcome back, {name}!"
+        "welcome": "Welcome back, {name}!",
+        "success": "Logged in successfully"
     },
     "create": {
         "account": {

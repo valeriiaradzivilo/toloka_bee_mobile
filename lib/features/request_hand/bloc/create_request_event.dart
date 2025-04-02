@@ -29,3 +29,5 @@ class SetPriceEvent extends CreateRequestEvent {
 
   SetPriceEvent(this.price);
 }
+
+class SendRequestEvent extends CreateRequestEvent {}

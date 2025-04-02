@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../common/reactive/react_widget.dart';
@@ -190,7 +191,8 @@ class _BottomSheet extends StatelessWidget {
                               showDragHandle: true,
                               useSafeArea: true,
                               builder: (final context) => BlocProvider(
-                                create: (final context) => CreateRequestBloc(),
+                                create: (final context) =>
+                                    CreateRequestBloc(GetIt.instance),
                                 child: const RequestHandModal(),
                               ),
                             ),

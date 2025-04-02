@@ -141,7 +141,9 @@ class _RequestHandModalState extends State<RequestHandModal> {
                 ),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => context.read<CreateRequestBloc>().add(
+                          SendRequestEvent(),
+                        ),
                     child: Text(
                       translate('request.hand.submit'),
                     ),
