@@ -33,6 +33,10 @@
         "welcome": "Welcome back, {name}!",
         "success": "Logged in successfully"
     },
+    "logout": {
+        "success": "Logged out successfully",
+        "subtitle": "See you soon!"
+    },
     "create": {
         "account": {
             "title": "Create an account",

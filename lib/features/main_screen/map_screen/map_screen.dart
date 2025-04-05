@@ -263,8 +263,10 @@ class _AccountInfo extends StatelessWidget {
                 ),
               ),
               OutlinedButton(
-                onPressed: () => Navigator.of(context)
-                    .pushReplacementNamed(Routes.loginScreen),
+                onPressed: () => isAuthenticated
+                    ? context.read<AuthenticationBloc>().logout()
+                    : Navigator.of(context)
+                        .pushReplacementNamed(Routes.loginScreen),
                 child: Text(
                   translate(
                     isAuthenticated

@@ -32,10 +32,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<void> logout() {
-    // TODO: implement logout
-    throw UnimplementedError();
-  }
+  Future<void> logout() => _auth.signOut();
 
   @override
   Future<void> register(final UserAuthModel user) async {

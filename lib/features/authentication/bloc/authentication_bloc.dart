@@ -11,16 +11,18 @@ import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../../data/usecase/get_current_user_data_usecase.dart';
 import '../../../data/usecase/login_user_usecase.dart';
+import '../../../data/usecase/logout_user_usecase.dart';
 
 class AuthenticationBloc extends ZipBloc {
   AuthenticationBloc(final GetIt locator)
       : _loginUserUsecase = locator<LoginUserUsecase>(),
-        _getCurrentUserDataUsecase = locator<GetCurrentUserDataUsecase>() {
+        _getCurrentUserDataUsecase = locator<GetCurrentUserDataUsecase>(),
+        _logoutUserUsecase = locator<LogoutUserUsecase>() {
     _init();
   }
 
   ValueStream<Optional<UserAuthModel>> get userStream => _user.stream;
-  Stream<bool> get isAuthenticated =>
+  late Stream<bool> isAuthenticated =
       _user.stream.map((final user) => user is OptionalValue);
   ValueStream<PopupModel> get authPopupStream => _popupController.stream;
 
@@ -73,6 +75,23 @@ class AuthenticationBloc extends ZipBloc {
     );
   }
 
+  Future<void> logout() async {
+    final logout = await _logoutUserUsecase.call();
+    logout.fold(
+      (final error) {},
+      (final _) {
+        _user.add(const OptionalNull());
+        _popupController.add(
+          PopupModel(
+            title: translate('logout.success'),
+            message: translate('logout.subtitle'),
+            type: EPopupType.success,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Future<void> dispose() async {
     await _user.close();
@@ -86,4 +105,5 @@ class AuthenticationBloc extends ZipBloc {
 
   final LoginUserUsecase _loginUserUsecase;
   final GetCurrentUserDataUsecase _getCurrentUserDataUsecase;
+  final LogoutUserUsecase _logoutUserUsecase;
 }

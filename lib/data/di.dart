@@ -15,6 +15,7 @@ import 'source/geolocation/geo_data_source_imp.dart';
 import 'source/notifications/fcm_data_source.dart';
 import 'usecase/get_current_user_data_usecase.dart';
 import 'usecase/login_user_usecase.dart';
+import 'usecase/logout_user_usecase.dart';
 import 'usecase/register_user_usecase.dart';
 import 'usecase/send_notification_usecase.dart';
 import 'usecase/subscribe_to_topic_usecase.dart';
@@ -77,6 +78,10 @@ Future<void> initUseCases() async {
 
   serviceLocator.registerLazySingleton<GetCurrentUserDataUsecase>(
     () => GetCurrentUserDataUsecase(serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton<LogoutUserUsecase>(
+    () => LogoutUserUsecase(serviceLocator()),
   );
 
   serviceLocator.registerLazySingleton<RegisterUserUsecase>(
