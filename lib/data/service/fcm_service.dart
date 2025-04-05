@@ -16,22 +16,14 @@ class FcmService {
       final String? token = await _messaging.getToken();
       print('🔑 FCM Token: $token');
 
-      if (token != null) {
-        // 3. Відправляємо на бекенд
-        await _dio.post(
-          'https://твій_бекенд/api/save-fcm-token',
-          data: {
-            'userId': userId,
-            'fcmToken': token,
-          },
-        );
-      }
+      if (token != null) {}
     } else {
       print('🚫 Дозвіл на сповіщення не надано');
     }
   }
 
-  void listenToMessages() {
+  void listenToMessages() async {
+    await FirebaseMessaging.instance.subscribeToTopic('test');
     FirebaseMessaging.onMessage.listen((final RemoteMessage message) {
       print('🔕 Фонове повідомлення: ${message.messageId}');
       print('📲 Отримано повідомлення у Foreground:');
@@ -39,5 +31,19 @@ class FcmService {
       print('📝 Тіло: ${message.notification?.body}');
       print('📦 Дані: ${message.data}');
     });
+  }
+
+  void listenToBackgroundMessages() {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
+
+  static Future<void> _firebaseMessagingBackgroundHandler(
+    final RemoteMessage message,
+  ) async {
+    print('🔕 Фонове повідомлення: ${message.messageId}');
+    print('📲 Отримано повідомлення у Background:');
+    print('🔔 Заголовок: ${message.notification?.title}');
+    print('📝 Тіло: ${message.notification?.body}');
+    print('📦 Дані: ${message.data}');
   }
 }

@@ -38,7 +38,7 @@ class ZipSnackbar extends StatelessWidget {
             ),
           ],
         ),
-        backgroundColor: model.type.color.withValues(alpha: 0.1),
+        backgroundColor: Colors.white,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 3),
       );

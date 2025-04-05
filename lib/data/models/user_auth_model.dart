@@ -6,6 +6,7 @@ part '../../generated/data/models/user_auth_model.g.dart';
 @freezed
 class UserAuthModel with _$UserAuthModel {
   factory UserAuthModel({
+    required final String id,
     required final String email,
     @JsonKey(includeFromJson: false, includeToJson: true)
     final String? password,

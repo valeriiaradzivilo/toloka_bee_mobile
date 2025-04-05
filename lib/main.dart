@@ -169,5 +169,14 @@ class MyApp extends StatelessWidget {
 Future<void> _firebaseMessagingBackgroundHandler(
   final RemoteMessage message,
 ) async {
+  final notificationSettings =
+      await FirebaseMessaging.instance.requestPermission();
+  if (notificationSettings.authorizationStatus ==
+      AuthorizationStatus.authorized) {
+    print('✅ Дозвіл на сповіщення надано');
+  } else {
+    print('🚫 Дозвіл на сповіщення не надано');
+  }
   FcmService().listenToMessages();
+  FcmService().listenToBackgroundMessages();
 }

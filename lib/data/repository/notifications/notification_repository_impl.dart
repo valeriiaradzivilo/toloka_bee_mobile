@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:simple_logger/simple_logger.dart';
 
 import '../../models/request_notification_model.dart';
 import '../../source/notifications/fcm_data_source.dart';
@@ -6,6 +7,7 @@ import 'notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
   final FcmDataSource _fcmDataSource;
+  final logger = SimpleLogger();
 
   NotificationRepositoryImpl(this._fcmDataSource);
 
@@ -40,6 +42,9 @@ class NotificationRepositoryImpl implements NotificationRepository {
       await _fcmDataSource.sendNotification(notification);
       return const Right(null);
     } catch (e) {
+      logger.severe(
+        '❌ Error while sending notification: ${e.toString()}',
+      );
       return Left(Fail('Failed to send notification'));
     }
   }

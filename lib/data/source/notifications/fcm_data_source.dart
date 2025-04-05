@@ -1,16 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../../di.dart';
 import '../../models/request_notification_model.dart';
+import '../authentication/auth_data_source.dart';
 
 class FcmDataSource {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   FcmDataSource(this._dio);
   final Dio _dio;
-
-  final String serverKey =
-      'BIMW3VLTV3S-6sBvkwKAvWEOvIIrbItxTOP1bwAo_5DVnH8VEYokiVMnvGevWYYov4hQgrcKnOsgc9Pf-sxX0BA';
 
   Future<String> getFcmToken() async =>
       await _firebaseMessaging.getToken() ?? '';
@@ -22,21 +21,40 @@ class FcmDataSource {
   Future<void> sendNotification(
     final RequestNotificationModel notification,
   ) async {
-    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    final apnsToken = await _firebaseMessaging.getAPNSToken();
+    if (apnsToken != null) {
+      // APNS token is available, make FCM plugin API requests...
+    }
+
+    await FirebaseMessaging.instance.setAutoInitEnabled(true);
+
+    final postUrl =
+        'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
+
+    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
+
+    if (accessToken.isEmpty) {
+      throw Exception('Access token is null');
+    }
 
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'key=$serverKey',
+      'Authorization': 'Bearer $accessToken',
     };
 
     final payload = {
-      'to': await getFcmToken(),
-      'priority': 'high',
-      'notification': {
-        'title': 'Somebody needs your help',
-        'body': 'Open the app to see the details',
+      'message': {
+        'topic': 'test',
+        'token': await getFcmToken(),
+        // 'priority': 'high',
+        'notification': {
+          'title': 'Somebody needs your help',
+          'body': 'Open the app to see the details',
+        },
+        'data': {
+          'keysandvalues': notification.toJson(),
+        },
       },
-      'data': notification.toJson(),
     };
 
     final response = await _dio.post(

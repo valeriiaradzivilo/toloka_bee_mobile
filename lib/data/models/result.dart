@@ -8,6 +8,9 @@ class Success<T> extends Result<T> {
 sealed class Error<T> extends Result<T> {
   final String message;
   Error(this.message);
+
+  @override
+  String toString() => 'Error: $message';
 }
 
 class ErrorTimeout<T> extends Error<T> {

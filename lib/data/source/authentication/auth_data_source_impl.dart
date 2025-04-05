@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../models/user_auth_model.dart';
@@ -11,6 +12,8 @@ class AuthDataSourceImpl implements AuthDataSource {
   AuthDataSourceImpl(this._dio);
 
   static const _basePath = '/auth';
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   static final logger = SimpleLogger();
 
   @override
@@ -18,12 +21,17 @@ class AuthDataSourceImpl implements AuthDataSource {
     final String username,
     final String password,
   ) async {
+    final UserCredential userCredential = await _auth
+        .signInWithEmailAndPassword(email: username, password: password);
+
+    final String? idToken = userCredential.user?.uid;
+
+    if (idToken == null) throw Exception('Failed to get ID token');
+
     final response = await _dio.post(
       '$_basePath/login',
       data: {
-        'email': username,
-        'password': password,
-        'returnSecureToken': true,
+        'id': idToken,
       },
       options: Options(
         headers: {
@@ -49,30 +57,65 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<void> register(final UserAuthModel user) async {
-    try {
-      final data = user.toJson();
-      final response = await _dio.post(
-        '$_basePath/register',
-        data: jsonEncode(data),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        // Parse the response if needed
-        final userRecord =
-            response.data; // Assuming response contains UserRecord
-        print('User registered successfully: $userRecord');
-      } else {
-        throw Exception('Failed to register user: ${response.statusCode}');
-      }
-    } catch (e) {
-      // Handle errors appropriately
-      print('Error during registration: $e');
-      rethrow; // Optionally rethrow the error
+    if (user.password == null) {
+      throw Exception('Password is required');
     }
+
+    final UserCredential userCredential =
+        await _auth.createUserWithEmailAndPassword(
+      email: user.email,
+      password: user.password!,
+    );
+
+    if (userCredential.user == null) {
+      throw Exception('Failed to create user');
+    }
+
+    final data = user
+        .copyWith(
+          id: userCredential.user!.uid,
+          password: null,
+        )
+        .toJson();
+
+    final response = await _dio.post(
+      '$_basePath/register',
+      data: jsonEncode(data),
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final userRecord = response.data;
+      logger.info('User registered successfully: $userRecord');
+    } else {
+      throw Exception('Failed to register user: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<String> getAccessToken() async {
+    final User? user = _auth.currentUser;
+
+    if (user == null) {
+      throw Exception('User is not logged in');
+    }
+
+    final idToken = await _dio.post(
+      '$_basePath/access-token',
+      data: {
+        'id': user.uid,
+      },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    return idToken.data as String? ?? '';
   }
 }

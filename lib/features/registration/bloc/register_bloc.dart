@@ -24,6 +24,7 @@ class RegisterBloc extends ZipBloc {
   Future<bool> register(final EPosition position) async {
     final isRegistered = await _registerUserUsecase(
       UserAuthModel(
+        id: '',
         email: _emailController.value,
         password: _passwordController.value,
         username: _usernameController.value,

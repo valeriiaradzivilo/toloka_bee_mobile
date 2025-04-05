@@ -6,4 +6,6 @@ abstract class AuthDataSource {
   Future<void> logout();
 
   Future<void> register(final UserAuthModel user);
+
+  Future<String> getAccessToken();
 }
