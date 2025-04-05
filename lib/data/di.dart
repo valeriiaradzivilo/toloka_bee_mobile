@@ -7,6 +7,7 @@ import 'repository/geolocation/geo_repository.dart';
 import 'repository/geolocation/geo_repository_imp.dart';
 import 'repository/notifications/notification_repository.dart';
 import 'repository/notifications/notification_repository_impl.dart';
+import 'service/fcm_service.dart';
 import 'source/authentication/auth_data_source.dart';
 import 'source/authentication/auth_data_source_impl.dart';
 import 'source/geolocation/geo_data_source.dart';
@@ -35,9 +36,9 @@ Future<void> initDatasources() async {
   late final Dio dio = Dio(
     BaseOptions(
       baseUrl: backendUrl,
-      sendTimeout: const Duration(seconds: 5),
-      receiveTimeout: const Duration(seconds: 5),
-      connectTimeout: const Duration(seconds: 5),
+      sendTimeout: const Duration(seconds: 40),
+      receiveTimeout: const Duration(seconds: 40),
+      connectTimeout: const Duration(seconds: 40),
     ),
   );
 
@@ -46,6 +47,7 @@ Future<void> initDatasources() async {
   serviceLocator
       .registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(dio));
   serviceLocator.registerLazySingleton<FcmDataSource>(() => FcmDataSource(dio));
+  serviceLocator.registerLazySingleton<FcmService>(() => FcmService(dio));
 }
 
 Future<void> initRepository() async {

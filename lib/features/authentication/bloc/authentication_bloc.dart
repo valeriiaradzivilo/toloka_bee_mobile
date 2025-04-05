@@ -26,6 +26,8 @@ class AuthenticationBloc extends ZipBloc {
   ) async {
     final isAuthenticated = switch (username) {
       'l' when kDebugMode => await _loginUserUsecase('lera@z.com', 'Lera1234!'),
+      't' when kDebugMode =>
+        await _loginUserUsecase('test@user.com', 'Lera1234!'),
       _ => await _loginUserUsecase(username, password),
     };
 

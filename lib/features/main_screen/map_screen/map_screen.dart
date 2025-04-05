@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/reactive/react_widget.dart';
 import '../../../common/routes.dart';
@@ -190,10 +191,16 @@ class _BottomSheet extends StatelessWidget {
                               isScrollControlled: true,
                               showDragHandle: true,
                               useSafeArea: true,
-                              builder: (final context) => BlocProvider(
-                                create: (final context) =>
-                                    CreateRequestBloc(GetIt.instance),
-                                child: const RequestHandModal(),
+                              builder: (final context) => Provider(
+                                create: (final _) =>
+                                    MapScreenBloc(GetIt.I, context),
+                                dispose: (final _, final bloc) =>
+                                    bloc.dispose(),
+                                child: BlocProvider(
+                                  create: (final context) =>
+                                      CreateRequestBloc(GetIt.instance),
+                                  child: const RequestHandModal(),
+                                ),
                               ),
                             ),
                             label: Text(

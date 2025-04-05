@@ -34,7 +34,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await _firebaseMessagingBackgroundHandler();
 
   await init();
 
@@ -166,17 +166,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Future<void> _firebaseMessagingBackgroundHandler(
-  final RemoteMessage message,
-) async {
+Future<void> _firebaseMessagingBackgroundHandler() async {
   final notificationSettings =
       await FirebaseMessaging.instance.requestPermission();
+
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
   if (notificationSettings.authorizationStatus ==
       AuthorizationStatus.authorized) {
     print('✅ Дозвіл на сповіщення надано');
+    GetIt.instance.get<FcmService>().listenToMessages();
+    GetIt.instance.get<FcmService>().listenToBackgroundMessages();
   } else {
     print('🚫 Дозвіл на сповіщення не надано');
   }
-  FcmService().listenToMessages();
-  FcmService().listenToBackgroundMessages();
 }

@@ -30,4 +30,11 @@ class SetPriceEvent extends CreateRequestEvent {
   SetPriceEvent(this.price);
 }
 
+class SetLocationEvent extends CreateRequestEvent {
+  final double latitude;
+  final double longitude;
+
+  SetLocationEvent(this.latitude, this.longitude);
+}
+
 class SendRequestEvent extends CreateRequestEvent {}

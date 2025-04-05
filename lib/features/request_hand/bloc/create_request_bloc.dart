@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../data/usecase/send_notification_usecase.dart';
 import 'create_request_event.dart';
@@ -12,6 +13,7 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
           CreateRequestState(
             description: '',
             isRemote: false,
+            location: const LatLng(0, 0),
             isPhysicalStrength: false,
           ),
         ) {
@@ -43,6 +45,9 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
           print('Notification sent successfully: $success');
         },
       );
+    });
+    on<SetLocationEvent>((final event, final emit) {
+      emit(state.copyWith(location: LatLng(event.latitude, event.longitude)));
     });
   }
 

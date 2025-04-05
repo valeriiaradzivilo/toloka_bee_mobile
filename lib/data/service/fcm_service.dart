@@ -1,35 +1,40 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:simple_logger/simple_logger.dart';
 
 class FcmService {
+  FcmService(this._dio);
+  final Dio _dio;
+
+  static final SimpleLogger _logger = SimpleLogger();
+
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  final Dio _dio = Dio(); // або кастомний
 
   Future<void> initFCM(final String userId) async {
     // 1. Запит на дозволи
     final NotificationSettings settings = await _messaging.requestPermission();
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('✅ Дозвіл на сповіщення надано');
+      _logger.info('✅ Дозвіл на сповіщення надано');
 
       // 2. Отримуємо токен
       final String? token = await _messaging.getToken();
-      print('🔑 FCM Token: $token');
+      _logger.info('🔑 FCM Token: $token');
 
       if (token != null) {}
     } else {
-      print('🚫 Дозвіл на сповіщення не надано');
+      _logger.info('🚫 Дозвіл на сповіщення не надано');
     }
   }
 
   void listenToMessages() async {
     await FirebaseMessaging.instance.subscribeToTopic('test');
     FirebaseMessaging.onMessage.listen((final RemoteMessage message) {
-      print('🔕 Фонове повідомлення: ${message.messageId}');
-      print('📲 Отримано повідомлення у Foreground:');
-      print('🔔 Заголовок: ${message.notification?.title}');
-      print('📝 Тіло: ${message.notification?.body}');
-      print('📦 Дані: ${message.data}');
+      _logger.info('🔕 Фонове повідомлення: ${message.messageId}');
+      _logger.info('📲 Отримано повідомлення у Foreground:');
+      _logger.info('🔔 Заголовок: ${message.notification?.title}');
+      _logger.info('📝 Тіло: ${message.notification?.body}');
+      _logger.info('📦 Дані: ${message.data}');
     });
   }
 
@@ -40,10 +45,10 @@ class FcmService {
   static Future<void> _firebaseMessagingBackgroundHandler(
     final RemoteMessage message,
   ) async {
-    print('🔕 Фонове повідомлення: ${message.messageId}');
-    print('📲 Отримано повідомлення у Background:');
-    print('🔔 Заголовок: ${message.notification?.title}');
-    print('📝 Тіло: ${message.notification?.body}');
-    print('📦 Дані: ${message.data}');
+    _logger.info('🔕 Фонове повідомлення: ${message.messageId}');
+    _logger.info('📲 Отримано повідомлення у Background:');
+    _logger.info('🔔 Заголовок: ${message.notification?.title}');
+    _logger.info('📝 Тіло: ${message.notification?.body}');
+    _logger.info('📦 Дані: ${message.data}');
   }
 }

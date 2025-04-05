@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -10,6 +12,8 @@ class FcmDataSource {
 
   FcmDataSource(this._dio);
   final Dio _dio;
+
+  final String _basePath = '/request';
 
   Future<String> getFcmToken() async =>
       await _firebaseMessaging.getToken() ?? '';
@@ -25,8 +29,6 @@ class FcmDataSource {
     if (apnsToken != null) {
       // APNS token is available, make FCM plugin API requests...
     }
-
-    await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
     final postUrl =
         'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
@@ -45,15 +47,15 @@ class FcmDataSource {
     final payload = {
       'message': {
         'topic': 'test',
-        'token': await getFcmToken(),
+        // 'token': await getFcmToken(),
         // 'priority': 'high',
         'notification': {
           'title': 'Somebody needs your help',
           'body': 'Open the app to see the details',
         },
-        'data': {
-          'keysandvalues': notification.toJson(),
-        },
+        'data': notification
+            .toJson()
+            .map((final key, final value) => MapEntry(key, value.toString())),
       },
     };
 
@@ -64,10 +66,22 @@ class FcmDataSource {
     );
 
     if (response.statusCode == 200) {
-      print('✅ Сповіщення успішно надіслано');
+      final result = await _dio.post(
+        '$_basePath/save',
+        options: Options(headers: headers),
+        data: jsonEncode(
+          notification.copyWith(id: response.data['name']).toJson(),
+        ),
+      );
+      if (result.statusCode != 200) {
+        throw Exception(
+          'Failed to save notification: ${result.statusCode}',
+        );
+      }
     } else {
-      print('❌ Помилка при надсиланні: ${response.statusCode}');
-      print(response.data);
+      throw Exception(
+        'Failed to send notification: ${response.statusCode}',
+      );
     }
   }
 }

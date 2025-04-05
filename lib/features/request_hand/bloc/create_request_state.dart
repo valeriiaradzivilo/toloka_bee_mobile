@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:latlong2/latlong.dart';
+
 import '../../../data/models/request_notification_model.dart';
 
 class CreateRequestState {
@@ -6,11 +9,13 @@ class CreateRequestState {
   final bool isPhysicalStrength;
   final DateTime? deadline;
   final double? price;
+  final LatLng location;
 
   CreateRequestState({
     required this.description,
     required this.isRemote,
     required this.isPhysicalStrength,
+    required this.location,
     this.deadline,
     this.price,
   });
@@ -21,6 +26,7 @@ class CreateRequestState {
     final bool? isPhysicalStrength,
     final DateTime? deadline,
     final double? price,
+    final LatLng? location,
   }) =>
       CreateRequestState(
         description: description ?? this.description,
@@ -28,17 +34,18 @@ class CreateRequestState {
         isPhysicalStrength: isPhysicalStrength ?? this.isPhysicalStrength,
         deadline: deadline ?? this.deadline,
         price: price ?? this.price,
+        location: location ?? this.location,
       );
 
   RequestNotificationModel toRequestNotificationModel() =>
       RequestNotificationModel(
         id: '',
         requestId: '',
-        userId: '',
+        userId: FirebaseAuth.instance.currentUser!.uid,
         status: '',
-        deadline: deadline ?? DateTime.now(),
-        latitude: 0.0,
-        longitude: 0.0,
+        deadline: deadline ?? DateTime.now().add(const Duration(days: 7)),
+        latitude: location.latitude,
+        longitude: location.longitude,
         isRemote: isRemote,
         requiresPhysicalStrength: isPhysicalStrength,
         price: price?.toInt(),
