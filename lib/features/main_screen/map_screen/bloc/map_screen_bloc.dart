@@ -51,8 +51,7 @@ class MapScreenBloc extends ZipBloc {
   }
 
   void onMapCreated(final Position latLang) {
-    mapController.camera
-        .latLngToScreenPoint(LatLng(latLang.latitude, latLang.longitude));
+    mapController.move(LatLng(latLang.latitude, latLang.longitude), 12);
   }
 
   @override
@@ -61,7 +60,6 @@ class MapScreenBloc extends ZipBloc {
     await super.dispose();
   }
 
-  Stream<Position> get locationStream => Geolocator.getPositionStream();
   ValueStream<LocationServiceState> get locationServiceEnabled =>
       _locationServiceEnabled.stream;
 

@@ -13,9 +13,11 @@ import 'source/authentication/auth_data_source_impl.dart';
 import 'source/geolocation/geo_data_source.dart';
 import 'source/geolocation/geo_data_source_imp.dart';
 import 'source/notifications/fcm_data_source.dart';
-import 'usecase/authenticate_user_usecase.dart';
+import 'usecase/get_current_user_data_usecase.dart';
+import 'usecase/login_user_usecase.dart';
 import 'usecase/register_user_usecase.dart';
 import 'usecase/send_notification_usecase.dart';
+import 'usecase/subscribe_to_topic_usecase.dart';
 import 'usecase/update_location_usecase.dart';
 
 final GetIt serviceLocator = GetIt.instance;
@@ -73,8 +75,16 @@ Future<void> initUseCases() async {
     () => LoginUserUsecase(serviceLocator()),
   );
 
+  serviceLocator.registerLazySingleton<GetCurrentUserDataUsecase>(
+    () => GetCurrentUserDataUsecase(serviceLocator()),
+  );
+
   serviceLocator.registerLazySingleton<RegisterUserUsecase>(
     () => RegisterUserUsecase(serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton<SubscribeToTopicUsecase>(
+    () => SubscribeToTopicUsecase(serviceLocator()),
   );
 
   serviceLocator.registerLazySingleton<SendNotificationUsecase>(

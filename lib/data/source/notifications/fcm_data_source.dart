@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:latlong2/latlong.dart';
 
+import '../../../common/constants/location_constants.dart';
 import '../../di.dart';
 import '../../models/request_notification_model.dart';
 import '../authentication/auth_data_source.dart';
@@ -20,6 +22,10 @@ class FcmDataSource {
 
   Future<void> subscribeToTopic(final String topic) async {
     await _firebaseMessaging.subscribeToTopic(topic);
+  }
+
+  Future<void> unsubscribeFromTopic(final String topic) async {
+    await _firebaseMessaging.unsubscribeFromTopic(topic);
   }
 
   Future<void> sendNotification(
@@ -44,11 +50,11 @@ class FcmDataSource {
       'Authorization': 'Bearer $accessToken',
     };
 
+    final location = LatLng(notification.latitude, notification.longitude);
+
     final payload = {
       'message': {
-        'topic': 'test',
-        // 'token': await getFcmToken(),
-        // 'priority': 'high',
+        'topic': location.locationTopic,
         'notification': {
           'title': 'Somebody needs your help',
           'body': 'Open the app to see the details',

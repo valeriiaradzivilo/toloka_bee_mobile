@@ -28,25 +28,7 @@ class AuthDataSourceImpl implements AuthDataSource {
 
     if (idToken == null) throw Exception('Failed to get ID token');
 
-    final response = await _dio.post(
-      '$_basePath/login',
-      data: {
-        'id': idToken,
-      },
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
-    );
-
-    if (response.statusCode == 200) {
-      final userRecord = response.data;
-      logger.info('User logged in successfully...');
-      return UserAuthModel.fromJson(userRecord);
-    } else {
-      throw Exception('Failed to login: ${response.statusCode}');
-    }
+    return await getCurrentUserData(idToken: idToken);
   }
 
   @override
@@ -117,5 +99,32 @@ class AuthDataSourceImpl implements AuthDataSource {
     );
 
     return idToken.data as String? ?? '';
+  }
+
+  @override
+  Future<UserAuthModel> getCurrentUserData({final String? idToken}) async {
+    if (idToken == null && FirebaseAuth.instance.currentUser == null) {
+      throw Exception('User is not logged in');
+    }
+
+    final response = await _dio.post(
+      '$_basePath/login',
+      data: {
+        'id': idToken ?? FirebaseAuth.instance.currentUser?.uid,
+      },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final userRecord = response.data;
+      logger.info('User logged in successfully...');
+      return UserAuthModel.fromJson(userRecord);
+    } else {
+      throw Exception('Failed to login: ${response.statusCode}');
+    }
   }
 }

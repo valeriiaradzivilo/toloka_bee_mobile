@@ -8,4 +8,6 @@ abstract class AuthDataSource {
   Future<void> register(final UserAuthModel user);
 
   Future<String> getAccessToken();
+
+  Future<UserAuthModel> getCurrentUserData();
 }

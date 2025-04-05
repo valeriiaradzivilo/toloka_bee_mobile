@@ -8,4 +8,6 @@ abstract class AuthRepository {
     final String password,
   );
   Future<Either<Fail, void>> register(final UserAuthModel user);
+  Future<Either<Fail, UserAuthModel>> getCurrentUserData();
+  Future<Either<Fail, void>> logout();
 }

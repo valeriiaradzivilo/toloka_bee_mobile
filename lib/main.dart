@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -13,9 +12,9 @@ import 'common/theme/theme.dart';
 import 'common/theme/util.dart';
 import 'common/widgets/app_icon.dart';
 import 'data/di.dart';
-import 'data/service/fcm_service.dart';
 import 'features/authentication/bloc/authentication_bloc.dart';
 import 'features/authentication/ui/login_screen.dart';
+import 'features/location_controll/bloc/location_controll_bloc.dart';
 import 'features/main_screen/main_screen.dart';
 import 'features/profile/ui/profile_screen.dart';
 import 'features/registration/ui/create_account_screen.dart';
@@ -34,7 +33,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await _firebaseMessagingBackgroundHandler();
 
   await init();
 
@@ -103,6 +101,10 @@ class MyApp extends StatelessWidget {
           create: (final _) => AuthenticationBloc(GetIt.I),
           dispose: (final _, final bloc) => bloc.dispose(),
         ),
+        Provider(
+          create: (final context) => LocationControllBloc(GetIt.I),
+          dispose: (final context, final bloc) => bloc.dispose(),
+        ),
       ],
       child: MaterialApp(
         title: translate('app.name'),
@@ -163,20 +165,5 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-Future<void> _firebaseMessagingBackgroundHandler() async {
-  final notificationSettings =
-      await FirebaseMessaging.instance.requestPermission();
-
-  await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  if (notificationSettings.authorizationStatus ==
-      AuthorizationStatus.authorized) {
-    print('✅ Дозвіл на сповіщення надано');
-    GetIt.instance.get<FcmService>().listenToMessages();
-    GetIt.instance.get<FcmService>().listenToBackgroundMessages();
-  } else {
-    print('🚫 Дозвіл на сповіщення не надано');
   }
 }

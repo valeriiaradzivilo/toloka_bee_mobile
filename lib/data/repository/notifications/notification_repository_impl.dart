@@ -27,7 +27,18 @@ class NotificationRepositoryImpl implements NotificationRepository {
   @override
   Future<Either<Fail, void>> subscribeToTopic(final String topic) async {
     try {
+      if (_subscribedTopics.contains(topic)) {
+        return const Right(null);
+      }
+
+      if (_subscribedTopics.isNotEmpty) {
+        final unsubscribeFrom = _subscribedTopics.last;
+        await _fcmDataSource.unsubscribeFromTopic(unsubscribeFrom);
+        _subscribedTopics.removeLast();
+        logger.info('Unsubscribed from topic: $unsubscribeFrom');
+      }
       await _fcmDataSource.subscribeToTopic(topic);
+      _subscribedTopics.add(topic);
       return const Right(null);
     } catch (e) {
       return Left(Fail('Failed to subscribe to topic'));
@@ -48,4 +59,6 @@ class NotificationRepositoryImpl implements NotificationRepository {
       return Left(Fail('Failed to send notification'));
     }
   }
+
+  final List<String> _subscribedTopics = [];
 }

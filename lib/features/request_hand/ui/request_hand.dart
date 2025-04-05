@@ -5,7 +5,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../common/widgets/lin_number_editing_field.dart';
 import '../../../common/widgets/lin_text_editing_field.dart';
-import '../../main_screen/map_screen/bloc/map_screen_bloc.dart';
+import '../../location_controll/bloc/location_controll_bloc.dart';
 import '../bloc/create_request_bloc.dart';
 import '../bloc/create_request_event.dart';
 import '../bloc/create_request_state.dart';
@@ -33,7 +33,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
         height: MediaQuery.of(context).size.height,
         child: BlocBuilder<CreateRequestBloc, CreateRequestState>(
           builder: (final context, final state) => StreamBuilder(
-            stream: context.read<MapScreenBloc>().locationStream,
+            stream: context.read<LocationControllBloc>().locationStream,
             builder: (final context, final snapshot) {
               if (snapshot.hasData) {
                 final location = snapshot.data;

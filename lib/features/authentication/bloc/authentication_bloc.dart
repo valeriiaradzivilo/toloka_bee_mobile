@@ -9,16 +9,35 @@ import '../../../common/optional_value.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
-import '../../../data/usecase/authenticate_user_usecase.dart';
+import '../../../data/usecase/get_current_user_data_usecase.dart';
+import '../../../data/usecase/login_user_usecase.dart';
 
 class AuthenticationBloc extends ZipBloc {
   AuthenticationBloc(final GetIt locator)
-      : _loginUserUsecase = locator<LoginUserUsecase>();
+      : _loginUserUsecase = locator<LoginUserUsecase>(),
+        _getCurrentUserDataUsecase = locator<GetCurrentUserDataUsecase>() {
+    _init();
+  }
 
   ValueStream<Optional<UserAuthModel>> get userStream => _user.stream;
   Stream<bool> get isAuthenticated =>
       _user.stream.map((final user) => user is OptionalValue);
   ValueStream<PopupModel> get authPopupStream => _popupController.stream;
+
+  void _init() async {
+    final user = await _getCurrentUserDataUsecase.call();
+    if (user.isRight()) {
+      final UserAuthModel? userData = user.foldRight(
+        null,
+        (final userData, final _) => userData,
+      );
+      if (userData != null) {
+        _user.add(OptionalValue(userData));
+      }
+    } else {
+      _user.add(const OptionalNull());
+    }
+  }
 
   Future<void> login(
     final String username,
@@ -66,4 +85,5 @@ class AuthenticationBloc extends ZipBloc {
       BehaviorSubject<Optional<UserAuthModel>>.seeded(const OptionalNull());
 
   final LoginUserUsecase _loginUserUsecase;
+  final GetCurrentUserDataUsecase _getCurrentUserDataUsecase;
 }

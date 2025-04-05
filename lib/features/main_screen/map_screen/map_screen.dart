@@ -13,6 +13,7 @@ import '../../../common/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../authentication/bloc/authentication_bloc.dart';
+import '../../location_controll/bloc/location_controll_bloc.dart';
 import '../../request_hand/bloc/create_request_bloc.dart';
 import '../../request_hand/ui/request_hand.dart';
 import 'bloc/map_screen_bloc.dart';
@@ -31,8 +32,9 @@ class MapScreen extends StatelessWidget {
           LocationServiceState.enabled => Stack(
               children: [
                 ReactWidget(
-                  stream: bloc.locationStream,
+                  stream: context.read<LocationControllBloc>().locationStream,
                   builder: (final data) => FlutterMap(
+                    key: ValueKey('Map_Key_${data.latitude}_${data.longitude}'),
                     mapController: bloc.mapController,
                     options: MapOptions(
                       interactionOptions: const InteractionOptions(
@@ -40,15 +42,21 @@ class MapScreen extends StatelessWidget {
                         pinchMoveWinGestures: MultiFingerGesture.none,
                         pinchZoomWinGestures: MultiFingerGesture.none,
                       ),
+                      onPositionChanged: (final camera, final hasGesture) =>
+                          bloc.mapController
+                              .move(LatLng(data.latitude, data.longitude), 12),
                       onMapReady: () => bloc.onMapCreated(data),
-                      initialZoom: 10,
-                      maxZoom: 10,
+                      initialZoom: 12,
+                      maxZoom: 12,
                       minZoom: 1,
                       keepAlive: true,
                       initialCenter: LatLng(data.latitude, data.longitude),
                     ),
                     children: [
                       TileLayer(
+                        key: ValueKey(
+                          'Tile_Layer_Map_Key_${data.latitude}_${data.longitude}',
+                        ),
                         urlTemplate:
                             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                         tileBuilder:
