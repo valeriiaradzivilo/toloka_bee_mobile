@@ -87,7 +87,7 @@ class FcmDataSource {
         '$_basePath/save',
         options: Options(headers: headers),
         data: jsonEncode(
-          notification.copyWith(id: response.data['name']).toJson(),
+          notification.toJson(),
         ),
       );
       if (result.statusCode != 200) {

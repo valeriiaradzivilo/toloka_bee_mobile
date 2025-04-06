@@ -34,17 +34,11 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
     });
 
     on<SendRequestEvent>((final event, final emit) async {
-      final result = await _sendNotificationUsecase(
+      await _sendNotificationUsecase(
         state.toRequestNotificationModel(),
       );
-      result.fold(
-        (final failure) {
-          print('Error: $failure');
-        },
-        (final success) {
-          print('Notification sent successfully: $success');
-        },
-      );
+
+      // TODO: Handle success and error states
     });
     on<SetLocationEvent>((final event, final emit) {
       emit(state.copyWith(location: LatLng(event.latitude, event.longitude)));

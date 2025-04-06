@@ -17,6 +17,7 @@ class ZipSnackbar extends StatelessWidget {
               color: model.type.color,
             ),
             Expanded(
+              flex: 5,
               child: Column(
                 spacing: 4,
                 children: [
@@ -36,6 +37,21 @@ class ZipSnackbar extends StatelessWidget {
                 ],
               ),
             ),
+            if (model.onPressed != null)
+              Flexible(
+                child: TextButton(
+                  onPressed: () {
+                    model.onPressed!();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    model.type.actionText,
+                    style: ZipFonts.medium.style.copyWith(
+                      color: model.type.color,
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
         backgroundColor: Colors.white,

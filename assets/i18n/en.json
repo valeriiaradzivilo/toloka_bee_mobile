@@ -145,5 +145,11 @@
             },
             "submit": "Create request"
         }
+    },
+    "common": {
+        "action": {
+            "help": "Help",
+            "learn": "Learn more"
+        }
     }
 }

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../common/bloc/zip_bloc.dart';
 import '../../../common/optional_value.dart';
@@ -24,7 +25,7 @@ class RegisterBloc extends ZipBloc {
   Future<bool> register(final EPosition position) async {
     final isRegistered = await _registerUserUsecase(
       UserAuthModel(
-        id: '',
+        id: const Uuid().v4(),
         email: _emailController.value,
         password: _passwordController.value,
         username: _usernameController.value,

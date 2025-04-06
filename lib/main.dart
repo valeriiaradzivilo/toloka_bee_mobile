@@ -14,6 +14,7 @@ import 'common/theme/util.dart';
 import 'common/widgets/app_icon.dart';
 import 'common/widgets/zip_snackbar.dart';
 import 'data/di.dart';
+import 'data/models/request_notification_model.dart';
 import 'data/models/ui/popup_model.dart';
 import 'features/authentication/bloc/authentication_bloc.dart';
 import 'features/authentication/ui/login_screen.dart';
@@ -21,6 +22,7 @@ import 'features/location_controll/bloc/location_controll_bloc.dart';
 import 'features/main_screen/main_screen.dart';
 import 'features/profile/ui/profile_screen.dart';
 import 'features/registration/ui/create_account_screen.dart';
+import 'features/request_details/ui/request_details_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -135,6 +137,12 @@ class MyApp extends StatelessWidget {
             case Routes.profileScreen:
               return MaterialPageRoute(
                 builder: (final context) => const ProfileScreen(),
+              );
+            case Routes.requestDetailsScreen:
+              return MaterialPageRoute(
+                builder: (final context) => RequestDetailsScreen(
+                  settings.arguments as RequestNotificationModel,
+                ),
               );
             default:
               return MaterialPageRoute(

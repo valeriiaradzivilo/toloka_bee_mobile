@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../common/theme/zip_color.dart';
 
@@ -17,7 +18,7 @@ enum EPopupType {
         EPopupType.warning => Icons.warning_amber,
         EPopupType.error => Icons.error,
         EPopupType.question => Icons.question_mark_outlined,
-        EPopupType.helpNeeded => Icons.help_outline,
+        EPopupType.helpNeeded => Icons.add_location,
         _ => Icons.notifications,
       };
 
@@ -29,5 +30,10 @@ enum EPopupType {
         EPopupType.question => const Color(0xFF007AFF),
         EPopupType.helpNeeded => ZipColor.onPrimaryFixed,
         _ => const Color(0xFF007AFF),
+      };
+
+  String get actionText => switch (this) {
+        EPopupType.helpNeeded => translate('common.action.learn'),
+        _ => '',
       };
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../data/models/e_request_status.dart';
 import '../../../data/models/request_notification_model.dart';
 
 class CreateRequestState {
@@ -40,9 +41,8 @@ class CreateRequestState {
   RequestNotificationModel toRequestNotificationModel() =>
       RequestNotificationModel(
         id: '',
-        requestId: '',
         userId: FirebaseAuth.instance.currentUser!.uid,
-        status: '',
+        status: ERequestStatus.pending,
         deadline: deadline ?? DateTime.now().add(const Duration(days: 7)),
         latitude: location.latitude,
         longitude: location.longitude,
