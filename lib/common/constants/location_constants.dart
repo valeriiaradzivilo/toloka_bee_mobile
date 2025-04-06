@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 
 class LocationConstants {
   static const String locationTopicStart = 'location_';
+  static const String androidLocationChannelId = 'high_importance_channel';
 }
 
 extension LocationConstantsPositionExtension on Position {

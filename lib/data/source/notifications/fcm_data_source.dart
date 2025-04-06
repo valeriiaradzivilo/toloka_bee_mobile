@@ -59,6 +59,17 @@ class FcmDataSource {
           'title': 'Somebody needs your help',
           'body': 'Open the app to see the details',
         },
+        'android': {
+          'priority': 'high',
+          'notification': {
+            'channel_id': LocationConstants.androidLocationChannelId,
+            'visibility': 'PUBLIC',
+            'sound': 'default',
+            'default_sound': true,
+            'default_vibrate_timings': true,
+            'default_light_settings': true,
+          },
+        },
         'data': notification
             .toJson()
             .map((final key, final value) => MapEntry(key, value.toString())),

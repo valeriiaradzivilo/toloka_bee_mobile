@@ -50,7 +50,7 @@ Future<void> initDatasources() async {
   serviceLocator
       .registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(dio));
   serviceLocator.registerLazySingleton<FcmDataSource>(() => FcmDataSource(dio));
-  serviceLocator.registerLazySingleton<FcmService>(() => FcmService(dio));
+  serviceLocator.registerLazySingleton<FcmService>(() => FcmService());
 }
 
 Future<void> initRepository() async {

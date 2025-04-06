@@ -21,9 +21,6 @@ class LocationControllBloc extends ZipBloc {
           return;
         }
 
-        print(
-          'aaaaaaaaa Location: ${position.latitude}, ${position.longitude}',
-        );
         _subscribeToTopicUsecase(position.locationTopic);
       }),
     );
