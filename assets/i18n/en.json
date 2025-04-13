@@ -136,7 +136,7 @@
             },
             "deadline": {
                 "title": "Select deadline",
-                "description": "When do you need this task to be done? The request will be deleted after this date."
+                "description": "When do you need this task to be done? The request will be deleted after this date. Default value - in 1 week from now."
             },
             "price": {
                 "title": "Price",
@@ -144,6 +144,18 @@
                 "label": "Price (hryvnya)"
             },
             "submit": "Create request"
+        },
+        "details": {
+            "description": "Description",
+            "price": "Price",
+            "deadline": "Needs to be done by {date}",
+            "remote": "Remote",
+            "physical": "Requires physical strength",
+            "created": "Created at",
+            "actions": {
+                "accept": "Accept request",
+                "cancel": "Cancel request"
+            }
         }
     },
     "common": {

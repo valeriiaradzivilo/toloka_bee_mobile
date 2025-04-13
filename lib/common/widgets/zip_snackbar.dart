@@ -38,17 +38,14 @@ class ZipSnackbar extends StatelessWidget {
               ),
             ),
             if (model.onPressed != null)
-              Flexible(
-                child: TextButton(
-                  onPressed: () {
-                    model.onPressed!();
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    model.type.actionText,
-                    style: ZipFonts.medium.style.copyWith(
-                      color: model.type.color,
-                    ),
+              TextButton(
+                onPressed: () {
+                  model.onPressed!(context);
+                },
+                child: Text(
+                  model.type.actionText,
+                  style: ZipFonts.small.style.copyWith(
+                    color: model.type.color,
                   ),
                 ),
               ),
@@ -56,7 +53,10 @@ class ZipSnackbar extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
+        dismissDirection: DismissDirection.vertical,
+        duration: model.onPressed != null
+            ? const Duration(seconds: 10)
+            : const Duration(seconds: 3),
       );
 
   /// Static method to show the custom snackbar

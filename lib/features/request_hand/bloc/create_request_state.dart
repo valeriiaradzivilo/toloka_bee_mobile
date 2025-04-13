@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../data/models/e_request_status.dart';
 import '../../../data/models/request_notification_model.dart';
@@ -40,7 +41,7 @@ class CreateRequestState {
 
   RequestNotificationModel toRequestNotificationModel() =>
       RequestNotificationModel(
-        id: '',
+        id: const Uuid().v4(),
         userId: FirebaseAuth.instance.currentUser!.uid,
         status: ERequestStatus.pending,
         deadline: deadline ?? DateTime.now().add(const Duration(days: 7)),
@@ -50,5 +51,7 @@ class CreateRequestState {
         requiresPhysicalStrength: isPhysicalStrength,
         price: price?.toInt(),
         description: description,
+        createdAt: DateTime.now(),
+        updatedAt: null,
       );
 }

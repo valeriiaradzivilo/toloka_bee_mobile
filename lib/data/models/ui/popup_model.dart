@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
+
 import 'e_popup_type.dart';
 
 class PopupModel {
   final String title;
   final String? message;
   final String? buttonText;
-  final Function? onPressed;
+  final Function(BuildContext context)? onPressed;
   final EPopupType type;
 
   PopupModel({

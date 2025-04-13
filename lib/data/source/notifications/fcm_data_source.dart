@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../common/constants/location_constants.dart';
 import '../../di.dart';
+import '../../models/get_requests_model.dart';
 import '../../models/request_notification_model.dart';
 import '../authentication/auth_data_source.dart';
 
@@ -100,5 +101,42 @@ class FcmDataSource {
         'Failed to send notification: ${response.statusCode}',
       );
     }
+  }
+
+  Future<List<RequestNotificationModel>> getAllRequests(
+    final GetRequestsModel location,
+  ) async {
+    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
+
+    if (accessToken.isEmpty) {
+      throw Exception('Access token is null');
+    }
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    final response = await _dio.get(
+      '$_basePath/get-all',
+      options: Options(headers: headers),
+      data: jsonEncode(location.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      return (response.data as List)
+          .map((final e) => RequestNotificationModel.fromJson(e))
+          .toList();
+    } else {
+      throw Exception(
+        'Failed to get all requests: ${response.statusCode}',
+      );
+    }
+  }
+
+  Future<void> updateNotification(
+    final RequestNotificationModel notification,
+  ) async {
+    throw UnimplementedError();
   }
 }

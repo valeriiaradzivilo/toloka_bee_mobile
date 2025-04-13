@@ -13,6 +13,9 @@ import '../../../common/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../authentication/bloc/authentication_bloc.dart';
+import '../../give_hand/bloc/give_hand_bloc.dart';
+import '../../give_hand/bloc/give_hand_event.dart';
+import '../../give_hand/ui/give_hand_screen.dart';
 import '../../location_controll/bloc/location_controll_bloc.dart';
 import '../../request_hand/bloc/create_request_bloc.dart';
 import '../../request_hand/ui/request_hand.dart';
@@ -180,7 +183,18 @@ class _BottomSheet extends StatelessWidget {
                       children: [
                         Expanded(
                           child: ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () => showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              showDragHandle: true,
+                              useSafeArea: true,
+                              builder: (final context) => BlocProvider(
+                                create: (final context) =>
+                                    GiveHandBloc(GetIt.instance)
+                                      ..add(GiveHandFetchEvent()),
+                                child: const GiveHandScreen(),
+                              ),
+                            ),
                             label: Text(
                               translate('map.actions.give.hand'),
                               style: ZipFonts.small.style,

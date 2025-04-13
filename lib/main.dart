@@ -6,6 +6,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'common/routes.dart';
@@ -40,6 +42,8 @@ void main() async {
   );
 
   await init();
+
+  await initDateFormatting();
 
   ErrorWidget.builder = (final FlutterErrorDetails details) => Scaffold(
         body: Padding(
@@ -189,4 +193,11 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> initDateFormatting() async {
+  final locale = PlatformDispatcher.instance.locale.languageCode;
+
+  await initializeDateFormatting(locale);
+  Intl.defaultLocale = locale;
 }

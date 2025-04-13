@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+
 import 'e_request_status.dart';
 
-class RequestNotificationModel {
+class RequestNotificationModel implements Equatable {
   final String id;
   final String userId;
   final ERequestStatus status;
@@ -11,6 +15,8 @@ class RequestNotificationModel {
   final bool requiresPhysicalStrength;
   final int? price;
   final String description;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
 
   RequestNotificationModel({
     required this.id,
@@ -23,7 +29,32 @@ class RequestNotificationModel {
     required this.requiresPhysicalStrength,
     required this.price,
     required this.description,
+    required this.createdAt,
+    required this.updatedAt,
   });
+
+  factory RequestNotificationModel.fromFCM(final Map<String, dynamic> json) {
+    final location = jsonDecode(json['location'] as String);
+
+    final latitude = location?['coordinates']?[0] as double?;
+    final longitude = location?['coordinates']?[1] as double?;
+
+    return RequestNotificationModel(
+      id: json['id'] ?? '',
+      userId: json['userId'] ?? '',
+      status: ERequestStatus.fromJson(json['status'] ?? ''),
+      deadline: DateTime.tryParse(json['deadline'] ?? '') ?? DateTime.now(),
+      latitude: latitude ?? 0.0,
+      longitude: longitude ?? 0.0,
+      isRemote: bool.tryParse(json['isRemote']) ?? false,
+      requiresPhysicalStrength:
+          bool.tryParse(json['requiresPhysicalStrength']) ?? false,
+      price: int.tryParse(json['price']),
+      description: json['description'] ?? '',
+      createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+      updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
+    );
+  }
 
   factory RequestNotificationModel.fromJson(final Map<String, dynamic> json) =>
       RequestNotificationModel(
@@ -31,25 +62,32 @@ class RequestNotificationModel {
         userId: json['userId'] ?? '',
         status: ERequestStatus.fromJson(json['status'] ?? ''),
         deadline: DateTime.tryParse(json['deadline'] ?? '') ?? DateTime.now(),
-        latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
-        longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
-        isRemote: json['isRemote'] ?? false,
-        requiresPhysicalStrength: json['requiresPhysicalStrength'] ?? false,
-        price: json['price'],
+        latitude: json['location']['x'] as double? ?? 0.0,
+        longitude: json['location']['y'] as double? ?? 0.0,
+        isRemote: json['isRemote'] as bool? ?? false,
+        requiresPhysicalStrength:
+            json['requiresPhysicalStrength'] as bool? ?? false,
+        price: json['price'] as int?,
         description: json['description'] ?? '',
+        createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
+        updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'userId': userId,
-        'status': status,
+        'status': status.name,
         'deadline': deadline.toIso8601String(),
-        'latitude': latitude,
-        'longitude': longitude,
+        'location': {
+          'type': 'Point',
+          'coordinates': [longitude, latitude],
+        },
         'isRemote': isRemote,
         'requiresPhysicalStrength': requiresPhysicalStrength,
         'price': price,
         'description': description,
+        'createdAt': createdAt.toIso8601String(),
+        'updatedAt': updatedAt?.toIso8601String(),
       };
 
   RequestNotificationModel copyWith({
@@ -63,6 +101,8 @@ class RequestNotificationModel {
     final bool? requiresPhysicalStrength,
     final int? price,
     final String? description,
+    final DateTime? createdAt,
+    final DateTime? updatedAt,
   }) =>
       RequestNotificationModel(
         id: id ?? this.id,
@@ -76,5 +116,26 @@ class RequestNotificationModel {
             requiresPhysicalStrength ?? this.requiresPhysicalStrength,
         price: price ?? this.price,
         description: description ?? this.description,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
       );
+
+  @override
+  List<Object?> get props => [
+        id,
+        userId,
+        status,
+        deadline,
+        latitude,
+        longitude,
+        isRemote,
+        requiresPhysicalStrength,
+        price,
+        description,
+        createdAt,
+        updatedAt,
+      ];
+
+  @override
+  bool? get stringify => true;
 }

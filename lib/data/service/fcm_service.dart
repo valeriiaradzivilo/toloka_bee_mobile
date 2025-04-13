@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../common/constants/location_constants.dart';
@@ -54,34 +57,37 @@ class FcmService {
 
     final context = MyApp.navigatorKey.currentState?.context;
 
-    if (context == null) {
+    if (context == null || !context.mounted) {
       _logger.warning('❌ Контекст не знайдено');
       return;
     }
 
-    final data = RequestNotificationModel.fromJson(message.data);
+    final data = RequestNotificationModel.fromFCM(message.data);
+
+    final Position position = await Geolocator.getCurrentPosition();
+
+    final double distanceKm = Geolocator.distanceBetween(
+          position.latitude,
+          position.longitude,
+          data.latitude,
+          data.longitude,
+        ) /
+        1000;
+
+    if (distanceKm > 100) return;
 
     ZipSnackbar.show(
       context,
       PopupModel(
         title: message.notification?.title ?? '',
         message: message.notification?.body ?? '',
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
+        onPressed: (final BuildContext context) {
+          Navigator.of(context).pushReplacementNamed(
             Routes.requestDetailsScreen,
             arguments: data,
           );
         },
         type: EPopupType.helpNeeded,
-      ),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '🔔 ${message.notification?.title} - ${message.notification?.body}',
-        ),
       ),
     );
   }
