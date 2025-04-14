@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
@@ -21,8 +26,11 @@ class RegisterBloc extends ZipBloc {
   ValueStream<String> get surnameStream => _surnameController.stream;
 
   ValueStream<String> get emailStream => _emailController.stream;
+  ValueStream<({Uint8List bytes, String contentType})> get photoStream =>
+      _photoController.stream;
 
   Future<bool> register(final EPosition position) async {
+    final base64Image = base64Encode(_photoController.value.bytes);
     final isRegistered = await _registerUserUsecase(
       UserAuthModel(
         id: const Uuid().v4(),
@@ -34,7 +42,8 @@ class RegisterBloc extends ZipBloc {
         birthDate: _dateOfBirthController.value.valueOrNull!.toIso8601String(),
         position: position.name.toLowerCase(),
         about: _aboutMeController.value,
-        photoId: '',
+        photo: base64Image,
+        photoFormat: _photoController.value.contentType,
       ),
     );
     logger.info('User registered: ${isRegistered.isRight()}');
@@ -81,6 +90,32 @@ class RegisterBloc extends ZipBloc {
     _aboutMeController.add(aboutMe);
   }
 
+  void pickImage() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+
+    if (image == null) {
+      _photoController.add(
+        (
+          bytes: Uint8List(0),
+          contentType: 'image/jpeg',
+        ),
+      );
+      return;
+    }
+
+    final bytes = await image.readAsBytes();
+
+    final contentType = lookupMimeType(image.name) ?? 'image/jpeg';
+
+    _photoController.add(
+      (
+        bytes: bytes,
+        contentType: contentType,
+      ),
+    );
+  }
+
   @override
   Future<void> dispose() async {
     await _nameController.close();
@@ -91,6 +126,7 @@ class RegisterBloc extends ZipBloc {
     await _dateOfBirthController.close();
     await _stepController.close();
     await _aboutMeController.close();
+    await _photoController.close();
 
     await super.dispose();
   }
@@ -111,6 +147,15 @@ class RegisterBloc extends ZipBloc {
   final BehaviorSubject<Optional<DateTime>> _dateOfBirthController =
       BehaviorSubject<Optional<DateTime>>.seeded(
     const OptionalNull<DateTime>(),
+  );
+
+  final BehaviorSubject<({Uint8List bytes, String contentType})>
+      _photoController =
+      BehaviorSubject<({Uint8List bytes, String contentType})>.seeded(
+    (
+      bytes: Uint8List(0),
+      contentType: '',
+    ),
   );
 
   final BehaviorSubject<String> _aboutMeController =

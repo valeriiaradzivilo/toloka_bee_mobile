@@ -43,14 +43,17 @@ class _LoginScreenState extends State<_LoginScreen> {
   }
 
   void _login() {
-    loggingInProgress = true;
+    setState(() {
+      loggingInProgress = true;
+    });
+
     final username = _usernameController.text;
     final password = _passwordController.text;
     _authenticationBloc.login(username, password).then(
       (final value) {
         loggingInProgress = false;
 
-        if (context.mounted) {
+        if (context.mounted && value) {
           // ignore: use_build_context_synchronously
           Navigator.of(context).pushReplacementNamed(
             Routes.mainScreen,

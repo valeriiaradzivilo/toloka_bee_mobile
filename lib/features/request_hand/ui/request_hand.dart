@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/theme/zip_fonts.dart';
 import '../../../common/widgets/lin_number_editing_field.dart';
@@ -123,12 +124,29 @@ class _RequestHandModalState extends State<RequestHandModal> {
                               title: Text(
                                 translate('request.hand.deadline.title'),
                               ),
-                              subtitle: Text(
-                                state.deadline == null
-                                    ? translate(
-                                        'request.hand.deadline.description',
-                                      )
-                                    : state.deadline.toString(),
+                              subtitle: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '${translate(
+                                      'request.hand.deadline.description',
+                                    )}\n',
+                                  ),
+                                  Text(
+                                    translate(
+                                      'request.hand.deadline.current',
+                                      args: {
+                                        'date': DateFormat.yMMMMEEEEd().format(
+                                          state.deadline ?? DateTime.now(),
+                                        ),
+                                      },
+                                    ),
+                                    style: ZipFonts.small.style.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                               trailing: const Icon(Icons.calendar_today),
                             ),

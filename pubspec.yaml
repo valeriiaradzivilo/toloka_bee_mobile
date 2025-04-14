@@ -78,6 +78,7 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_gen: ^5.8.0
   flutter_local_notifications: ^19.0.0
+  mime: ^2.0.0
 
 # Development dependencies
 dev_dependencies:

@@ -15,8 +15,11 @@ class $AssetsI18nGen {
   /// File path: assets/i18n/en.json
   String get en => 'assets/i18n/en.json';
 
+  /// File path: assets/i18n/uk.json
+  String get uk => 'assets/i18n/uk.json';
+
   /// List of all assets
-  List<String> get values => [en];
+  List<String> get values => [en, uk];
 }
 
 class $AssetsLogoGen {

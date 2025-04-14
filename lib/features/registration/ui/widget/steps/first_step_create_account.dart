@@ -37,6 +37,21 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
       spacing: 20,
       children: [
         const Spacer(),
+        ReactWidget(
+          stream: registerBloc.photoStream,
+          builder: (final data) => data.bytes.isNotEmpty
+              ? GestureDetector(
+                  onTap: () => registerBloc.pickImage(),
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: MemoryImage(data.bytes),
+                  ),
+                )
+              : IconButton(
+                  onPressed: () => registerBloc.pickImage(),
+                  icon: const Icon(Icons.add_a_photo),
+                ),
+        ),
         LinTextField(
           initialValue: registerBloc.nameStream.value,
           controller: _nameController,
@@ -107,15 +122,18 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
           ],
         ),
         const Spacer(),
-        ReactWidget(
-          stream: registerBloc.dateOfBirthStream,
-          builder: (final data) => NextBackButtonRow(
+        ReactWidget2(
+          stream1: registerBloc.dateOfBirthStream,
+          stream2: registerBloc.photoStream,
+          builder: (final data1, final data2) => NextBackButtonRow(
             step: ESteps.checkGeneralInfo,
             areFieldsValid: _isValidName &&
                 _isValidSurname &&
-                data.valueOrNull != null &&
+                data1.valueOrNull != null &&
                 _nameController.text.isNotEmpty &&
-                _surnameController.text.isNotEmpty,
+                _surnameController.text.isNotEmpty &&
+                data2.bytes.isNotEmpty &&
+                data2.contentType.isNotEmpty,
           ),
         ),
       ],

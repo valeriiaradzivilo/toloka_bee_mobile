@@ -41,7 +41,7 @@ class AuthenticationBloc extends ZipBloc {
     }
   }
 
-  Future<void> login(
+  Future<bool> login(
     final String username,
     final String password,
   ) async {
@@ -52,7 +52,7 @@ class AuthenticationBloc extends ZipBloc {
       _ => await _loginUserUsecase(username, password),
     };
 
-    isAuthenticated.fold(
+    return isAuthenticated.fold(
       (final error) {
         _popupController.add(
           PopupModel(
@@ -61,6 +61,7 @@ class AuthenticationBloc extends ZipBloc {
             type: EPopupType.error,
           ),
         );
+        return false;
       },
       (final user) {
         _user.add(OptionalValue(user));
@@ -71,6 +72,7 @@ class AuthenticationBloc extends ZipBloc {
             type: EPopupType.success,
           ),
         );
+        return true;
       },
     );
   }

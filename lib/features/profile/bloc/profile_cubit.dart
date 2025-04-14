@@ -3,22 +3,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/models/user_model.dart';
+import '../../../data/models/user_auth_model.dart';
 
 part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileInitialState());
 
-  void loadUser(final UserModel user) {
+  void loadUser(final UserAuthModel user) {
     emit(ProfileLoadingState());
-    try {
-      // Simulate data load
-      Future.delayed(const Duration(seconds: 1), () {
-        emit(ProfileLoadedState(user));
-      });
-    } catch (e) {
-      emit(const ProfileErrorState('Failed to load user data'));
-    }
+
+    emit(ProfileLoadedState(user));
   }
 }
