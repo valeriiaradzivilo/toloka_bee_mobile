@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../common/bloc/zip_bloc.dart';
 import '../../../common/constants/location_constants.dart';
+import '../../../data/models/location_subscription_model.dart';
 import '../../../data/service/fcm_service.dart';
 import '../../../data/usecase/subscribe_to_topic_usecase.dart';
 
@@ -20,8 +21,15 @@ class LocationControlBloc extends ZipBloc {
         if (FirebaseAuth.instance.currentUser == null) {
           return;
         }
-
-        _subscribeToTopicUsecase(position.locationTopic);
+        for (final location in position.locationTopicList) {
+          _subscribeToTopicUsecase(
+            LocationSubscriptionModel(
+              id: '',
+              topic: location,
+              userId: FirebaseAuth.instance.currentUser!.uid,
+            ),
+          );
+        }
       }),
     );
 

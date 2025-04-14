@@ -7,6 +7,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../common/constants/location_constants.dart';
 import '../../di.dart';
 import '../../models/get_requests_model.dart';
+import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
 import '../authentication/auth_data_source.dart';
 
@@ -16,17 +17,30 @@ class FcmDataSource {
   FcmDataSource(this._dio);
   final Dio _dio;
 
-  final String _basePath = '/request';
+  final String _basePathRequest = '/request';
+  final String _basePathSubscription = '/location-subscription';
 
   Future<String> getFcmToken() async =>
       await _firebaseMessaging.getToken() ?? '';
 
-  Future<void> subscribeToTopic(final String topic) async {
-    await _firebaseMessaging.subscribeToTopic(topic);
+  Future<void> subscribeToTopic(
+    final LocationSubscriptionModel locationSubscription,
+  ) async {
+    await _firebaseMessaging.subscribeToTopic(locationSubscription.topic);
+    await _dio.post(
+      '$_basePathSubscription/subscribe',
+      data: jsonEncode(locationSubscription.toJson()),
+    );
   }
 
-  Future<void> unsubscribeFromTopic(final String topic) async {
-    await _firebaseMessaging.unsubscribeFromTopic(topic);
+  Future<void> unsubscribeFromTopic(
+    final LocationSubscriptionModel locationSubscription,
+  ) async {
+    await _firebaseMessaging.unsubscribeFromTopic(locationSubscription.topic);
+    await _dio.post(
+      '$_basePathSubscription/unsubscribe',
+      data: jsonEncode(locationSubscription.toJson()),
+    );
   }
 
   Future<void> sendNotification(
@@ -85,7 +99,7 @@ class FcmDataSource {
 
     if (response.statusCode == 200) {
       final result = await _dio.post(
-        '$_basePath/save',
+        '$_basePathRequest/save',
         options: Options(headers: headers),
         data: jsonEncode(
           notification.toJson(),
@@ -118,7 +132,7 @@ class FcmDataSource {
     };
 
     final response = await _dio.get(
-      '$_basePath/get-all',
+      '$_basePathRequest/get-all',
       options: Options(headers: headers),
       data: jsonEncode(location.toJson()),
     );
@@ -130,6 +144,34 @@ class FcmDataSource {
     } else {
       throw Exception(
         'Failed to get all requests: ${response.statusCode}',
+      );
+    }
+  }
+
+  Future<int> countVolunteersByTopic(
+    final String topic,
+  ) async {
+    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
+
+    if (accessToken.isEmpty) {
+      throw Exception('Access token is null');
+    }
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    final response = await _dio.get(
+      '$_basePathSubscription/count$topic',
+      options: Options(headers: headers),
+    );
+
+    if (response.statusCode == 200) {
+      return response.data as int;
+    } else {
+      throw Exception(
+        'Failed to count volunteers by topic: ${response.statusCode}',
       );
     }
   }
