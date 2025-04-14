@@ -17,7 +17,7 @@ import 'data/di.dart';
 import 'data/models/request_notification_model.dart';
 import 'features/authentication/bloc/authentication_bloc.dart';
 import 'features/authentication/ui/login_screen.dart';
-import 'features/location_controll/bloc/location_controll_bloc.dart';
+import 'features/location_control/bloc/location_control_bloc.dart';
 import 'features/main_app/main_wrapper_widget.dart';
 import 'features/main_screen/main_screen.dart';
 import 'features/profile/ui/profile_screen.dart';
@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
           dispose: (final _, final bloc) => bloc.dispose(),
         ),
         Provider(
-          create: (final context) => LocationControllBloc(GetIt.I),
+          create: (final context) => LocationControlBloc(GetIt.I),
           dispose: (final context, final bloc) => bloc.dispose(),
         ),
       ],

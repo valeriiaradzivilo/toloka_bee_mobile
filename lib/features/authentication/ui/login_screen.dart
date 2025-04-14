@@ -43,15 +43,13 @@ class _LoginScreenState extends State<_LoginScreen> {
   }
 
   void _login() {
-    setState(() {
-      loggingInProgress = true;
-    });
+    setState(() => loggingInProgress = true);
 
     final username = _usernameController.text;
     final password = _passwordController.text;
     _authenticationBloc.login(username, password).then(
       (final value) {
-        loggingInProgress = false;
+        setState(() => loggingInProgress = false);
 
         if (context.mounted && value) {
           // ignore: use_build_context_synchronously

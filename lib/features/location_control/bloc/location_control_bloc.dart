@@ -9,8 +9,8 @@ import '../../../common/constants/location_constants.dart';
 import '../../../data/service/fcm_service.dart';
 import '../../../data/usecase/subscribe_to_topic_usecase.dart';
 
-class LocationControllBloc extends ZipBloc {
-  LocationControllBloc(final GetIt serviceLocator)
+class LocationControlBloc extends ZipBloc {
+  LocationControlBloc(final GetIt serviceLocator)
       : _subscribeToTopicUsecase = serviceLocator<SubscribeToTopicUsecase>(),
         super() {
     addSubscription(

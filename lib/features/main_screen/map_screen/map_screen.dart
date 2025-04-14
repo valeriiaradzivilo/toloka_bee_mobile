@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -12,11 +14,12 @@ import '../../../common/reactive/react_widget.dart';
 import '../../../common/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
+import '../../../data/models/user_auth_model.dart';
 import '../../authentication/bloc/authentication_bloc.dart';
 import '../../give_hand/bloc/give_hand_bloc.dart';
 import '../../give_hand/bloc/give_hand_event.dart';
 import '../../give_hand/ui/give_hand_screen.dart';
-import '../../location_controll/bloc/location_controll_bloc.dart';
+import '../../location_control/bloc/location_control_bloc.dart';
 import '../../request_hand/bloc/create_request_bloc.dart';
 import '../../request_hand/ui/request_hand.dart';
 import 'bloc/map_screen_bloc.dart';
@@ -34,50 +37,58 @@ class MapScreen extends StatelessWidget {
         builder: (final locationEnabled) => switch (locationEnabled) {
           LocationServiceState.enabled => Stack(
               children: [
-                ReactWidget(
-                  stream: context.read<LocationControllBloc>().locationStream,
-                  builder: (final data) => FlutterMap(
-                    key: ValueKey('Map_Key_${data.latitude}_${data.longitude}'),
-                    mapController: bloc.mapController,
-                    options: MapOptions(
-                      interactionOptions: const InteractionOptions(
-                        flags: InteractiveFlag.none,
-                        pinchMoveWinGestures: MultiFingerGesture.none,
-                        pinchZoomWinGestures: MultiFingerGesture.none,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: ReactWidget(
+                    stream: context.read<LocationControlBloc>().locationStream,
+                    builder: (final data) => FlutterMap(
+                      key: ValueKey(
+                        'Map_Key_${data.latitude}_${data.longitude}',
                       ),
-                      onPositionChanged: (final camera, final hasGesture) =>
-                          bloc.mapController
-                              .move(LatLng(data.latitude, data.longitude), 12),
-                      onMapReady: () => bloc.onMapCreated(data),
-                      initialZoom: 12,
-                      maxZoom: 12,
-                      minZoom: 1,
-                      keepAlive: true,
-                      initialCenter: LatLng(data.latitude, data.longitude),
-                    ),
-                    children: [
-                      TileLayer(
-                        key: ValueKey(
-                          'Tile_Layer_Map_Key_${data.latitude}_${data.longitude}',
+                      mapController: bloc.mapController,
+                      options: MapOptions(
+                        interactionOptions: const InteractionOptions(
+                          flags: InteractiveFlag.none,
+                          pinchMoveWinGestures: MultiFingerGesture.none,
+                          pinchZoomWinGestures: MultiFingerGesture.none,
                         ),
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        tileBuilder:
-                            (final context, final widget, final tile) => widget,
+                        onPositionChanged: (final camera, final hasGesture) =>
+                            bloc.mapController.move(
+                          LatLng(data.latitude, data.longitude),
+                          12,
+                        ),
+                        onMapReady: () => bloc.onMapCreated(data),
+                        initialZoom: 12,
+                        maxZoom: 12,
+                        minZoom: 1,
+                        keepAlive: true,
+                        initialCenter: LatLng(data.latitude, data.longitude),
                       ),
-                      MarkerLayer(
-                        markers: [
-                          Marker(
-                            point: LatLng(data.latitude, data.longitude),
-                            child: Icon(
-                              FontAwesomeIcons.userNinja,
-                              color: ZipColor.randomZipColor,
-                              size: 50,
-                            ),
+                      children: [
+                        TileLayer(
+                          key: ValueKey(
+                            'Tile_Layer_Map_Key_${data.latitude}_${data.longitude}',
                           ),
-                        ],
-                      ),
-                    ],
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          tileBuilder:
+                              (final context, final widget, final tile) =>
+                                  widget,
+                        ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: LatLng(data.latitude, data.longitude),
+                              child: Icon(
+                                FontAwesomeIcons.userNinja,
+                                color: ZipColor.randomZipColor,
+                                size: 50,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const Align(
@@ -108,8 +119,8 @@ class _BottomSheet extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ReactWidget(
-        stream: context.read<AuthenticationBloc>().isAuthenticated,
-        builder: (final isAuthenticated) => Container(
+        stream: context.read<AuthenticationBloc>().userStream,
+        builder: (final user) => Container(
           width: double.infinity,
           decoration: const BoxDecoration(
             color: ZipColor.surfaceBright,
@@ -119,9 +130,11 @@ class _BottomSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(child: _AccountInfo(isAuthenticated)),
+              Flexible(
+                child: _AccountInfo(user.valueOrNull != null, user.valueOrNull),
+              ),
               Visibility(
-                visible: isAuthenticated,
+                visible: user.valueOrNull != null,
                 child: Column(
                   children: [
                     const Divider(),
@@ -248,8 +261,9 @@ class _BottomSheet extends StatelessWidget {
 }
 
 class _AccountInfo extends StatelessWidget {
-  const _AccountInfo(this.isAuthenticated);
+  const _AccountInfo(this.isAuthenticated, this.user);
   final bool isAuthenticated;
+  final UserAuthModel? user;
 
   @override
   Widget build(final BuildContext context) => Row(
@@ -265,15 +279,31 @@ class _AccountInfo extends StatelessWidget {
                         .pushReplacementNamed(Routes.profileScreen)
                     : null,
                 icon: Container(
+                  width: 100,
+                  height: 100,
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     border: Border.all(color: ZipColor.primary, width: 2),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(
-                    Icons.person_4_rounded,
-                    size: 50,
-                    color: ZipColor.primary,
-                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: user == null ||
+                          (user!.photo.isEmpty || user!.photoFormat.isEmpty)
+                      ? const Icon(
+                          Icons.person_4_rounded,
+                          size: 50,
+                          color: ZipColor.primary,
+                        )
+                      : DecoratedBox(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: MemoryImage(
+                                base64Decode(user!.photo),
+                              ),
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
+                        ),
                 ),
               ),
               OutlinedButton(

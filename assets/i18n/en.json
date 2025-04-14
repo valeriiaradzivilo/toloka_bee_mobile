@@ -8,7 +8,7 @@
     "map": {
         "hello": {
             "title": "Hello{name}!",
-            "subtitle": "What a great day to give somebody a hand!"
+            "subtitle": "What a great day to give somebody a hand!\nOr to ask for a hand."
         },
         "actions": {
             "question": "What are we doing today?",
