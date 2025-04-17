@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,16 +9,49 @@ import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../../../common/bloc/zip_bloc.dart';
+import '../../../../common/constants/location_constants.dart';
+import '../../../../common/theme/zip_color.dart';
 import '../../../../data/models/location_model.dart';
+import '../../../../data/usecase/get_volunteers_by_location_usecase.dart';
 import '../../../../data/usecase/update_location_usecase.dart';
 import '../data/location_service_state.dart';
 
 class MapScreenBloc extends ZipBloc {
   MapScreenBloc(final GetIt locator, final BuildContext context)
-      : _updateLocationUsecase = locator<UpdateLocationUsecase>() {
-    // locationStream.skip(2).listen((event) {
-    //   mapController.move(LatLng(event.latitude, event.longitude), 10);
-    // });
+      : _updateLocationUsecase = locator<UpdateLocationUsecase>(),
+        _getVolunteersByLocationUsecase =
+            locator<GetVolunteersByLocationUsecase>(),
+        super() {
+    addSubscription(
+      Stream.periodic(const Duration(seconds: 30)).listen((final _) async {
+        final getCurrentPosition = await Geolocator.getCurrentPosition();
+        final volunteers = await _getVolunteersByLocationUsecase(
+          getCurrentPosition.locationTopic,
+        );
+        volunteers.fold((final _) {}, (final markersCount) {
+          final markers = <Marker>[];
+          for (int i = 0; i < markersCount; i++) {
+            final double randomValue =
+                Random().nextDouble() / 10 * (i.isEven ? 1 : -1);
+
+            markers.add(
+              Marker(
+                point: LatLng(
+                  getCurrentPosition.latitude + randomValue,
+                  getCurrentPosition.longitude + randomValue,
+                ),
+                child: Icon(
+                  Icons.volunteer_activism,
+                  color: ZipColor.tertiary.withValues(alpha: 0.8),
+                  size: 30,
+                ),
+              ),
+            );
+          }
+          _volunteerMarkers.add(markers);
+        });
+      }),
+    );
     _init();
   }
 
@@ -57,11 +92,14 @@ class MapScreenBloc extends ZipBloc {
   @override
   Future<void> dispose() async {
     await _locationServiceEnabled.close();
+    await _volunteerMarkers.close();
     await super.dispose();
   }
 
   ValueStream<LocationServiceState> get locationServiceEnabled =>
       _locationServiceEnabled.stream;
+
+  ValueStream<List<Marker>> get volunteerMarkers => _volunteerMarkers.stream;
 
   MapController mapController = MapController();
 
@@ -70,5 +108,11 @@ class MapScreenBloc extends ZipBloc {
     LocationServiceState.loading,
   );
 
+  final BehaviorSubject<List<Marker>> _volunteerMarkers =
+      BehaviorSubject<List<Marker>>.seeded(
+    [],
+  );
+
   final UpdateLocationUsecase _updateLocationUsecase;
+  final GetVolunteersByLocationUsecase _getVolunteersByLocationUsecase;
 }

@@ -8,7 +8,7 @@ class LocationSubscriptionModel with _$LocationSubscriptionModel {
   factory LocationSubscriptionModel({
     required final String id,
     required final String topic,
-    required final String userId,
+    @JsonKey(name: 'userId') required final String userId,
   }) = _LocationSubscriptionModel;
 
   factory LocationSubscriptionModel.fromJson(final Map<String, dynamic> json) =>

@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:simple_logger/simple_logger.dart';
 
@@ -28,25 +27,30 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<Either<Fail, void>> subscribeToTopic(
-    final LocationSubscriptionModel locationSubscription,
+  Future<Either<Fail, void>> subscribeToTopics(
+    final List<LocationSubscriptionModel> locationSubscription,
   ) async {
     try {
-      if (_subscribedTopics.firstWhereOrNull(
-            (final topic) => topic.id == locationSubscription.id,
-          ) !=
-          null) {
-        return const Right(null);
+      final Map<String, LocationSubscriptionModel> locationToSubscribe = {
+        for (final location in locationSubscription) location.topic: location,
+      };
+
+      for (final subscription in _subscribedTopics.entries) {
+        if (locationToSubscribe[subscription.key] == null) {
+          await _fcmDataSource.unsubscribeFromTopic(subscription.value);
+          _subscribedTopics.remove(subscription.key);
+          logger.info('Unsubscribed from topic: ${subscription.key}');
+        } else {
+          locationToSubscribe.remove(subscription.key);
+        }
       }
 
-      if (_subscribedTopics.isNotEmpty) {
-        final unsubscribeFrom = _subscribedTopics.last;
-        await _fcmDataSource.unsubscribeFromTopic(unsubscribeFrom);
-        _subscribedTopics.removeLast();
-        logger.info('Unsubscribed from topic: $unsubscribeFrom');
+      for (final subscription in locationToSubscribe.entries) {
+        await _fcmDataSource.subscribeToTopic(subscription.value);
+        _subscribedTopics[subscription.key] = subscription.value;
+        logger.info('Subscribed to topic: ${subscription.key}');
       }
-      await _fcmDataSource.subscribeToTopic(locationSubscription);
-      _subscribedTopics.add(locationSubscription);
+
       return const Right(null);
     } catch (e) {
       return Left(Fail('Failed to subscribe to topic'));
@@ -68,7 +72,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
     }
   }
 
-  final List<LocationSubscriptionModel> _subscribedTopics = [];
+  final Map<String, LocationSubscriptionModel> _subscribedTopics = {};
 
   @override
   Future<Either<Fail, List<RequestNotificationModel>>> getAllRequests(

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 class ZipColor {
@@ -46,12 +47,15 @@ class ZipColor {
   static const surfaceContainerHigh = Color(0xffe3eae7);
   static const surfaceContainerHighest = Color(0xffdde4e1);
 
-  static final Color randomZipColor = [
+  static final Color randomZipColor =
+      _randColors.elementAt(Random().nextInt(_randColors.length));
+
+  static final List<Color> _randColors = [
     primary,
     onSecondaryFixed,
     onPrimaryContainer,
     onErrorContainer,
     secondary,
     tertiary,
-  ].elementAt(DateTime.now().microsecond % 6);
+  ];
 }

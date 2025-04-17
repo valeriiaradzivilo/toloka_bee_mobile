@@ -32,13 +32,19 @@ class MapScreen extends StatelessWidget {
   Widget build(final BuildContext context) {
     final bloc = context.read<MapScreenBloc>();
     return Scaffold(
-      body: ReactWidget(
-        stream: bloc.locationServiceEnabled,
-        builder: (final locationEnabled) => switch (locationEnabled) {
+      body: ReactWidget3(
+        stream1: bloc.locationServiceEnabled,
+        stream2: context.read<AuthenticationBloc>().isAuthenticated,
+        stream3: bloc.volunteerMarkers,
+        builder:
+            (final locationEnabled, final isAuthenticated, final volunteers) =>
+                switch (locationEnabled) {
           LocationServiceState.enabled => Stack(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 2,
+                  height: isAuthenticated
+                      ? MediaQuery.of(context).size.height / 2
+                      : null,
                   child: ReactWidget(
                     stream: context.read<LocationControlBloc>().locationStream,
                     builder: (final data) => FlutterMap(
@@ -77,6 +83,7 @@ class MapScreen extends StatelessWidget {
                         ),
                         MarkerLayer(
                           markers: [
+                            ...volunteers,
                             Marker(
                               point: LatLng(data.latitude, data.longitude),
                               child: Icon(

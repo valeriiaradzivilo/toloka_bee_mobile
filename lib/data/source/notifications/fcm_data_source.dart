@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -27,9 +28,10 @@ class FcmDataSource {
     final LocationSubscriptionModel locationSubscription,
   ) async {
     await _firebaseMessaging.subscribeToTopic(locationSubscription.topic);
+    final data = locationSubscription.toJson();
     await _dio.post(
       '$_basePathSubscription/subscribe',
-      data: jsonEncode(locationSubscription.toJson()),
+      data: jsonEncode(data),
     );
   }
 
@@ -163,12 +165,18 @@ class FcmDataSource {
     };
 
     final response = await _dio.get(
-      '$_basePathSubscription/count$topic',
+      '$_basePathSubscription/count/$topic',
       options: Options(headers: headers),
     );
 
     if (response.statusCode == 200) {
-      return response.data as int;
+      final volunteersSubscribtions = (response.data as List)
+          .map((final e) => LocationSubscriptionModel.fromJson(e))
+          .where(
+            (final element) =>
+                element.userId != FirebaseAuth.instance.currentUser?.uid,
+          );
+      return volunteersSubscribtions.length;
     } else {
       throw Exception(
         'Failed to count volunteers by topic: ${response.statusCode}',

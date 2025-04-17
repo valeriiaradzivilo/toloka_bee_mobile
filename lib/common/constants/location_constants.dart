@@ -13,6 +13,8 @@ extension LocationConstantsPositionExtension on Position {
   List<String> get locationTopicList => [
         for (final double location in _closeLocations(latitude))
           '${LocationConstants.locationTopicStart}${_splitLocation(location)}_${_splitLocation(longitude)}',
+        for (final double location in _closeLocations(longitude))
+          '${LocationConstants.locationTopicStart}${_splitLocation(latitude)}_${_splitLocation(location)}',
       ];
 }
 
@@ -32,7 +34,7 @@ List<double> _closeLocations(final double value) {
   for (int i = -1; i < 2; i++) {
     result.add(
       double.parse(
-        '$firstPart,${secondPart + i}',
+        '$firstPart.${secondPart + i}',
       ),
     );
   }

@@ -15,21 +15,26 @@ class LocationControlBloc extends ZipBloc {
       : _subscribeToTopicUsecase = serviceLocator<SubscribeToTopicUsecase>(),
         super() {
     addSubscription(
-      locationStream
-          .debounceTime(const Duration(minutes: 1))
+      Rx.combineLatest2(
+        locationStream,
+        FirebaseAuth.instance.userChanges(),
+        (final location, final user) => (location),
+      )
+          .distinct()
+          .debounceTime(const Duration(seconds: 1))
           .listen((final Position position) {
         if (FirebaseAuth.instance.currentUser == null) {
           return;
         }
-        for (final location in position.locationTopicList) {
-          _subscribeToTopicUsecase(
+
+        _subscribeToTopicUsecase([
+          for (final location in position.locationTopicList)
             LocationSubscriptionModel(
               id: '',
               topic: location,
               userId: FirebaseAuth.instance.currentUser!.uid,
             ),
-          );
-        }
+        ]);
       }),
     );
 

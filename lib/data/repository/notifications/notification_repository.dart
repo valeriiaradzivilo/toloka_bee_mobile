@@ -6,8 +6,8 @@ import '../../models/request_notification_model.dart';
 
 abstract class NotificationRepository {
   Future<Either<Fail, String>> getFcmToken();
-  Future<Either<Fail, void>> subscribeToTopic(
-    final LocationSubscriptionModel locationSubscription,
+  Future<Either<Fail, void>> subscribeToTopics(
+    final List<LocationSubscriptionModel> locationSubscription,
   );
 
   Future<Either<Fail, void>> unsubscribeFromTopic(

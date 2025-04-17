@@ -75,3 +75,45 @@ class ReactWidget2<T, A> extends StatelessWidget {
         },
       );
 }
+
+class ReactWidget3<T, A, B> extends StatelessWidget {
+  const ReactWidget3({
+    super.key,
+    required this.stream1,
+    required this.stream2,
+    required this.stream3,
+    required this.builder,
+  });
+  final Stream<T> stream1;
+  final Stream<A> stream2;
+  final Stream<B> stream3;
+  final Function(T data1, A data2, B data3) builder;
+
+  @override
+  Widget build(final BuildContext context) => StreamBuilder(
+        stream: stream1,
+        builder: (final context, final data1) {
+          if (data1.hasData) {
+            if (data1.data case final T d1) {
+              return ReactWidget2<A, B>(
+                stream1: stream2,
+                stream2: stream3,
+                builder: (final a, final b) => builder(d1, a, b),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }
+          if (data1.hasError) {
+            return Center(
+              child: Text(
+                translate('oops.error.occurred'),
+                style: ZipFonts.small.error,
+              ),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      );
+}
