@@ -211,7 +211,7 @@ class _BottomSheet extends StatelessWidget {
                               builder: (final context) => BlocProvider(
                                 create: (final context) =>
                                     GiveHandBloc(GetIt.instance)
-                                      ..add(GiveHandFetchEvent()),
+                                      ..add(const GiveHandFetchEvent()),
                                 child: const GiveHandScreen(),
                               ),
                             ),
