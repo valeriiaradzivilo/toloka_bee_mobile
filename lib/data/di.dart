@@ -3,8 +3,6 @@ import 'package:get_it/get_it.dart';
 
 import 'repository/authentication/auth_repository.dart';
 import 'repository/authentication/auth_repository_impl.dart';
-import 'repository/geolocation/geo_repository.dart';
-import 'repository/geolocation/geo_repository_imp.dart';
 import 'repository/notifications/notification_repository.dart';
 import 'repository/notifications/notification_repository_impl.dart';
 import 'service/fcm_service.dart';
@@ -21,7 +19,6 @@ import 'usecase/logout_user_usecase.dart';
 import 'usecase/register_user_usecase.dart';
 import 'usecase/send_notification_usecase.dart';
 import 'usecase/subscribe_to_topic_usecase.dart';
-import 'usecase/update_location_usecase.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
@@ -56,10 +53,6 @@ Future<void> initDatasources() async {
 }
 
 Future<void> initRepository() async {
-  serviceLocator.registerLazySingleton<GeoRepository>(
-    () => GeoRepositoryImp(serviceLocator()),
-  );
-
   serviceLocator.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(serviceLocator()),
   );
@@ -70,10 +63,6 @@ Future<void> initRepository() async {
 }
 
 Future<void> initUseCases() async {
-  serviceLocator.registerLazySingleton<UpdateLocationUsecase>(
-    () => UpdateLocationUsecase(serviceLocator()),
-  );
-
   serviceLocator.registerLazySingleton<GetVolunteersByLocationUsecase>(
     () => GetVolunteersByLocationUsecase(serviceLocator()),
   );

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,49 +13,17 @@ import 'package:rxdart/subjects.dart';
 import '../../../../common/bloc/zip_bloc.dart';
 import '../../../../common/constants/location_constants.dart';
 import '../../../../common/theme/zip_color.dart';
-import '../../../../data/models/location_model.dart';
 import '../../../../data/usecase/get_volunteers_by_location_usecase.dart';
-import '../../../../data/usecase/update_location_usecase.dart';
 import '../data/location_service_state.dart';
 
 class MapScreenBloc extends ZipBloc {
   MapScreenBloc(final GetIt locator, final BuildContext context)
-      : _updateLocationUsecase = locator<UpdateLocationUsecase>(),
-        _getVolunteersByLocationUsecase =
+      : _getVolunteersByLocationUsecase =
             locator<GetVolunteersByLocationUsecase>(),
         super() {
     addSubscription(
       Stream.periodic(const Duration(seconds: 30)).listen((final _) async {
-        if (FirebaseAuth.instance.currentUser == null) {
-          return;
-        }
-
-        final getCurrentPosition = await Geolocator.getCurrentPosition();
-        final volunteers = await _getVolunteersByLocationUsecase(
-          getCurrentPosition.locationTopic,
-        );
-        volunteers.fold((final _) {}, (final markersCount) {
-          final markers = <Marker>[];
-          for (int i = 0; i < markersCount; i++) {
-            final double randomValue =
-                Random().nextDouble() / 10 * (i.isEven ? 1 : -1);
-
-            markers.add(
-              Marker(
-                point: LatLng(
-                  getCurrentPosition.latitude + randomValue,
-                  getCurrentPosition.longitude + randomValue,
-                ),
-                child: Icon(
-                  Icons.volunteer_activism,
-                  color: ZipColor.tertiary.withValues(alpha: 0.8),
-                  size: 30,
-                ),
-              ),
-            );
-          }
-          _volunteerMarkers.add(markers);
-        });
+        await _searchForVolunteers();
       }),
     );
     _init();
@@ -80,14 +49,47 @@ class MapScreenBloc extends ZipBloc {
           : LocationServiceState.disabled,
     );
     if (locationServiceEnabled) {
-      final location = await Geolocator.getCurrentPosition();
-      await _updateLocationUsecase(
-        LocationModel(
-          latitude: location.latitude,
-          longitude: location.longitude,
-        ),
-      );
+      unawaited(_searchForVolunteers());
     }
+  }
+
+  Future<void> _searchForVolunteers() async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      return;
+    }
+
+    final getCurrentPosition = await Geolocator.getCurrentPosition();
+    debugPrint(
+      'MAPBLOC Current position: ${getCurrentPosition.latitude}, ${getCurrentPosition.longitude}, locationTopic: ${getCurrentPosition.locationTopic}',
+    );
+    final volunteers = await _getVolunteersByLocationUsecase(
+      getCurrentPosition.locationTopic,
+    );
+    volunteers.fold((final _) {}, (final markersCount) {
+      debugPrint(
+        'MAPBLOC Markers count: $markersCount',
+      );
+      final markers = <Marker>[];
+      for (int i = 0; i < markersCount; i++) {
+        final double randomValue =
+            Random().nextDouble() / 100 * (i.isEven ? 1 : -1);
+
+        markers.add(
+          Marker(
+            point: LatLng(
+              getCurrentPosition.latitude + randomValue,
+              getCurrentPosition.longitude + randomValue,
+            ),
+            child: Icon(
+              Icons.volunteer_activism,
+              color: ZipColor.tertiary.withValues(alpha: 0.8),
+              size: 30,
+            ),
+          ),
+        );
+      }
+      _volunteerMarkers.add(markers);
+    });
   }
 
   void onMapCreated(final Position latLang) {
@@ -118,6 +120,5 @@ class MapScreenBloc extends ZipBloc {
     [],
   );
 
-  final UpdateLocationUsecase _updateLocationUsecase;
   final GetVolunteersByLocationUsecase _getVolunteersByLocationUsecase;
 }

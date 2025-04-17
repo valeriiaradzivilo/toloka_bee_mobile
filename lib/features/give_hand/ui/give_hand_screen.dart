@@ -178,11 +178,26 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '\u2981 ${translate('give.hand.deadline')}: ${DateFormat.yMMMMEEEEd().format(request.deadline)}',
+                              '\u2981 ${translate(
+                                'give.hand.deadline',
+                                args: {
+                                  'date': DateFormat.yMMMMEEEEd()
+                                      .format(request.deadline),
+                                  'days': request.deadline
+                                      .difference(DateTime.now())
+                                      .inDays
+                                      .toString(),
+                                },
+                              )}',
                             ),
                             if (request.price != null && request.price != 0)
                               Text(
-                                '\u2981 ${translate('give.hand.price')}: ${request.price}',
+                                '\u2981 ${translate(
+                                  'give.hand.price',
+                                  args: {
+                                    'price': request.price.toString(),
+                                  },
+                                )}',
                               ),
                           ],
                         ),

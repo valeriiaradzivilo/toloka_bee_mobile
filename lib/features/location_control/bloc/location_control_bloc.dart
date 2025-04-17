@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
@@ -30,10 +31,16 @@ class LocationControlBloc extends ZipBloc {
         final previousPosition = positions[0];
         final currentPosition = positions[1];
 
-        if (currentPosition.latitude == previousPosition.latitude &&
-            currentPosition.longitude == previousPosition.longitude) {
-          return;
+        if (!isFirstRun) {
+          if (currentPosition.latitude == previousPosition.latitude &&
+              currentPosition.longitude == previousPosition.longitude) {
+            return;
+          }
         }
+
+        debugPrint(
+          'LOCBLOC Locations to subscribe: ${currentPosition.locationTopicList}',
+        );
 
         _subscribeToTopicUsecase([
           for (final location in currentPosition.locationTopicList)
@@ -43,6 +50,7 @@ class LocationControlBloc extends ZipBloc {
               userId: FirebaseAuth.instance.currentUser!.uid,
             ),
         ]);
+        isFirstRun = false;
       }),
     );
 
@@ -51,7 +59,10 @@ class LocationControlBloc extends ZipBloc {
 
   final locationStream = Geolocator.getPositionStream();
   final _permissionsGranted = BehaviorSubject.seeded(false);
+
   final SubscribeToTopicUsecase _subscribeToTopicUsecase;
+
+  bool isFirstRun = true;
 
   @override
   Future<void> dispose() async {
