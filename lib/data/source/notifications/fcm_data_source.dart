@@ -49,8 +49,8 @@ class FcmDataSource {
     final RequestNotificationModel notification,
   ) async {
     final apnsToken = await _firebaseMessaging.getAPNSToken();
-    if (apnsToken != null) {
-      // APNS token is available, make FCM plugin API requests...
+    if (apnsToken == null) {
+      throw Exception('APNS token is null');
     }
 
     final postUrl =
@@ -170,13 +170,13 @@ class FcmDataSource {
     );
 
     if (response.statusCode == 200) {
-      final volunteersSubscribtions = (response.data as List)
+      final volunteersSubscriptions = (response.data as List)
           .map((final e) => LocationSubscriptionModel.fromJson(e))
           .where(
             (final element) =>
                 element.userId != FirebaseAuth.instance.currentUser?.uid,
           );
-      return volunteersSubscribtions.length;
+      return volunteersSubscriptions.length;
     } else {
       throw Exception(
         'Failed to count volunteers by topic: ${response.statusCode}',

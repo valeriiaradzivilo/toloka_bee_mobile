@@ -43,7 +43,7 @@ class MapScreen extends StatelessWidget {
               children: [
                 SizedBox(
                   height: isAuthenticated
-                      ? MediaQuery.of(context).size.height / 2
+                      ? MediaQuery.of(context).size.height * 0.6
                       : null,
                   child: ReactWidget(
                     stream: context.read<LocationControlBloc>().locationStream,

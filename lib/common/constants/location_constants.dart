@@ -32,6 +32,10 @@ List<double> _closeLocations(final double value) {
   final secondPart = int.parse(value.toString().split('.')[1].substring(0, 1));
 
   for (int i = -1; i < 2; i++) {
+    if (secondPart + i < 0) {
+      continue;
+    }
+
     result.add(
       double.parse(
         '$firstPart.${secondPart + i}',

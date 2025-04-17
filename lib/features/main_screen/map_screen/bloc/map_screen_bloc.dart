@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -24,6 +25,10 @@ class MapScreenBloc extends ZipBloc {
         super() {
     addSubscription(
       Stream.periodic(const Duration(seconds: 30)).listen((final _) async {
+        if (FirebaseAuth.instance.currentUser == null) {
+          return;
+        }
+
         final getCurrentPosition = await Geolocator.getCurrentPosition();
         final volunteers = await _getVolunteersByLocationUsecase(
           getCurrentPosition.locationTopic,

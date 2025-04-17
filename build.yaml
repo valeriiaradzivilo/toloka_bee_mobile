@@ -7,18 +7,18 @@ targets:
         options:
           build_extensions:
             # '^lib/**/{{}}.dart': 'lib/generated/model/{{}}.g.dart'
-            'lib/{{path}}/{{file}}.dart': 'lib/generated/{{path}}/{{file}}.g.dart'
+            "lib/{{path}}/{{file}}.dart": "lib/generated/{{path}}/{{file}}.g.dart"
       freezed:
         options:
           build_extensions:
             # '^lib/**/{{}}.dart': 'lib/generated/model/{{}}.freezed.dart'
-            'lib/{{path}}/{{file}}.dart': 'lib/generated/{{path}}/{{file}}.freezed.dart'
-          field_rename: snake
+            "lib/{{path}}/{{file}}.dart": "lib/generated/{{path}}/{{file}}.freezed.dart"
+          field_rename: none
           explicit_to_json: true
           map: false
           enum_class: false
+
       json_serializable:
         options:
-          field_rename: snake
+          field_rename: none
           explicit_to_json: true
-          
