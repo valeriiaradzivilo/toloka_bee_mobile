@@ -10,8 +10,25 @@ class GiveHandLoading extends GiveHandState {
 
 class GiveHandLoaded extends GiveHandState {
   final List<RequestNotificationModel> requests;
+  final int radius;
+  final bool onlyRemote;
 
-  const GiveHandLoaded(this.requests);
+  const GiveHandLoaded({
+    required this.requests,
+    this.radius = 100,
+    this.onlyRemote = false,
+  });
+
+  GiveHandLoaded copyWith({
+    final List<RequestNotificationModel>? requests,
+    final int? radius,
+    final bool? onlyRemote,
+  }) =>
+      GiveHandLoaded(
+        requests: requests ?? this.requests,
+        radius: radius ?? this.radius,
+        onlyRemote: onlyRemote ?? this.onlyRemote,
+      );
 }
 
 class GiveHandError extends GiveHandState {

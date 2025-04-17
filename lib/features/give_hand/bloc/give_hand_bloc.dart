@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
@@ -15,25 +14,46 @@ class GiveHandBloc extends Bloc<GiveHandEvent, GiveHandState> {
       : _getAllRequestsUsecase = serviceLocator<GetAllRequestsUsecase>(),
         super(const GiveHandLoading()) {
     on<GiveHandFetchEvent>((final event, final emit) async {
+      final currentState = state;
+
       final currentLocation = await Geolocator.getCurrentPosition();
       final result = await _getAllRequestsUsecase(
         GetRequestsModel(
           latitude: currentLocation.latitude,
           longitude: currentLocation.longitude,
-          radius: 100,
+          radius: currentState is GiveHandLoaded ? (currentState).radius : 100,
+          onlyRemote: currentState is GiveHandLoaded
+              ? (currentState).onlyRemote
+              : false,
         ),
       );
       result.fold(
         (final failure) => emit(const GiveHandError()),
         (final result) {
-          if (state case GiveHandLoaded(:final requests)
-              when !listEquals(requests, result)) {
-            emit(GiveHandLoaded(result));
-          } else if (state is! GiveHandLoaded) {
-            emit(GiveHandLoaded(result));
-          }
+          // if (currentState case GiveHandLoaded(:final requests)
+          //     when !listEquals(requests, result)) {
+          //   emit(GiveHandLoaded(requests: result));
+          // } else if (currentState is! GiveHandLoaded) {
+          emit(
+            GiveHandLoaded(requests: result),
+          );
+          // }
         },
       );
+    });
+
+    on<ChangeRadiusEvent>((final event, final emit) {
+      if (state is GiveHandLoaded) {
+        final currentState = state as GiveHandLoaded;
+        emit(currentState.copyWith(radius: event.radius));
+      }
+    });
+
+    on<ChangeOnlyRemoteEvent>((final event, final emit) {
+      if (state is GiveHandLoaded) {
+        final currentState = state as GiveHandLoaded;
+        emit(currentState.copyWith(onlyRemote: event.onlyRemote));
+      }
     });
   }
 
@@ -46,6 +66,6 @@ class GiveHandBloc extends Bloc<GiveHandEvent, GiveHandState> {
   final GetAllRequestsUsecase _getAllRequestsUsecase;
   late final StreamSubscription _updateListSubscription =
       Stream.periodic(const Duration(minutes: 1)).listen((final event) {
-    add(GiveHandFetchEvent());
+    add(const GiveHandFetchEvent());
   });
 }

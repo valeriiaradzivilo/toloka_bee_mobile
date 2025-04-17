@@ -164,6 +164,16 @@
             }
         }
     },
+    "give": {
+        "hand": {
+            "no_requests": "No requests available at the moment. Check again later or set a bigger search radius.",
+            "deadline": "Needs to be done by {date}",
+            "price": "Price: {price}",
+            "radius": "Search radius",
+            "search": "Search",
+            "only_remote": "Show only remote requests"
+        }
+    },
     "common": {
         "action": {
             "help": "Help",

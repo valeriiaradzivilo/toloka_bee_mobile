@@ -20,15 +20,23 @@ class LocationControlBloc extends ZipBloc {
         FirebaseAuth.instance.userChanges(),
         (final location, final user) => (location),
       )
-          .distinct()
           .debounceTime(const Duration(seconds: 1))
-          .listen((final Position position) {
+          .pairwise()
+          .listen((final List<Position> positions) {
         if (FirebaseAuth.instance.currentUser == null) {
           return;
         }
 
+        final previousPosition = positions[0];
+        final currentPosition = positions[1];
+
+        if (currentPosition.latitude == previousPosition.latitude &&
+            currentPosition.longitude == previousPosition.longitude) {
+          return;
+        }
+
         _subscribeToTopicUsecase([
-          for (final location in position.locationTopicList)
+          for (final location in currentPosition.locationTopicList)
             LocationSubscriptionModel(
               id: '',
               topic: location,
