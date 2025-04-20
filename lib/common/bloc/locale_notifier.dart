@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-import '../../main.dart';
+import '../../features/main_app/main_app.dart';
 
 class LocaleNotifier extends ChangeNotifier {
-  static BuildContext? get _ctx => MyApp.navigatorKey.currentContext;
+  static BuildContext? get _ctx => MainApp.navigatorKey.currentContext;
   Locale? _locale =
       _ctx != null ? LocalizedApp.of(_ctx!).delegate.currentLocale : null;
 

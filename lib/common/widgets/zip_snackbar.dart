@@ -1,68 +1,108 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../data/models/ui/popup_model.dart';
+import '../../features/main_app/main_app.dart';
 import '../theme/zip_fonts.dart';
 
-class ZipSnackbar extends StatelessWidget {
-  const ZipSnackbar({super.key, required this.model});
+class ZipSnackbar {
+  static final List<OverlayEntry> _entries = [];
+
+  static void show(final BuildContext context, final PopupModel model) {
+    final overlayState = MainApp.navigatorKey.currentState?.overlay;
+    if (overlayState == null) return;
+
+    final index = _entries.length;
+
+    if (index >= 5) {
+      _entries[index - 1].remove();
+      _entries.removeAt(index - 1);
+    }
+
+    const height = 100.0;
+    const spacing = 8.0;
+
+    late final OverlayEntry entry;
+    entry = OverlayEntry(
+      builder: (final ctx) => Positioned(
+        bottom: 16 + index * (height + spacing),
+        left: 16,
+        right: 16,
+        child: Dismissible(
+          key: UniqueKey(),
+          direction: DismissDirection.down,
+          onDismissed: (final _) {
+            entry.remove();
+            _entries.remove(entry);
+          },
+          child: _NotificationCard(model: model),
+        ),
+      ),
+    );
+
+    overlayState.insert(entry);
+    _entries.add(entry);
+
+    Future.delayed(
+      model.onPressed != null
+          ? const Duration(seconds: 30)
+          : const Duration(seconds: 3),
+      () {
+        if (_entries.contains(entry)) {
+          entry.remove();
+          _entries.remove(entry);
+        }
+      },
+    );
+  }
+}
+
+class _NotificationCard extends StatelessWidget {
+  const _NotificationCard({required this.model});
   final PopupModel model;
 
   @override
-  SnackBar build(final BuildContext context) => SnackBar(
-        content: Row(
-          spacing: 8,
-          children: [
-            Icon(
-              model.type.icon,
-              color: model.type.color,
-            ),
-            Expanded(
-              flex: 5,
-              child: Column(
-                spacing: 4,
-                children: [
-                  Text(
-                    model.title,
-                    style: ZipFonts.medium.style.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  if (model.message != null)
+  Widget build(final BuildContext context) => Material(
+        elevation: 6,
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              Icon(model.type.icon, color: model.type.color),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      model.message!,
-                      style: ZipFonts.small.style.copyWith(
-                        color: Colors.black,
-                      ),
+                      model.title,
+                      style:
+                          ZipFonts.medium.style.copyWith(color: Colors.black),
                     ),
-                ],
-              ),
-            ),
-            if (model.onPressed != null)
-              TextButton(
-                onPressed: () {
-                  model.onPressed!(context);
-                },
-                child: Text(
-                  model.type.actionText,
-                  style: ZipFonts.small.style.copyWith(
-                    color: model.type.color,
-                  ),
+                    if (model.message != null)
+                      Text(
+                        model.message!,
+                        style: ZipFonts.small.style
+                            .copyWith(color: Colors.black54),
+                      ),
+                  ],
                 ),
               ),
-          ],
+              if (model.onPressed != null)
+                TextButton(
+                  onPressed: () => model.onPressed!(context),
+                  child: Text(
+                    model.type.actionText,
+                    style:
+                        ZipFonts.small.style.copyWith(color: model.type.color),
+                  ),
+                ),
+            ],
+          ),
         ),
-        backgroundColor: Colors.white,
-        behavior: SnackBarBehavior.floating,
-        dismissDirection: DismissDirection.vertical,
-        duration: model.onPressed != null
-            ? const Duration(seconds: 10)
-            : const Duration(seconds: 3),
       );
-
-  /// Static method to show the custom snackbar
-  static void show(final BuildContext context, final PopupModel model) {
-    final snackBar = ZipSnackbar(model: model).build(context);
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 }

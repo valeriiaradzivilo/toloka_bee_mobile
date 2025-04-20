@@ -7,24 +7,28 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../../common/bloc/zip_bloc.dart';
 import '../../../common/constants/location_constants.dart';
+import '../../../common/optional_value.dart';
 import '../../../data/models/location_subscription_model.dart';
+import '../../../data/models/user_auth_model.dart';
 import '../../../data/service/fcm_service.dart';
 import '../../../data/usecase/subscribe_to_topic_usecase.dart';
 
 class LocationControlBloc extends ZipBloc {
-  LocationControlBloc(final GetIt serviceLocator)
-      : _subscribeToTopicUsecase = serviceLocator<SubscribeToTopicUsecase>(),
+  LocationControlBloc(
+    final GetIt serviceLocator,
+    final ValueStream<Optional<UserAuthModel>> userStream,
+  )   : _subscribeToTopicUsecase = serviceLocator<SubscribeToTopicUsecase>(),
         super() {
     addSubscription(
       Rx.combineLatest2(
         locationStream,
-        FirebaseAuth.instance.userChanges(),
+        userStream,
         (final location, final user) => (location),
       )
           .debounceTime(const Duration(seconds: 1))
           .pairwise()
           .listen((final List<Position> positions) {
-        if (FirebaseAuth.instance.currentUser == null) {
+        if (userStream.value is OptionalNull) {
           return;
         }
 

@@ -36,8 +36,8 @@ class RequestNotificationModel implements Equatable {
   factory RequestNotificationModel.fromFCM(final Map<String, dynamic> json) {
     final location = jsonDecode(json['location'] as String);
 
-    final latitude = location?['coordinates']?[0] as double?;
-    final longitude = location?['coordinates']?[1] as double?;
+    final latitude = location?['coordinates']?[1] as double?;
+    final longitude = location?['coordinates']?[0] as double?;
 
     return RequestNotificationModel(
       id: json['id'] ?? '',
@@ -62,8 +62,8 @@ class RequestNotificationModel implements Equatable {
         userId: json['userId'] ?? '',
         status: ERequestStatus.fromJson(json['status'] ?? ''),
         deadline: DateTime.tryParse(json['deadline'] ?? '') ?? DateTime.now(),
-        latitude: json['location']['x'] as double? ?? 0.0,
-        longitude: json['location']['y'] as double? ?? 0.0,
+        latitude: json['location']['y'] as double? ?? 0.0,
+        longitude: json['location']['x'] as double? ?? 0.0,
         isRemote: json['isRemote'] as bool? ?? false,
         requiresPhysicalStrength:
             json['requiresPhysicalStrength'] as bool? ?? false,

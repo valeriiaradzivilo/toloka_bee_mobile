@@ -158,6 +158,7 @@
             "remote": "Remote",
             "physical": "Requires physical strength",
             "created": "Created at",
+            "distance": "Distance {distance} km",
             "actions": {
                 "accept": "Accept request",
                 "cancel": "Cancel request"
@@ -171,7 +172,9 @@
             "price": "Price: {price}",
             "radius": "Search radius",
             "search": "Search",
-            "only_remote": "Show only remote requests"
+            "only_remote": "Show only remote requests",
+            "remote": "Remote",
+            "distance": "Distance {distance} km"
         }
     },
     "common": {

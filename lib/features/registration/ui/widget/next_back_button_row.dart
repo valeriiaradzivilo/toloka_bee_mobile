@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../common/routes.dart';
+import '../../../../common/routing/routes.dart';
 import '../../../../common/widgets/zip_snackbar.dart';
 import '../../../../data/models/ui/e_popup_type.dart';
 import '../../../../data/models/ui/popup_model.dart';

@@ -1,113 +1,70 @@
 name: zip_way
 description: Flutter project for volunteering.
 
-# Publishing
-publish_to: "none" # Prevent accidental publishing
+publish_to: "none"
 
-# Versioning
 version: 1.0.0+1
 
-# Environment
 environment:
   sdk: ">=3.2.0 <4.0.0"
 
-# Dependencies
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
 
-  # Core packages
-  intl: 0.19.0
-
-  # UI packages
-  feather_icons: ^1.2.0
-  flutter_portal: ^1.1.4
-  flutter_svg: ^2.0.7
-  # camera: ^0.9.4+5
-  http: ^1.2.1
-  flutter_map: ^7.0.2
-  geolocator: ^13.0.1
-  font_awesome_flutter: ^10.1.0
-  flutter_native_splash: ^2.4.4
-  image_picker: ^1.1.2
-
-  # Firebase packages
-  firebase_in_app_messaging: ^0.8.1+5
-  firebase_messaging: ^15.2.5
-  firebase_core: ^3.13.0
-  firebase_auth: ^5.5.2
-
-  # State management and data handling
-  flutter_bloc: ^9.0.0
-  equatable: ^2.0.5
   dartz: ^0.10.1
-  provider: ^6.1.2
-
-  # Dependency injection
-  get_it: ^8.0.3
-
-  # Serialization
-  json_annotation: ^4.9.0
-  json_serializable: any
-
-  # Logging
-  simple_logger: ^1.10.0
-
-  # Database
-  # cloud_firestore: ^4.8.4
   dio: ^5.0.0
-
-  # Reactive programming
-  rxdart: ^0.27.7
-
-  # Other utilities
-  currency_picker: ^2.0.19
-  gap: ^3.0.1
-  freezed: ^2.4.5
-  rx_widgets: ^4.2.1
-  uuid: ^4.2.1
-  url_launcher: ^6.2.1
-  badges: ^3.1.2
-  flutter_rating_bar: ^4.0.1
-  freezed_annotation: ^2.4.4
-  collection: ^1.17.2
-  flutter_translate: ^4.1.0
-  latlong2: ^0.9.1
-  google_fonts: ^6.2.1
+  equatable: ^2.0.5
+  firebase_auth: ^5.5.2
+  firebase_core: ^3.13.0
+  firebase_messaging: ^15.2.5
+  flutter_bloc: ^9.0.0
   flutter_gen: ^5.8.0
   flutter_local_notifications: ^19.0.0
+  flutter_map: ^7.0.2
+  flutter_native_splash: ^2.4.4
+  flutter_translate: ^4.1.0
+  freezed: ^2.4.5
+  freezed_annotation: ^2.4.4
+  gap: ^3.0.1
+  geolocator: ^13.0.1
+  google_fonts: ^6.2.1
+  get_it: ^8.0.3
+  image_picker: ^1.1.2
+  intl: 0.19.0
+  json_annotation: ^4.9.0
+  json_serializable: any
+  latlong2: ^0.9.1
   mime: ^2.0.0
+  provider: ^6.1.2
+  rxdart: ^0.27.7
+  rx_widgets: ^4.2.1
+  simple_logger: ^1.10.0
+  uuid: ^4.2.1
 
-# Development dependencies
 dev_dependencies:
+  build_runner: ^2.4.15
+  class_match_file_name: ^0.2.2
+  flutter_gen_runner: any
+  flutter_launcher_icons: ^0.14.3
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
-
-  flutter_gen_runner: any
-
-  # Linting and code analysis
-  flutter_lints: ^5.0.0
-  class_match_file_name: ^0.2.2
   lints: ^5.0.0
-  build_runner: ^2.4.15
-  flutter_launcher_icons: "^0.14.3"
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/logo/logo.png"
 
-# Flutter configuration
 flutter:
   generate: true
   uses-material-design: true
-
-  # Assets
   assets:
     - assets/
-    - assets/logo/
     - assets/i18n/
+    - assets/logo/

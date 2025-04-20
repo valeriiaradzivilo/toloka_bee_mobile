@@ -125,16 +125,6 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                   style: ZipFonts.medium.style,
                 ),
               ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  context.read<GiveHandBloc>().add(const GiveHandFetchEvent());
-                },
-                icon: const Icon(Icons.search),
-                label: Text(
-                  translate('give.hand.search'),
-                  style: ZipFonts.medium.style,
-                ),
-              ),
             ],
           ),
           Expanded(
@@ -151,61 +141,96 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                 itemCount: widget.state.requests.length,
                 itemBuilder: (final context, final index) {
                   final request = widget.state.requests[index];
-                  return Badge(
-                    backgroundColor: ZipColor.onTertiaryFixed,
-                    isLabelVisible: request.isRemote,
-                    label: Text(
-                      'Remote',
-                      style: ZipFonts.medium.style.copyWith(
-                        color: ZipColor.onTertiary,
-                      ),
-                    ),
-                    child: ListTile(
-                      leading: const CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          'https://thumb.ac-illust.com/30/30fa090868a2f8236c55ef8c1361db01_t.jpeg',
+                  return Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Visibility(
+                          visible: request.isRemote,
+                          child: Transform.rotate(
+                            angle: 0.5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: ZipColor.onTertiaryFixed,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 2,
+                              ),
+                              child: Text(
+                                translate('give.hand.remote'),
+                                style: ZipFonts.small.style.copyWith(
+                                  color: ZipColor.onTertiary,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      title: Text(
-                        request.description,
-                        style: ZipFonts.medium.style,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '\u2981 ${translate(
-                                'give.hand.deadline',
-                                args: {
-                                  'date': DateFormat.yMMMMEEEEd()
-                                      .format(request.deadline),
-                                  'days': request.deadline
-                                      .difference(DateTime.now())
-                                      .inDays
-                                      .toString(),
-                                },
-                              )}',
-                            ),
-                            if (request.price != null && request.price != 0)
+                      ListTile(
+                        leading: const CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            'https://thumb.ac-illust.com/30/30fa090868a2f8236c55ef8c1361db01_t.jpeg',
+                          ),
+                        ),
+                        title: Text(
+                          request.description,
+                          style: ZipFonts.medium.style,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Text(
                                 '\u2981 ${translate(
-                                  'give.hand.price',
+                                  'give.hand.deadline',
                                   args: {
-                                    'price': request.price.toString(),
+                                    'date': DateFormat.yMMMMEEEEd()
+                                        .format(request.deadline),
+                                    'days': request.deadline
+                                        .difference(DateTime.now())
+                                        .inDays
+                                        .toString(),
                                   },
                                 )}',
                               ),
-                          ],
+                              if (request.price != null && request.price != 0)
+                                Text(
+                                  '\u2981 ${translate(
+                                    'give.hand.price',
+                                    args: {
+                                      'price': request.price.toString(),
+                                    },
+                                  )}',
+                                ),
+                              if (request.isRemote == false)
+                                Text(
+                                  '\u2981 ${translate(
+                                    'give.hand.distance',
+                                    args: {
+                                      'distance': context
+                                          .read<GiveHandBloc>()
+                                          .distanceTo(
+                                            request.latitude,
+                                            request.longitude,
+                                          )
+                                          .toStringAsFixed(2),
+                                    },
+                                  )}',
+                                ),
+                            ],
+                          ),
                         ),
+                        onTap: () {
+                          // Navigate to request details screen
+                        },
                       ),
-                      onTap: () {
-                        // Navigate to request details screen
-                      },
-                    ),
+                    ],
                   );
                 },
                 separatorBuilder:

@@ -48,11 +48,6 @@ class FcmDataSource {
   Future<void> sendNotification(
     final RequestNotificationModel notification,
   ) async {
-    final apnsToken = await _firebaseMessaging.getAPNSToken();
-    if (apnsToken == null) {
-      throw Exception('APNS token is null');
-    }
-
     final postUrl =
         'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
 
@@ -68,6 +63,17 @@ class FcmDataSource {
     };
 
     final location = LatLng(notification.latitude, notification.longitude);
+
+    final notificationData = notification.toJson();
+
+    final Map<String, String> data = {};
+    notificationData.forEach((final key, final value) {
+      if (key == 'location' && value is Map) {
+        data[key] = jsonEncode(value);
+      } else {
+        data[key] = value.toString();
+      }
+    });
 
     final payload = {
       'message': {
@@ -87,9 +93,7 @@ class FcmDataSource {
             'default_light_settings': true,
           },
         },
-        'data': notification
-            .toJson()
-            .map((final key, final value) => MapEntry(key, value.toString())),
+        'data': data,
       },
     };
 
@@ -103,9 +107,7 @@ class FcmDataSource {
       final result = await _dio.post(
         '$_basePathRequest/save',
         options: Options(headers: headers),
-        data: jsonEncode(
-          notification.toJson(),
-        ),
+        data: notificationData,
       );
       if (result.statusCode != 200) {
         throw Exception(

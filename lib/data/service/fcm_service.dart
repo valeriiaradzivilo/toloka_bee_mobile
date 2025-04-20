@@ -1,15 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../common/constants/location_constants.dart';
-import '../../common/routes.dart';
+import '../../common/routing/routes.dart';
 import '../../common/widgets/zip_snackbar.dart';
-import '../../main.dart';
+import '../../features/main_app/main_app.dart';
 import '../models/request_notification_model.dart';
 import '../models/ui/e_popup_type.dart';
 import '../models/ui/popup_model.dart';
@@ -49,13 +51,7 @@ class FcmService {
   static Future<void> _firebaseMessagingBackgroundHandler(
     final RemoteMessage message,
   ) async {
-    _logger.info('🔕 Фонове повідомлення: ${message.messageId}');
-    _logger.info('📲 Отримано повідомлення у Background:');
-    _logger.info('🔔 Заголовок: ${message.notification?.title}');
-    _logger.info('📝 Тіло: ${message.notification?.body}');
-    _logger.info('📦 Дані: ${message.data}');
-
-    final context = MyApp.navigatorKey.currentState?.context;
+    final context = MainApp.navigatorKey.currentState?.context;
 
     if (context == null || !context.mounted) {
       _logger.warning('❌ Контекст не знайдено');
@@ -63,6 +59,16 @@ class FcmService {
     }
 
     final data = RequestNotificationModel.fromFCM(message.data);
+
+    if (data.userId == FirebaseAuth.instance.currentUser?.uid) {
+      return;
+    }
+
+    _logger.info('🔕 Фонове повідомлення: ${message.messageId}');
+    _logger.info('📲 Отримано повідомлення у Background:');
+    _logger.info('🔔 Заголовок: ${message.notification?.title}');
+    _logger.info('📝 Тіло: ${message.notification?.body}');
+    _logger.info('📦 Дані: ${message.data}');
 
     final Position position = await Geolocator.getCurrentPosition();
 
@@ -80,7 +86,13 @@ class FcmService {
       context,
       PopupModel(
         title: message.notification?.title ?? '',
-        message: message.notification?.body ?? '',
+        message: message.notification?.body ??
+            '${translate(
+              'request.details.distance',
+              args: {
+                'distance': distanceKm.toStringAsFixed(2),
+              },
+            )} ',
         onPressed: (final BuildContext context) {
           Navigator.of(context).pushReplacementNamed(
             Routes.requestDetailsScreen,

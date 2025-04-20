@@ -72,7 +72,7 @@ class MapScreenBloc extends ZipBloc {
       final markers = <Marker>[];
       for (int i = 0; i < markersCount; i++) {
         final double randomValue =
-            Random().nextDouble() / 100 * (i.isEven ? 1 : -1);
+            Random().nextDouble() / 100 + 0.02 * (i.isEven ? 1 : -1);
 
         markers.add(
           Marker(
@@ -82,7 +82,7 @@ class MapScreenBloc extends ZipBloc {
             ),
             child: Icon(
               Icons.volunteer_activism,
-              color: ZipColor.tertiary.withValues(alpha: 0.8),
+              color: ZipColor.randomZipColor,
               size: 30,
             ),
           ),

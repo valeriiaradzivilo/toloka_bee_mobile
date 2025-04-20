@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
 
-import '../../../common/routes.dart';
+import '../../../common/routing/routes.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../authentication/bloc/authentication_bloc.dart';
 import '../bloc/profile_cubit.dart';

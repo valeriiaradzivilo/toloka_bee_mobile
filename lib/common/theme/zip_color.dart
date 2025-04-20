@@ -47,8 +47,10 @@ class ZipColor {
   static const surfaceContainerHigh = Color(0xffe3eae7);
   static const surfaceContainerHighest = Color(0xffdde4e1);
 
-  static final Color randomZipColor =
+  static Color get randomZipColor =>
       _randColors.elementAt(Random().nextInt(_randColors.length));
+
+  static final Color userRandomColor = randomZipColor;
 
   static final List<Color> _randColors = [
     primary,
@@ -57,5 +59,12 @@ class ZipColor {
     onErrorContainer,
     secondary,
     tertiary,
+    onTertiary,
+    onTertiaryContainer,
+    onPrimary,
+    onSecondary,
+    onPrimaryFixed,
+    onPrimaryFixedVariant,
+    onSecondaryContainer,
   ];
 }

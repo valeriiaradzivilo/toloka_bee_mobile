@@ -1,4 +1,3 @@
-import 'package:feather_icons/feather_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
@@ -113,7 +112,7 @@ class _LinTextFieldState extends State<LinTextField> {
               IconButton(
                 onPressed: () => setState(() => obscureText = !obscureText),
                 icon:
-                    Icon(obscureText ? FeatherIcons.eye : FeatherIcons.eyeOff),
+                    Icon(obscureText ? Icons.visibility_off : Icons.visibility),
               ),
               SizedBox(width: PaddingConstants.medium),
               Tooltip(

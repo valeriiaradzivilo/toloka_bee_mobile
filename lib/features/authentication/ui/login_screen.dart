@@ -3,7 +3,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
-import '../../../common/routes.dart';
+import '../../../common/routing/routes.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../bloc/authentication_bloc.dart';
 
@@ -110,11 +110,6 @@ class _LoginScreenState extends State<_LoginScreen> {
                   ),
                   child: Text(translate('login.register')),
                 ),
-                // OutlinedButton.icon(
-                //   onPressed: () {},
-                //   label: Text(translate('login.google')),
-                //   icon: const Icon(FontAwesomeIcons.google),
-                // ),
               ],
             ),
           ),

@@ -3,168 +3,79 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:gap/gap.dart';
-import 'package:get_it/get_it.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
-import 'common/e_supported_localizations.dart';
-import 'common/routes.dart';
-import 'common/theme/theme.dart';
-import 'common/theme/util.dart';
+import 'common/widgets/error_screen.dart';
 import 'data/di.dart';
-import 'data/models/request_notification_model.dart';
-import 'features/authentication/bloc/authentication_bloc.dart';
-import 'features/authentication/ui/login_screen.dart';
-import 'features/location_control/bloc/location_control_bloc.dart';
-import 'features/main_app/main_wrapper_widget.dart';
-import 'features/main_screen/main_screen.dart';
-import 'features/profile/ui/profile_screen.dart';
-import 'features/registration/ui/create_account_screen.dart';
-import 'features/request_details/ui/request_details_screen.dart';
+import 'features/main_app/main_app.dart';
 import 'firebase_options.dart';
 
-void main() async {
-  final WidgetsBinding widgetsBinding =
-      WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
-  final delegate = await LocalizationDelegate.create(
-    fallbackLocale:
-        ESupportedLocalizations.codes[ESupportedLocalizations.en] ?? 'en_US',
-    supportedLocales: ESupportedLocalizations.codes.values.toList(),
-  );
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  await init();
-
-  await initDateFormatting();
-
-  ErrorWidget.builder = (final FlutterErrorDetails details) => Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Container(
-              height: 500,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.red),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Text(
-                      translate('error.screen.title'),
-                      style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      translate('error.screen.message'),
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                    const Gap(8),
-                    if (kDebugMode)
-                      Text(
-                        details.exceptionAsString(),
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-
-  runApp(
-    LocalizedApp(delegate, const MyApp()),
-  );
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppInitializer.initialize();
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AppInitializer {
+  static Future<void> initialize() async {
+    _preserveSplash();
+    await _initFirebase();
+    await _initLocalization();
+    await _initDependencies();
+    await _initDateFormatting();
+    _configureErrorHandling();
+  }
 
-  static final GlobalKey<NavigatorState> navigatorKey =
-      GlobalKey<NavigatorState>();
-
-  @override
-  Widget build(final BuildContext context) {
-    final brightness = View.of(context).platformDispatcher.platformBrightness;
-    final TextTheme textTheme =
-        ZipTheme.createTextTheme(context, 'Roboto Serif', 'Roboto');
-
-    final MaterialTheme theme = MaterialTheme(textTheme);
-
-    FlutterNativeSplash.remove();
-
-    return MultiProvider(
-      providers: [
-        Provider(
-          create: (final _) => AuthenticationBloc(GetIt.I),
-          dispose: (final _, final bloc) => bloc.dispose(),
-        ),
-        Provider(
-          create: (final context) => LocationControlBloc(GetIt.I),
-          dispose: (final context, final bloc) => bloc.dispose(),
-        ),
-      ],
-      child: MaterialApp(
-        title: translate('app.name'),
-        theme: brightness == Brightness.light ? theme.light() : theme.dark(),
-        initialRoute: Routes.mainScreen,
-        navigatorKey: navigatorKey,
-        routes: {
-          Routes.mainScreen: (final context) => const MainScreen(),
-          Routes.loginScreen: (final context) => const LoginScreen(),
-          Routes.createAccountScreen: (final context) =>
-              const CreateAccountScreen(),
-        },
-        debugShowCheckedModeBanner: false,
-        darkTheme: theme.dark(),
-        onGenerateRoute: (final settings) {
-          switch (settings.name) {
-            case Routes.loginScreen:
-              return MaterialPageRoute(
-                builder: (final context) => const LoginScreen(),
-              );
-            case Routes.createAccountScreen:
-              return MaterialPageRoute(
-                builder: (final context) => const CreateAccountScreen(),
-              );
-            case Routes.profileScreen:
-              return MaterialPageRoute(
-                builder: (final context) => const ProfileScreen(),
-              );
-            case Routes.requestDetailsScreen:
-              return MaterialPageRoute(
-                builder: (final context) => RequestDetailsScreen(
-                  settings.arguments as RequestNotificationModel,
-                ),
-              );
-            default:
-              return MaterialPageRoute(
-                builder: (final context) => const MainScreen(),
-              );
-          }
-        },
-        builder: (final context, final child) => MainWrapperWidget(child),
-      ),
+  static void _preserveSplash() {
+    FlutterNativeSplash.preserve(
+      widgetsBinding: WidgetsFlutterBinding.ensureInitialized(),
     );
+  }
+
+  static Future<void> _initFirebase() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
+  static LocalizationDelegate? _delegate;
+  static Future<void> _initLocalization() async {
+    _delegate = await LocalizationDelegate.create(
+      fallbackLocale: 'en_US',
+      supportedLocales: const ['en_US', 'uk_UA'],
+    );
+  }
+
+  static Future<void> _initDependencies() async {
+    await init();
+  }
+
+  static Future<void> _initDateFormatting() async {
+    final locale = PlatformDispatcher.instance.locale.languageCode;
+    await initializeDateFormatting(locale);
+    Intl.defaultLocale = locale;
+  }
+
+  static void _configureErrorHandling() {
+    ErrorWidget.builder =
+        (final FlutterErrorDetails details) => ErrorScreen(details);
+  }
+
+  static LocalizationDelegate get localizationDelegate {
+    if (_delegate == null) {
+      throw StateError('LocalizationDelegate is not initialized');
+    }
+    return _delegate!;
   }
 }
 
-Future<void> initDateFormatting() async {
-  final locale = PlatformDispatcher.instance.locale.languageCode;
+class App extends StatelessWidget {
+  const App({super.key});
 
-  await initializeDateFormatting(locale);
-  Intl.defaultLocale = locale;
+  @override
+  Widget build(final BuildContext context) => LocalizedApp(
+        AppInitializer.localizationDelegate,
+        const MainApp(),
+      );
 }

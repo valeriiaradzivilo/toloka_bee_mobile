@@ -27,15 +27,24 @@ class GiveHandBloc extends Bloc<GiveHandEvent, GiveHandState> {
               : false,
         ),
       );
-      result.fold(
-        (final failure) => emit(const GiveHandError()),
-        (final result) {
+      await result.fold(
+        (final failure) async => emit(const GiveHandError()),
+        (final result) async {
           // if (currentState case GiveHandLoaded(:final requests)
           //     when !listEquals(requests, result)) {
           //   emit(GiveHandLoaded(requests: result));
           // } else if (currentState is! GiveHandLoaded) {
           emit(
-            GiveHandLoaded(requests: result),
+            GiveHandLoaded(
+              requests: result,
+              latitude: currentLocation.latitude,
+              longitude: currentLocation.longitude,
+              radius:
+                  currentState is GiveHandLoaded ? (currentState).radius : 100,
+              onlyRemote: currentState is GiveHandLoaded
+                  ? (currentState).onlyRemote
+                  : false,
+            ),
           );
           // }
         },
@@ -53,8 +62,23 @@ class GiveHandBloc extends Bloc<GiveHandEvent, GiveHandState> {
       if (state is GiveHandLoaded) {
         final currentState = state as GiveHandLoaded;
         emit(currentState.copyWith(onlyRemote: event.onlyRemote));
+        add(const GiveHandFetchEvent());
       }
     });
+  }
+
+  double distanceTo(final double lat, final double long) {
+    final currentState = state;
+    if (currentState is GiveHandLoaded) {
+      return Geolocator.distanceBetween(
+            currentState.latitude,
+            currentState.longitude,
+            lat,
+            long,
+          ) /
+          1000;
+    }
+    return 0;
   }
 
   @override

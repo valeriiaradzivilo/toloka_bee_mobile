@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/reactive/react_widget.dart';
-import '../../../common/routes.dart';
+import '../../../common/routing/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../data/models/user_auth_model.dart';
@@ -87,8 +86,8 @@ class MapScreen extends StatelessWidget {
                             Marker(
                               point: LatLng(data.latitude, data.longitude),
                               child: Icon(
-                                FontAwesomeIcons.userNinja,
-                                color: ZipColor.randomZipColor,
+                                Icons.person_4_rounded,
+                                color: ZipColor.userRandomColor,
                                 size: 50,
                               ),
                             ),
@@ -250,7 +249,7 @@ class _BottomSheet extends StatelessWidget {
                               style: ZipFonts.small.style,
                             ),
                             icon: const Icon(
-                              FontAwesomeIcons.handHoldingHeart,
+                              Icons.volunteer_activism_outlined,
                               color: ZipColor.onPrimary,
                             ),
                           ),
