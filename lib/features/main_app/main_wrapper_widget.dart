@@ -9,7 +9,7 @@ import '../../common/theme/zip_fonts.dart';
 import '../../common/widgets/app_icon.dart';
 import '../../common/widgets/zip_snackbar.dart';
 import '../../data/models/ui/popup_model.dart';
-import '../authentication/bloc/authentication_bloc.dart';
+import '../authentication/bloc/user_bloc.dart';
 import 'main_app.dart';
 
 class MainWrapperWidget extends StatelessWidget {
@@ -25,7 +25,7 @@ class MainWrapperWidget extends StatelessWidget {
       key: ValueKey(currentCode),
       child: Material(
         child: StreamBuilder<PopupModel>(
-          stream: context.read<AuthenticationBloc>().authPopupStream,
+          stream: context.read<UserBloc>().authPopupStream,
           builder: (final ctx, final snapshot) {
             if (snapshot.hasData) {
               SchedulerBinding.instance.addPostFrameCallback((final _) {

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../common/routing/routes.dart';
 import '../../../common/theme/zip_fonts.dart';
-import '../bloc/authentication_bloc.dart';
+import '../bloc/user_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -24,13 +24,13 @@ class _LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<_LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  late final AuthenticationBloc _authenticationBloc;
+  late final UserBloc _authenticationBloc;
 
   bool loggingInProgress = false;
 
   @override
   void initState() {
-    _authenticationBloc = context.read<AuthenticationBloc>();
+    _authenticationBloc = context.read<UserBloc>();
     super.initState();
   }
 

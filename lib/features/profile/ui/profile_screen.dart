@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 
 import '../../../common/routing/routes.dart';
 import '../../../data/models/user_auth_model.dart';
-import '../../authentication/bloc/authentication_bloc.dart';
+import '../../authentication/bloc/user_bloc.dart';
 import '../bloc/profile_cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(final BuildContext context) => BlocProvider(
         create: (final _) => ProfileCubit()
           ..loadUser(
-            context.read<AuthenticationBloc>().userStream.value.valueOrNull!,
+            context.read<UserBloc>().userStream.value.valueOrNull!,
           ),
         child: Scaffold(
           appBar: AppBar(),

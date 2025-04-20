@@ -1,0 +1,171 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get_it/get_it.dart';
+import 'package:rxdart/rxdart.dart';
+
+import '../../../common/bloc/zip_bloc.dart';
+import '../../../common/constants/location_constants.dart';
+import '../../../common/optional_value.dart';
+import '../../../data/models/location_subscription_model.dart';
+import '../../../data/models/ui/e_popup_type.dart';
+import '../../../data/models/ui/popup_model.dart';
+import '../../../data/models/user_auth_model.dart';
+import '../../../data/service/fcm_service.dart';
+import '../../../data/usecase/get_current_user_data_usecase.dart';
+import '../../../data/usecase/login_user_usecase.dart';
+import '../../../data/usecase/logout_user_usecase.dart';
+import '../../../data/usecase/subscribe_to_topic_usecase.dart';
+import '../../registration/ui/data/e_position.dart';
+
+class UserBloc extends ZipBloc {
+  UserBloc(final GetIt locator)
+      : _locator = locator,
+        _loginUserUsecase = locator<LoginUserUsecase>(),
+        _getCurrentUserDataUsecase = locator<GetCurrentUserDataUsecase>(),
+        _logoutUserUsecase = locator<LogoutUserUsecase>(),
+        _subscribeToTopicUsecase = locator<SubscribeToTopicUsecase>() {
+    _initAuth();
+    _initLocationControl();
+  }
+
+  final GetIt _locator;
+  final BehaviorSubject<Optional<UserAuthModel>> _user =
+      BehaviorSubject<Optional<UserAuthModel>>.seeded(const OptionalNull());
+  final BehaviorSubject<PopupModel> _popupController =
+      BehaviorSubject<PopupModel>();
+
+  ValueStream<Optional<UserAuthModel>> get userStream => _user.stream;
+  Stream<bool> get isAuthenticated =>
+      userStream.map((final user) => user is OptionalValue);
+  ValueStream<PopupModel> get authPopupStream => _popupController.stream;
+
+  final LoginUserUsecase _loginUserUsecase;
+  final GetCurrentUserDataUsecase _getCurrentUserDataUsecase;
+  final LogoutUserUsecase _logoutUserUsecase;
+  final SubscribeToTopicUsecase _subscribeToTopicUsecase;
+
+  final locationStream = Geolocator.getPositionStream();
+  bool isFirstRun = true;
+
+  Future<void> _initAuth() async {
+    final result = await _getCurrentUserDataUsecase.call();
+    result.fold((final _) {
+      _user.add(const OptionalNull());
+    }, (final user) {
+      _user.add(OptionalValue(user));
+    });
+  }
+
+  Future<bool> login(final String username, final String password) async {
+    final authResult = switch (username) {
+      'l' when kDebugMode => await _loginUserUsecase('lera@z.com', 'Lera1234!'),
+      't' when kDebugMode =>
+        await _loginUserUsecase('test@user.com', 'Lera1234!'),
+      _ => await _loginUserUsecase(username, password),
+    };
+
+    return authResult.fold(
+      (final error) {
+        _popupController.add(
+          PopupModel(
+            title: translate('login.unable'),
+            message: translate('login.error'),
+            type: EPopupType.error,
+          ),
+        );
+        return false;
+      },
+      (final user) {
+        _user.add(OptionalValue(user));
+        _popupController.add(
+          PopupModel(
+            title: translate('login.success'),
+            message: translate('login.welcome', args: {'name': user.name}),
+            type: EPopupType.success,
+          ),
+        );
+        return true;
+      },
+    );
+  }
+
+  Future<void> logout() async {
+    final result = await _logoutUserUsecase.call();
+    result.fold(
+      (final error) {},
+      (final _) {
+        _user.add(const OptionalNull());
+        _popupController.add(
+          PopupModel(
+            title: translate('logout.success'),
+            message: translate('logout.subtitle'),
+            type: EPopupType.success,
+          ),
+        );
+      },
+    );
+  }
+
+  void _initLocationControl() async {
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      return;
+    }
+
+    final settings = await FirebaseMessaging.instance.requestPermission();
+    await FirebaseMessaging.instance.setAutoInitEnabled(true);
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      if (userStream.value case OptionalValue(:final value)
+          when value.position == EPosition.requester.name) {
+        return;
+      }
+      _locator<FcmService>().listenToMessages();
+      _locator<FcmService>().listenToBackgroundMessages();
+
+      addSubscription(
+        Rx.combineLatest2<Position, Optional<UserAuthModel>, Position>(
+          locationStream,
+          userStream,
+          (final location, final user) => location,
+        )
+            .debounceTime(const Duration(seconds: 1))
+            .pairwise()
+            .listen((final positions) {
+          if (_user.value is OptionalNull) return;
+          final prev = positions[0];
+          final curr = positions[1];
+          if (!isFirstRun &&
+              prev.latitude == curr.latitude &&
+              prev.longitude == curr.longitude) {
+            return;
+          }
+
+          final topics = curr.locationTopicList;
+          _subscribeToTopicUsecase(
+            topics
+                .map(
+                  (final topic) => LocationSubscriptionModel(
+                    id: '',
+                    topic: topic,
+                    userId: FirebaseAuth.instance.currentUser!.uid,
+                  ),
+                )
+                .toList(),
+          );
+          isFirstRun = false;
+        }),
+      );
+    }
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _user.close();
+    await _popupController.close();
+    await super.dispose();
+  }
+}

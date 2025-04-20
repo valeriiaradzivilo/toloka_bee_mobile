@@ -9,8 +9,7 @@ import '../../common/routing/route_generator.dart';
 import '../../common/routing/routes.dart';
 import '../../common/theme/theme.dart';
 import '../../common/theme/util.dart';
-import '../authentication/bloc/authentication_bloc.dart';
-import '../location_control/bloc/location_control_bloc.dart';
+import '../authentication/bloc/user_bloc.dart';
 import 'main_wrapper_widget.dart';
 
 class MainApp extends StatelessWidget {
@@ -30,11 +29,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(
-          create: (final _) => AuthenticationBloc(GetIt.I),
-          dispose: (final _, final bloc) => bloc.dispose(),
-        ),
-        Provider(
-          create: (final _) => LocationControlBloc(GetIt.I),
+          create: (final _) => UserBloc(GetIt.I),
           dispose: (final _, final bloc) => bloc.dispose(),
         ),
         ChangeNotifierProvider(create: (final _) => LocaleNotifier()),

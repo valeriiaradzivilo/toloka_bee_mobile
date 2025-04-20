@@ -14,11 +14,10 @@ import '../../../common/routing/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../data/models/user_auth_model.dart';
-import '../../authentication/bloc/authentication_bloc.dart';
+import '../../authentication/bloc/user_bloc.dart';
 import '../../give_hand/bloc/give_hand_bloc.dart';
 import '../../give_hand/bloc/give_hand_event.dart';
 import '../../give_hand/ui/give_hand_screen.dart';
-import '../../location_control/bloc/location_control_bloc.dart';
 import '../../request_hand/bloc/create_request_bloc.dart';
 import '../../request_hand/ui/request_hand.dart';
 import 'bloc/map_screen_bloc.dart';
@@ -33,7 +32,7 @@ class MapScreen extends StatelessWidget {
     return Scaffold(
       body: ReactWidget3(
         stream1: bloc.locationServiceEnabled,
-        stream2: context.read<AuthenticationBloc>().isAuthenticated,
+        stream2: context.read<UserBloc>().isAuthenticated,
         stream3: bloc.volunteerMarkers,
         builder:
             (final locationEnabled, final isAuthenticated, final volunteers) =>
@@ -45,7 +44,7 @@ class MapScreen extends StatelessWidget {
                       ? MediaQuery.of(context).size.height * 0.6
                       : null,
                   child: ReactWidget(
-                    stream: context.read<LocationControlBloc>().locationStream,
+                    stream: context.read<UserBloc>().locationStream,
                     builder: (final data) => FlutterMap(
                       key: ValueKey(
                         'Map_Key_${data.latitude}_${data.longitude}',
@@ -125,7 +124,7 @@ class _BottomSheet extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => ReactWidget(
-        stream: context.read<AuthenticationBloc>().userStream,
+        stream: context.read<UserBloc>().userStream,
         builder: (final user) => Container(
           width: double.infinity,
           decoration: const BoxDecoration(
@@ -314,7 +313,7 @@ class _AccountInfo extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () => isAuthenticated
-                    ? context.read<AuthenticationBloc>().logout()
+                    ? context.read<UserBloc>().logout()
                     : Navigator.of(context)
                         .pushReplacementNamed(Routes.loginScreen),
                 child: Text(
@@ -334,7 +333,7 @@ class _AccountInfo extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ReactWidget(
-                  stream: context.read<AuthenticationBloc>().userStream,
+                  stream: context.read<UserBloc>().userStream,
                   builder: (final user) => Text(
                     translate(
                       'map.hello.title',
