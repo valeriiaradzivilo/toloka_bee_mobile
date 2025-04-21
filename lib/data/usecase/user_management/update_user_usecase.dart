@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
-import '../../features/profile/bloc/profile_state.dart';
-import '../repository/authentication/auth_repository.dart';
-import 'usecase.dart';
+import '../../../features/profile/bloc/profile_state.dart';
+import '../../repository/authentication/auth_repository.dart';
+import '../usecase.dart';
 
 class UpdateUserUsecase extends UseCase<Either, ProfileUpdating> {
   final AuthRepository _authRepo;

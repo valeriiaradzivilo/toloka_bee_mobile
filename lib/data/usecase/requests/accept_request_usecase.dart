@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
-import '../repository/notifications/notification_repository.dart';
-import 'usecase.dart';
+import '../../repository/notifications/notification_repository.dart';
+import '../usecase.dart';
 
 class AcceptRequestUsecase extends UseCase<Either, String> {
   final NotificationRepository _notificationRepository;

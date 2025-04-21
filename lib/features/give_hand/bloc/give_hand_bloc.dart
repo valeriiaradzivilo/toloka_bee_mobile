@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../data/models/get_requests_model.dart';
-import '../../../data/usecase/get_all_requests_usecase.dart';
+import '../../../data/usecase/requests/get_all_requests_usecase.dart';
 import 'give_hand_event.dart';
 import 'give_hand_state.dart';
 

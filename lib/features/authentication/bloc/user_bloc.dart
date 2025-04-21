@@ -14,10 +14,10 @@ import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../../data/service/fcm_service.dart';
-import '../../../data/usecase/get_current_user_data_usecase.dart';
-import '../../../data/usecase/login_user_usecase.dart';
-import '../../../data/usecase/logout_user_usecase.dart';
 import '../../../data/usecase/subscribe_to_topic_usecase.dart';
+import '../../../data/usecase/user_management/get_current_user_data_usecase.dart';
+import '../../../data/usecase/user_management/login_user_usecase.dart';
+import '../../../data/usecase/user_management/logout_user_usecase.dart';
 import '../../registration/ui/data/e_position.dart';
 
 class UserBloc extends ZipBloc {

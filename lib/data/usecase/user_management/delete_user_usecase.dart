@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
-import '../repository/authentication/auth_repository.dart';
-import 'usecase.dart';
+import '../../repository/authentication/auth_repository.dart';
+import '../usecase.dart';
 
 class DeleteUserUsecase extends UseCase<Either, String> {
   final AuthRepository _authRepo;

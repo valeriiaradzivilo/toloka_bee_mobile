@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../data/models/user_auth_model.dart';
-import '../../../data/usecase/get_requests_by_user_id_usecase.dart';
-import '../../../data/usecase/update_user_usecase.dart';
+import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
+import '../../../data/usecase/user_management/update_user_usecase.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {

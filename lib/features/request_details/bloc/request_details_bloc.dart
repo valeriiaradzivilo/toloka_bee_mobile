@@ -8,9 +8,9 @@ import 'package:get_it/get_it.dart';
 
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
-import '../../../data/usecase/delete_request_usecase.dart';
 import '../../../data/usecase/get_notification_by_id_usecase.dart';
-import '../../../data/usecase/get_user_by_id_usecase.dart';
+import '../../../data/usecase/requests/delete_request_usecase.dart';
+import '../../../data/usecase/user_management/get_user_by_id_usecase.dart';
 import '../../snackbar/snackbar_service.dart';
 import 'request_details_state.dart';
 import 'request_detatils_event.dart';

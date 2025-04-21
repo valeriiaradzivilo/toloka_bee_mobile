@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../repository/authentication/auth_repository.dart';
+import '../../repository/authentication/auth_repository.dart';
 
 class LogoutUserUsecase {
   final AuthRepository _authRepository;

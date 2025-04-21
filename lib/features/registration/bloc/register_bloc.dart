@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 import '../../../common/bloc/zip_bloc.dart';
 import '../../../common/optional_value.dart';
 import '../../../data/models/user_auth_model.dart';
-import '../../../data/usecase/register_user_usecase.dart';
+import '../../../data/usecase/user_management/register_user_usecase.dart';
 import '../ui/data/e_position.dart';
 import '../ui/data/e_steps.dart';
 
