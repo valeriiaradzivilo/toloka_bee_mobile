@@ -14,7 +14,7 @@ class ContactInfoModel with _$ContactInfoModel {
     @JsonKey(includeIfNull: false) final String? email,
     @JsonKey(includeIfNull: false) final String? viber,
     @JsonKey(includeIfNull: false) final String? telegram,
-    @JsonKey(includeIfNull: false) final String? whatsup,
+    @JsonKey(includeIfNull: false) final String? whatsapp,
   }) = _ContactInfoModel;
 
   factory ContactInfoModel.fromJson(final Map<String, dynamic> json) =>
@@ -30,14 +30,14 @@ enum ContactMethod {
   viber,
   @JsonValue('TELEGRAM')
   telegram,
-  @JsonValue('WHATSUP')
-  whatsup;
+  @JsonValue('WHATSAPP')
+  whatsapp;
 
   String get text => switch (this) {
         phone => translate('contacts.phone'),
         email => translate('contacts.email'),
         viber => translate('contacts.viber'),
         telegram => translate('contacts.telegram'),
-        whatsup => translate('contacts.whatsup'),
+        whatsapp => translate('contacts.whatsapp'),
       };
 }

@@ -1,3 +1,4 @@
+import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/request_notification_model.dart';
 import '../../../data/models/user_auth_model.dart';
 
@@ -12,9 +13,12 @@ class ProfileLoading extends ProfileState {
 class ProfileLoaded extends ProfileState {
   final UserAuthModel user;
   final List<RequestNotificationModel> requests;
+  final ContactInfoModel? contactInfo;
+
   const ProfileLoaded({
     required this.user,
     required this.requests,
+    required this.contactInfo,
   });
 }
 

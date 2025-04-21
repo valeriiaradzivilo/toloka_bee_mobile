@@ -55,6 +55,7 @@ class RequestDetailsBloc
               requestNotificationModel.latitude,
               requestNotificationModel.longitude,
             );
+
             emit(
               RequestDetailsLoaded(
                 requestNotificationModel: requestNotificationModel,
@@ -107,5 +108,6 @@ class RequestDetailsBloc
   final GetUserByIdUsecase _getUserImageUsecase;
   final GetNotificationByIdUsecase _getNotificationByIdUsecase;
   final DeleteRequestUsecase _deleteRequestUsecase;
+
   final SnackbarService _snackbarService;
 }

@@ -11,6 +11,7 @@ import '../../../common/routing/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../common/widgets/zip_snackbar.dart';
+import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/request_notification_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
@@ -54,9 +55,15 @@ class ProfileScreen extends StatelessWidget {
                   ProfileUpdated() ||
                   ProfileLoading() =>
                     const Center(child: CircularProgressIndicator()),
-                  ProfileLoaded(:final user, :final requests) => _LoadedProfile(
+                  ProfileLoaded(
+                    :final user,
+                    :final requests,
+                    :final contactInfo
+                  ) =>
+                    _LoadedProfile(
                       user: user,
                       requests: requests,
+                      contactInfo: contactInfo,
                     ),
                   ProfileError(:final message) => Center(
                       child: Column(
@@ -90,9 +97,11 @@ class _LoadedProfile extends StatelessWidget {
   const _LoadedProfile({
     required this.user,
     required this.requests,
+    this.contactInfo,
   });
   final UserAuthModel user;
   final List<RequestNotificationModel> requests;
+  final ContactInfoModel? contactInfo;
 
   @override
   Widget build(final BuildContext context) => SingleChildScrollView(
@@ -209,6 +218,69 @@ class _LoadedProfile extends StatelessWidget {
                 },
               ),
               style: ZipFonts.small.style,
+            ),
+            Divider(
+              color: ZipColor.onSurfaceVariant.withValues(
+                alpha: 0.7,
+              ),
+            ),
+            Text(
+              translate('profile.contacts.title'),
+              style: ZipFonts.medium.style,
+            ),
+            if (contactInfo == null) ...[
+              Text(
+                translate('profile.contacts.no'),
+                style: ZipFonts.small.style,
+              ),
+              TextButton.icon(
+                onPressed: () => context.read<ProfileCubit>().editUser(),
+                label: Text(translate('profile.contacts.add')),
+                icon: const Icon(
+                  Icons.add,
+                  color: ZipColor.primary,
+                ),
+              ),
+            ] else ...[
+              if (contactInfo!.phone != null)
+                Text(
+                  contactInfo!.phone!,
+                  style: ZipFonts.small.style,
+                ),
+              if (contactInfo!.email != null)
+                Text(
+                  contactInfo!.email!,
+                  style: ZipFonts.small.style,
+                ),
+              if (contactInfo!.viber != null)
+                Text(
+                  contactInfo!.viber!,
+                  style: ZipFonts.small.style,
+                ),
+              if (contactInfo!.whatsapp != null)
+                Text(
+                  contactInfo!.whatsapp!,
+                  style: ZipFonts.small.style,
+                ),
+              if (contactInfo!.telegram != null)
+                Text(
+                  contactInfo!.telegram!,
+                  style: ZipFonts.small.style,
+                ),
+              Text(
+                translate(
+                  'contacts.preferred',
+                  args: {
+                    'method': contactInfo!.preferredMethod.text,
+                  },
+                ),
+                style: ZipFonts.small.style,
+              ),
+            ],
+            Divider(
+              color: ZipColor.onSurfaceVariant.withValues(
+                alpha: 0.7,
+              ),
             ),
             ElevatedButton.icon(
               onPressed: () => context.read<ProfileCubit>().editUser(),

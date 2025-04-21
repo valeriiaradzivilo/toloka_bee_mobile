@@ -100,7 +100,13 @@
             "save": "Save changes",
             "position": "Who do you want to be?"
         },
-        "requests": "Your requests:"
+        "requests": "Your requests:",
+        "contacts": {
+            "title": "Your contacts:",
+            "no": "No contacts available",
+            "add": "Add contacts",
+            "preffered": "Preffered method of contact {method}"
+        }
     },
     "start": {
         "app": {
@@ -234,5 +240,12 @@
             "title": "Error",
             "message": "An error occurred. Please restart the app."
         }
+    },
+    "contacts": {
+        "phone": "Phone",
+        "email": "Email",
+        "telegram": "Telegram",
+        "whatsapp": "WhatsApp",
+        "viber": "Viber"
     }
 }

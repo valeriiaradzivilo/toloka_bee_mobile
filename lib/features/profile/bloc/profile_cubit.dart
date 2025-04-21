@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../data/models/user_auth_model.dart';
+import '../../../data/usecase/contacts/get_contacts_by_user_id_usecase.dart';
 import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
 import '../../../data/usecase/user_management/update_user_usecase.dart';
 import 'profile_state.dart';
@@ -10,10 +11,12 @@ class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit(final GetIt getIt)
       : _updateUserUsecase = getIt<UpdateUserUsecase>(),
         _getRequestsByUserIdUsecase = getIt<GetRequestsByUserIdUsecase>(),
+        _getContactByUserIdUsecase = getIt<GetContactByUserIdUsecase>(),
         super(const ProfileLoading());
 
   final UpdateUserUsecase _updateUserUsecase;
   final GetRequestsByUserIdUsecase _getRequestsByUserIdUsecase;
+  final GetContactByUserIdUsecase _getContactByUserIdUsecase;
   late UserAuthModel _currentUser;
 
   UserAuthModel get currentUser => _currentUser;
@@ -22,19 +25,33 @@ class ProfileCubit extends Cubit<ProfileState> {
     _currentUser = user;
     final result = await _getRequestsByUserIdUsecase.call(user.id);
 
-    result.fold(
-      (final failure) => emit(
+    await result.fold(
+      (final failure) async => emit(
         ProfileLoaded(
           user: user,
           requests: [],
+          contactInfo: null,
         ),
       ),
-      (final requests) => emit(
-        ProfileLoaded(
-          user: user,
-          requests: requests,
-        ),
-      ),
+      (final requests) async {
+        final contactsResult = await _getContactByUserIdUsecase.call(user.id);
+        contactsResult.fold(
+          (final failure) => emit(
+            ProfileLoaded(
+              user: user,
+              requests: requests,
+              contactInfo: null,
+            ),
+          ),
+          (final contactInfo) => emit(
+            ProfileLoaded(
+              user: user,
+              requests: requests,
+              contactInfo: contactInfo,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -138,19 +155,6 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   late final _requestSubscription =
       Stream.periodic(const Duration(seconds: 5)).listen((final result) async {
-    await result.fold(
-      (final failure) => emit(
-        ProfileLoaded(
-          user: _currentUser,
-          requests: [],
-        ),
-      ),
-      (final requests) => emit(
-        ProfileLoaded(
-          user: _currentUser,
-          requests: requests,
-        ),
-      ),
-    );
+    loadUser(_currentUser);
   });
 }
