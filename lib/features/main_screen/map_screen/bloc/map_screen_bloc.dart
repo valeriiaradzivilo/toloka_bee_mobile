@@ -71,14 +71,17 @@ class MapScreenBloc extends ZipBloc {
       );
       final markers = <Marker>[];
       for (int i = 0; i < markersCount; i++) {
-        final double randomValue =
+        final double randomValueLat =
             Random().nextDouble() / 100 + 0.02 * (i.isEven ? 1 : -1);
+
+        final double randomValueLong =
+            Random().nextDouble() / 100 + 0.02 * (i.isOdd ? 1 : -1);
 
         markers.add(
           Marker(
             point: LatLng(
-              getCurrentPosition.latitude + randomValue,
-              getCurrentPosition.longitude + randomValue,
+              getCurrentPosition.latitude + randomValueLat,
+              getCurrentPosition.longitude + randomValueLong,
             ),
             child: Icon(
               Icons.volunteer_activism,

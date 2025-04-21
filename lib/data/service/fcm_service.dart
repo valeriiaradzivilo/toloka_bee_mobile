@@ -86,15 +86,14 @@ class FcmService {
       context,
       PopupModel(
         title: message.notification?.title ?? '',
-        message: message.notification?.body ??
-            '${translate(
-              'request.details.distance',
-              args: {
-                'distance': distanceKm.toStringAsFixed(2),
-              },
-            )} ',
+        message: '${message.notification?.body ?? ''} ${translate(
+          'request.details.distance',
+          args: {
+            'distance': distanceKm.toStringAsFixed(2),
+          },
+        )} ',
         onPressed: (final BuildContext context) {
-          Navigator.of(context).pushReplacementNamed(
+          Navigator.of(context).pushNamed(
             Routes.requestDetailsScreen,
             arguments: data,
           );

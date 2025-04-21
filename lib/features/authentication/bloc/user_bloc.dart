@@ -22,16 +22,28 @@ import '../../registration/ui/data/e_position.dart';
 
 class UserBloc extends ZipBloc {
   UserBloc(final GetIt locator)
-      : _locator = locator,
-        _loginUserUsecase = locator<LoginUserUsecase>(),
+      : _loginUserUsecase = locator<LoginUserUsecase>(),
         _getCurrentUserDataUsecase = locator<GetCurrentUserDataUsecase>(),
         _logoutUserUsecase = locator<LogoutUserUsecase>(),
         _subscribeToTopicUsecase = locator<SubscribeToTopicUsecase>() {
     _initAuth();
     _initLocationControl();
+
+    addSubscription(
+      _user.pairwise().listen((final users) {
+        if (users[0].valueOrNull?.id == users[1].valueOrNull?.id) return;
+        if (users[1].valueOrNull case OptionalValue<UserAuthModel>(:final value)
+            when value.position.toLowerCase() ==
+                EPosition.requester.name.toLowerCase()) {
+          return;
+        }
+
+        locator<FcmService>().listenToMessages();
+        locator<FcmService>().listenToBackgroundMessages();
+      }),
+    );
   }
 
-  final GetIt _locator;
   final BehaviorSubject<Optional<UserAuthModel>> _user =
       BehaviorSubject<Optional<UserAuthModel>>.seeded(const OptionalNull());
   final BehaviorSubject<PopupModel> _popupController =
@@ -119,25 +131,24 @@ class UserBloc extends ZipBloc {
     final settings = await FirebaseMessaging.instance.requestPermission();
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      if (userStream.value case OptionalValue(:final value)
-          when value.position == EPosition.requester.name) {
-        return;
-      }
-      _locator<FcmService>().listenToMessages();
-      _locator<FcmService>().listenToBackgroundMessages();
-
       addSubscription(
-        Rx.combineLatest2<Position, Optional<UserAuthModel>, Position>(
+        Rx.combineLatest2(
           locationStream,
           userStream,
-          (final location, final user) => location,
+          (final location, final user) => (location: location, user: user),
         )
             .debounceTime(const Duration(seconds: 1))
             .pairwise()
-            .listen((final positions) {
-          if (_user.value is OptionalNull) return;
-          final prev = positions[0];
-          final curr = positions[1];
+            .listen((final data) {
+          final userNew = data[1].user;
+          if (userNew is OptionalNull) return;
+          if (userNew case OptionalValue(:final value)
+              when value.position.toLowerCase() ==
+                  EPosition.requester.name.toLowerCase()) {
+            return;
+          }
+          final prev = data[0].location;
+          final curr = data[1].location;
           if (!isFirstRun &&
               prev.latitude == curr.latitude &&
               prev.longitude == curr.longitude) {

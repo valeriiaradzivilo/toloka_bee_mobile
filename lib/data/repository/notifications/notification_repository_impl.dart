@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../models/get_requests_model.dart';
@@ -80,7 +81,14 @@ class NotificationRepositoryImpl implements NotificationRepository {
   ) async {
     try {
       final notifications = await _fcmDataSource.getAllRequests(location);
-      return Right(notifications);
+      return Right(
+        notifications
+            .where(
+              (final notification) =>
+                  notification.userId != FirebaseAuth.instance.currentUser?.uid,
+            )
+            .toList(),
+      );
     } catch (e) {
       logger.severe(
         '❌ Error while getting all requests: ${e.toString()}',
@@ -118,10 +126,30 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<Either<Fail, void>> unsubscribeFromTopic(
-    final LocationSubscriptionModel locationSubscription,
-  ) {
-    // TODO: implement unsubscribeFromTopic
-    throw UnimplementedError();
+  Future<Either<Fail, RequestNotificationModel>> getRequestById(
+    final String id,
+  ) async {
+    try {
+      final notification = await _fcmDataSource.getRequestById(id);
+      return Right(notification);
+    } catch (e) {
+      logger.severe(
+        '❌ Error while getting request by id: ${e.toString()}',
+      );
+      return Left(Fail('Failed to get request by id'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> acceptRequest(final String id) async {
+    try {
+      await _fcmDataSource.acceptRequest(id);
+      return const Right(null);
+    } catch (e) {
+      logger.severe(
+        '❌ Error while accepting request: ${e.toString()}',
+      );
+      return Left(Fail('Failed to accept request'));
+    }
   }
 }

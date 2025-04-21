@@ -162,7 +162,24 @@
             "actions": {
                 "accept": "Accept request",
                 "cancel": "Cancel request"
-            }
+            },
+            "user": {
+                "name": "{name} {surname} needs your help",
+                "about": "About them: {about}"
+            },
+            "status": "Current request status is {status}",
+            "help": "Help"
+        },
+        "title": "Somebody close needs your help",
+        "body": "Click on the button to see the details",
+        "status": {
+            "pending": "Pending",
+            "completed": "Completed",
+            "canceled": "Canceled",
+            "needs_more_people": "Needs more people",
+            "in_progress": "In progress",
+            "expired": "Expired",
+            "unknown": "Unknown"
         }
     },
     "give": {
@@ -181,6 +198,10 @@
         "action": {
             "help": "Help",
             "learn": "Learn more"
+        },
+        "error": {
+            "title": "Error",
+            "message": "An error occurred. Please restart the app."
         }
     }
 }

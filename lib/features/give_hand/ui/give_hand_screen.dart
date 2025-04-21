@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 
+import '../../../common/routing/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../common/widgets/lin_number_editing_field.dart';
@@ -226,9 +227,17 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                             ],
                           ),
                         ),
-                        onTap: () {
-                          // Navigate to request details screen
-                        },
+                        trailing: ElevatedButton(
+                          onPressed: () => Navigator.of(context).pushNamed(
+                            Routes.requestDetailsScreen,
+                            arguments: request,
+                          ),
+                          child: Text(translate('common.action.learn')),
+                        ),
+                        onTap: () => Navigator.of(context).pushNamed(
+                          Routes.requestDetailsScreen,
+                          arguments: request,
+                        ),
                       ),
                     ],
                   );

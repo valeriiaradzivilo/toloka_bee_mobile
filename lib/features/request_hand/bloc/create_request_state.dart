@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uuid/uuid.dart';
 
@@ -53,5 +54,7 @@ class CreateRequestState {
         description: description,
         createdAt: DateTime.now(),
         updatedAt: null,
+        title: translate('request.title'),
+        body: translate('request.body'),
       );
 }

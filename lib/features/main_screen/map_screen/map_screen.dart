@@ -292,8 +292,7 @@ class _AccountInfo extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   clipBehavior: Clip.hardEdge,
-                  child: user == null ||
-                          (user!.photo.isEmpty || user!.photoFormat.isEmpty)
+                  child: user == null || (user!.photo.isEmpty)
                       ? const Icon(
                           Icons.person_4_rounded,
                           size: 50,

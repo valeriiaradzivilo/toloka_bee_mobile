@@ -17,6 +17,8 @@ class RequestNotificationModel implements Equatable {
   final String description;
   final DateTime createdAt;
   final DateTime? updatedAt;
+  final String title;
+  final String body;
 
   RequestNotificationModel({
     required this.id,
@@ -31,6 +33,8 @@ class RequestNotificationModel implements Equatable {
     required this.description,
     required this.createdAt,
     required this.updatedAt,
+    required this.title,
+    required this.body,
   });
 
   factory RequestNotificationModel.fromFCM(final Map<String, dynamic> json) {
@@ -53,6 +57,8 @@ class RequestNotificationModel implements Equatable {
       description: json['description'] ?? '',
       createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
       updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
+      title: '',
+      body: '',
     );
   }
 
@@ -71,6 +77,8 @@ class RequestNotificationModel implements Equatable {
         description: json['description'] ?? '',
         createdAt: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
         updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
+        title: json['title'] ?? '',
+        body: json['body'] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -88,6 +96,8 @@ class RequestNotificationModel implements Equatable {
         'description': description,
         'createdAt': createdAt.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
+        'title': title,
+        'body': body,
       };
 
   RequestNotificationModel copyWith({
@@ -103,6 +113,8 @@ class RequestNotificationModel implements Equatable {
     final String? description,
     final DateTime? createdAt,
     final DateTime? updatedAt,
+    final String? title,
+    final String? body,
   }) =>
       RequestNotificationModel(
         id: id ?? this.id,
@@ -118,6 +130,8 @@ class RequestNotificationModel implements Equatable {
         description: description ?? this.description,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt,
+        title: title ?? this.title,
+        body: body ?? this.body,
       );
 
   @override
