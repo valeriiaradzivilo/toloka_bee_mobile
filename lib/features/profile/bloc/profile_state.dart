@@ -1,27 +1,43 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import '../../../data/models/user_auth_model.dart';
 
-@immutable
-abstract class ProfileState {}
+sealed class ProfileState {
+  const ProfileState();
+}
 
-class ProfileInitial extends ProfileState {}
-
-class ProfileLoading extends ProfileState {}
+class ProfileLoading extends ProfileState {
+  const ProfileLoading();
+}
 
 class ProfileLoaded extends ProfileState {
   final UserAuthModel user;
-  ProfileLoaded(this.user);
+  const ProfileLoaded(this.user);
 }
 
-class ProfileUpdating extends ProfileState {}
+class ProfileUpdating extends ProfileState {
+  const ProfileUpdating({
+    required this.changedUser,
+    this.oldPassword,
+  });
+
+  final UserAuthModel changedUser;
+  final String? oldPassword;
+
+  ProfileUpdating copyWith({
+    final UserAuthModel? changedUser,
+    final String? oldPassword,
+  }) =>
+      ProfileUpdating(
+        changedUser: changedUser ?? this.changedUser,
+        oldPassword: oldPassword ?? this.oldPassword,
+      );
+}
 
 class ProfileUpdated extends ProfileState {
   final UserAuthModel user;
-  ProfileUpdated(this.user);
+  const ProfileUpdated(this.user);
 }
 
 class ProfileError extends ProfileState {
   final String message;
-  ProfileError(this.message);
+  const ProfileError(this.message);
 }

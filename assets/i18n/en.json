@@ -88,7 +88,18 @@
             "delete.success": "Account deleted successfully. Goodbye!"
         },
         "age": "You are {age} years old",
-        "about": "About you: "
+        "about": "About you: ",
+        "edit": {
+            "title": "Edit profile",
+            "phone": "Phone",
+            "name": "Name",
+            "surname": "Surname",
+            "about": "About",
+            "old_password": "Old Password",
+            "new_password": "New Password",
+            "save": "Save changes",
+            "position": "Who do you want to be?"
+        }
     },
     "start": {
         "app": {

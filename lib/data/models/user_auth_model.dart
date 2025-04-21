@@ -17,6 +17,7 @@ class UserAuthModel with _$UserAuthModel {
     required final String position,
     required final String about,
     @JsonKey(name: 'photo') required final String photo,
+    @JsonKey(name: 'photoFormat') required final String photoFormat,
   }) = _UserAuthModel;
 
   factory UserAuthModel.fromJson(final Map<String, dynamic> json) =>

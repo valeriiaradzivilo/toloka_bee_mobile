@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_logger/simple_logger.dart';
 
+import '../../../features/profile/bloc/profile_state.dart';
 import '../../models/user_auth_model.dart';
 import 'auth_data_source.dart';
 
@@ -132,10 +133,27 @@ class AuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<void> updateUser(final UserAuthModel user) async {
+  Future<void> updateUser(final ProfileUpdating user) async {
+    if (user.oldPassword != null &&
+        user.oldPassword!.isNotEmpty &&
+        user.changedUser.password != null) {
+      final credential = EmailAuthProvider.credential(
+        email: user.changedUser.email,
+        password: user.oldPassword!,
+      );
+      try {
+        await _auth.currentUser?.reauthenticateWithCredential(credential);
+      } catch (e) {
+        throw Exception('Old password is incorrect');
+      }
+      await _auth.currentUser?.updatePassword(user.changedUser.password!);
+    }
+
+    final data = user.changedUser.toJson();
+
     final response = await _dio.put(
       '$_basePath/update',
-      data: jsonEncode(user.toJson()),
+      data: (data),
       options: Options(
         headers: {
           'Content-Type': 'application/json',

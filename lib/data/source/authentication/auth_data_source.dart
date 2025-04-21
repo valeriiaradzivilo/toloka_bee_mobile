@@ -1,3 +1,4 @@
+import '../../../features/profile/bloc/profile_state.dart';
 import '../../models/user_auth_model.dart';
 
 abstract class AuthDataSource {
@@ -11,7 +12,7 @@ abstract class AuthDataSource {
 
   Future<UserAuthModel> getCurrentUserData();
 
-  Future<void> updateUser(final UserAuthModel user);
+  Future<void> updateUser(final ProfileUpdating user);
 
   Future<void> deleteUser(final String userId);
 }

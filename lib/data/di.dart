@@ -25,6 +25,7 @@ import 'usecase/logout_user_usecase.dart';
 import 'usecase/register_user_usecase.dart';
 import 'usecase/send_notification_usecase.dart';
 import 'usecase/subscribe_to_topic_usecase.dart';
+import 'usecase/update_user_usecase.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
@@ -107,6 +108,10 @@ Future<void> initUseCases() async {
 
   serviceLocator.registerLazySingleton<SubscribeToTopicUsecase>(
     () => SubscribeToTopicUsecase(serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton<UpdateUserUsecase>(
+    () => UpdateUserUsecase(serviceLocator()),
   );
 
   serviceLocator.registerLazySingleton<SendNotificationUsecase>(

@@ -1,11 +1,14 @@
 import 'package:dartz/dartz.dart';
+import 'package:simple_logger/simple_logger.dart';
 
+import '../../../features/profile/bloc/profile_state.dart';
 import '../../models/user_auth_model.dart';
 import '../../source/authentication/auth_data_source.dart';
 import 'auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource _authDataSource;
+  final logger = SimpleLogger();
 
   AuthRepositoryImpl(this._authDataSource);
 
@@ -49,10 +52,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Fail, void>> updateUser(final UserAuthModel user) async {
+  Future<Either<Fail, void>> updateUser(final ProfileUpdating user) async {
     try {
       return Right(await _authDataSource.updateUser(user));
     } catch (e) {
+      logger.severe('Failed to update user: $e');
       return Left(Fail('Failed to update user'));
     }
   }

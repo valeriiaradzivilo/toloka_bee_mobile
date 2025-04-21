@@ -43,6 +43,7 @@ class RegisterBloc extends ZipBloc {
         position: position.name.toLowerCase(),
         about: _aboutMeController.value,
         photo: base64Image,
+        photoFormat: _photoController.value.contentType,
       ),
     );
     logger.info('User registered: ${isRegistered.isRight()}');

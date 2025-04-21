@@ -171,14 +171,11 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                         ),
                       ),
                       ListTile(
-                        leading: const CircleAvatar(
-                          backgroundImage: NetworkImage(
-                            'https://thumb.ac-illust.com/30/30fa090868a2f8236c55ef8c1361db01_t.jpeg',
-                          ),
-                        ),
                         title: Text(
                           request.description,
-                          style: ZipFonts.medium.style,
+                          style: ZipFonts.small.style.copyWith(
+                            fontWeight: FontWeight.w900,
+                          ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -199,6 +196,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                                         .toString(),
                                   },
                                 )}',
+                                style: ZipFonts.tiny.style,
                               ),
                               if (request.price != null && request.price != 0)
                                 Text(
@@ -208,6 +206,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                                       'price': request.price.toString(),
                                     },
                                   )}',
+                                  style: ZipFonts.tiny.style,
                                 ),
                               if (request.isRemote == false)
                                 Text(
@@ -223,6 +222,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                                           .toStringAsFixed(2),
                                     },
                                   )}',
+                                  style: ZipFonts.tiny.style,
                                 ),
                             ],
                           ),
