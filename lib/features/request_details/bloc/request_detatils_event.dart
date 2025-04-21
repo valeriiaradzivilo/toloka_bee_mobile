@@ -10,3 +10,8 @@ class FetchRequestDetails extends RequestDetailsEvent {
 class AcceptRequest extends RequestDetailsEvent {
   const AcceptRequest();
 }
+
+class RemoveRequest extends RequestDetailsEvent {
+  const RemoveRequest(this.requestId);
+  final String requestId;
+}

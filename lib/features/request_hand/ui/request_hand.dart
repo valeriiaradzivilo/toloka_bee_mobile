@@ -60,7 +60,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                         children: [
                           Text(
                             translate('request.hand.title'),
-                            style: ZipFonts.medium.style,
+                            style: ZipFonts.big.style,
                           ),
                           LinTextField(
                             controller: _descriptionController,
@@ -228,7 +228,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                             child: ElevatedButton(
                               onPressed: () {
                                 context.read<CreateRequestBloc>().add(
-                                      SendRequestEvent(),
+                                      SendRequestEvent(context),
                                     );
                                 Navigator.of(context).pop();
                               },

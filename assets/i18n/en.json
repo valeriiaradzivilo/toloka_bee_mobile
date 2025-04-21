@@ -99,7 +99,8 @@
             "new_password": "New Password",
             "save": "Save changes",
             "position": "Who do you want to be?"
-        }
+        },
+        "requests": "Your requests:"
     },
     "start": {
         "app": {
@@ -171,7 +172,10 @@
                 "description": "Select how many volunteers do you need to complete this task. Default value - 1. Maximum value - 5.",
                 "label": "Number of volunteers"
             },
-            "submit": "Create request"
+            "submit": "Create request",
+            "success": "Request created successfully.",
+            "thanks": "Thank you for sharing your request with us. We will notify you when somebody accepts your request. Active requests can be found in the profile.",
+            "error": "Error occurred while creating a request. Please try again later."
         },
         "details": {
             "description": "Description",
@@ -190,7 +194,12 @@
                 "about": "About them: {about}"
             },
             "status": "Current request status is {status}",
-            "help": "Help"
+            "help": "Help",
+            "remove": "Remove request"
+        },
+        "delete": {
+            "success": "Request deleted successfully.",
+            "error": "Error occurred while deleting the request. Please try again later."
         },
         "title": "Somebody close needs your help",
         "body": "Click on the button to see the details",

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:intl/intl.dart';
 
-import '../../../common/routing/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../common/widgets/lin_number_editing_field.dart';
 import '../bloc/give_hand_bloc.dart';
 import '../bloc/give_hand_event.dart';
 import '../bloc/give_hand_state.dart';
+import 'widgets/request_tile.dart';
 
 class GiveHandScreen extends StatelessWidget {
   const GiveHandScreen({super.key});
@@ -170,74 +169,15 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                           ),
                         ),
                       ),
-                      ListTile(
-                        title: Text(
-                          request.description,
-                          style: ZipFonts.small.style.copyWith(
-                            fontWeight: FontWeight.w900,
-                          ),
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '\u2981 ${translate(
-                                  'give.hand.deadline',
-                                  args: {
-                                    'date': DateFormat.yMMMMEEEEd()
-                                        .format(request.deadline),
-                                    'days': request.deadline
-                                        .difference(DateTime.now())
-                                        .inDays
-                                        .toString(),
-                                  },
-                                )}',
-                                style: ZipFonts.tiny.style,
-                              ),
-                              if (request.price != null && request.price != 0)
-                                Text(
-                                  '\u2981 ${translate(
-                                    'give.hand.price',
-                                    args: {
-                                      'price': request.price.toString(),
-                                    },
-                                  )}',
-                                  style: ZipFonts.tiny.style,
-                                ),
-                              if (request.isRemote == false)
-                                Text(
-                                  '\u2981 ${translate(
-                                    'give.hand.distance',
-                                    args: {
-                                      'distance': context
-                                          .read<GiveHandBloc>()
-                                          .distanceTo(
-                                            request.latitude,
-                                            request.longitude,
-                                          )
-                                          .toStringAsFixed(2),
-                                    },
-                                  )}',
-                                  style: ZipFonts.tiny.style,
-                                ),
-                            ],
-                          ),
-                        ),
-                        trailing: ElevatedButton(
-                          onPressed: () => Navigator.of(context).pushNamed(
-                            Routes.requestDetailsScreen,
-                            arguments: request,
-                          ),
-                          child: Text(translate('common.action.learn')),
-                        ),
-                        onTap: () => Navigator.of(context).pushNamed(
-                          Routes.requestDetailsScreen,
-                          arguments: request,
-                        ),
+                      RequestTile(
+                        request: request,
+                        distance: context
+                            .read<GiveHandBloc>()
+                            .distanceTo(
+                              request.latitude,
+                              request.longitude,
+                            )
+                            .toStringAsFixed(2),
                       ),
                     ],
                   );

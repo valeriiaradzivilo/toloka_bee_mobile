@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_translate/flutter_translate.dart';
 
 enum ERequestStatus {
@@ -23,4 +25,14 @@ enum ERequestStatus {
         (final element) => element.name == json,
         orElse: () => ERequestStatus.unknown,
       );
+
+  Color get color => switch (this) {
+        pending => const Color.fromARGB(255, 0, 55, 113),
+        inProgress => const Color.fromARGB(255, 3, 125, 31),
+        completed => const Color.fromARGB(255, 40, 48, 55),
+        expired => const Color.fromARGB(255, 82, 0, 8),
+        cancelled => const Color.fromARGB(255, 128, 0, 13),
+        needsMorePeople => const Color.fromARGB(255, 110, 83, 2),
+        unknown => const Color(0xFF6C757D),
+      };
 }

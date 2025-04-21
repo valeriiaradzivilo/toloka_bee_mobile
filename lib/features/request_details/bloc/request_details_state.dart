@@ -17,11 +17,13 @@ final class RequestDetailsLoaded extends RequestDetailsState {
     required this.distance,
     required this.user,
     required this.image,
+    required this.isCurrentUsersRequest,
   });
   final RequestNotificationModel requestNotificationModel;
   final double distance;
   final UserAuthModel user;
   final Uint8List image;
+  final bool isCurrentUsersRequest;
 }
 
 final class RequestDetailsError extends RequestDetailsState {

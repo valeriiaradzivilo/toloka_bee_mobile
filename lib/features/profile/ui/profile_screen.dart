@@ -5,15 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import '../../../common/routing/routes.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../common/widgets/zip_snackbar.dart';
+import '../../../data/models/request_notification_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../authentication/bloc/user_bloc.dart';
+import '../../give_hand/ui/widgets/request_tile.dart';
 import '../bloc/profile_cubit.dart';
 import '../bloc/profile_state.dart';
 import 'profile_edit_screen.dart';
@@ -22,11 +25,12 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(final BuildContext context) => BlocProvider(
+  Widget build(final BuildContext context) => Provider(
         create: (final _) => ProfileCubit(GetIt.I)
           ..loadUser(
             context.read<UserBloc>().userStream.value.valueOrNull!,
           ),
+        dispose: (final context, final value) => value.close(),
         child: Scaffold(
           appBar: AppBar(),
           body: SizedBox(
@@ -43,14 +47,17 @@ class ProfileScreen extends StatelessWidget {
                         type: EPopupType.success,
                       ),
                     );
+                    context.read<ProfileCubit>().loadUser(state.user);
                   }
                 },
                 builder: (final context, final state) => switch (state) {
+                  ProfileUpdated() ||
                   ProfileLoading() =>
                     const Center(child: CircularProgressIndicator()),
-                  ProfileUpdated(:final user) ||
-                  ProfileLoaded(:final user) =>
-                    _LoadedProfile(user),
+                  ProfileLoaded(:final user, :final requests) => _LoadedProfile(
+                      user: user,
+                      requests: requests,
+                    ),
                   ProfileError(:final message) => Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -80,8 +87,12 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class _LoadedProfile extends StatelessWidget {
-  const _LoadedProfile(this.user);
+  const _LoadedProfile({
+    required this.user,
+    required this.requests,
+  });
   final UserAuthModel user;
+  final List<RequestNotificationModel> requests;
 
   @override
   Widget build(final BuildContext context) => SingleChildScrollView(
@@ -124,6 +135,62 @@ class _LoadedProfile extends StatelessWidget {
                 ),
               ),
             ),
+            const Divider(),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                translate('profile.requests'),
+                style: ZipFonts.medium.style,
+              ),
+            ),
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (final _, final index) {
+                  final request = requests[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          width: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: ZipColor.primary,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: RequestTile(request: request),
+                        ),
+                        Transform.rotate(
+                          angle: 0.2,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: request.status.color,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              request.status.text,
+                              style: ZipFonts.small.style.copyWith(
+                                color: ZipColor.onPrimary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                itemCount: requests.length,
+              ),
+            ),
+            const Divider(),
             Text(
               '${translate(
                 'profile.about',

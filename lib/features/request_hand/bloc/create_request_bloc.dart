@@ -1,7 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../common/widgets/zip_snackbar.dart';
+import '../../../data/models/ui/e_popup_type.dart';
+import '../../../data/models/ui/popup_model.dart';
 import '../../../data/usecase/send_notification_usecase.dart';
 import 'create_request_event.dart';
 import 'create_request_state.dart';
@@ -59,9 +63,29 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
     );
 
     on<SendRequestEvent>((final event, final emit) async {
-      await _sendNotificationUsecase(state.toRequestNotificationModel());
-
-      // TODO: Handle success and error states
+      final result =
+          await _sendNotificationUsecase(state.toRequestNotificationModel());
+      result.fold(
+        (final failure) {
+          ZipSnackbar.show(
+            event.context,
+            PopupModel(
+              title: translate('request.hand.error'),
+              type: EPopupType.error,
+            ),
+          );
+        },
+        (final success) {
+          ZipSnackbar.show(
+            event.context,
+            PopupModel(
+              title: translate('request.hand.success'),
+              message: translate('request.hand.thanks'),
+              type: EPopupType.success,
+            ),
+          );
+        },
+      );
     });
   }
 }

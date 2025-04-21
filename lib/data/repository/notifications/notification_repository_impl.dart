@@ -98,11 +98,11 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<Either<Fail, void>> updateNotification(
+  Future<Either<Fail, void>> updateRequest(
     final RequestNotificationModel notification,
   ) async {
     try {
-      await _fcmDataSource.updateNotification(notification);
+      await _fcmDataSource.updateRequest(notification);
       return const Right(null);
     } catch (e) {
       logger.severe(
@@ -150,6 +150,34 @@ class NotificationRepositoryImpl implements NotificationRepository {
         '❌ Error while accepting request: ${e.toString()}',
       );
       return Left(Fail('Failed to accept request'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> deleteRequest(final String id) async {
+    try {
+      await _fcmDataSource.deleteRequest(id);
+      return const Right(null);
+    } catch (e) {
+      logger.severe(
+        '❌ Error while deleting request: ${e.toString()}',
+      );
+      return Left(Fail('Failed to delete request'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, List<RequestNotificationModel>>> getAllRequestsByUserId(
+    final String userId,
+  ) async {
+    try {
+      final notifications = await _fcmDataSource.getAllRequestsByUserId(userId);
+      return Right(notifications);
+    } catch (e) {
+      logger.severe(
+        '❌ Error while getting all requests by user id: ${e.toString()}',
+      );
+      return Left(Fail('Failed to get all requests by user id'));
     }
   }
 }

@@ -21,10 +21,16 @@ abstract class NotificationRepository {
   Future<Either<Fail, RequestNotificationModel>> getRequestById(
     final String id,
   );
-  Future<Either<Fail, void>> updateNotification(
+  Future<Either<Fail, void>> updateRequest(
     final RequestNotificationModel notification,
   );
   Future<Either<Fail, void>> acceptRequest(
     final String id,
+  );
+  Future<Either<Fail, void>> deleteRequest(
+    final String id,
+  );
+  Future<Either<Fail, List<RequestNotificationModel>>> getAllRequestsByUserId(
+    final String userId,
   );
 }

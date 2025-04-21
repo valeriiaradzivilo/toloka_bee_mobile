@@ -1,3 +1,4 @@
+import '../../../data/models/request_notification_model.dart';
 import '../../../data/models/user_auth_model.dart';
 
 sealed class ProfileState {
@@ -10,7 +11,11 @@ class ProfileLoading extends ProfileState {
 
 class ProfileLoaded extends ProfileState {
   final UserAuthModel user;
-  const ProfileLoaded(this.user);
+  final List<RequestNotificationModel> requests;
+  const ProfileLoaded({
+    required this.user,
+    required this.requests,
+  });
 }
 
 class ProfileUpdating extends ProfileState {

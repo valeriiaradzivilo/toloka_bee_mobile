@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/bloc/locale_notifier.dart';
@@ -10,6 +11,7 @@ import '../../common/widgets/app_icon.dart';
 import '../../common/widgets/zip_snackbar.dart';
 import '../../data/models/ui/popup_model.dart';
 import '../authentication/bloc/user_bloc.dart';
+import '../snackbar/snackbar_service.dart';
 import 'main_app.dart';
 
 class MainWrapperWidget extends StatelessWidget {
@@ -32,17 +34,27 @@ class MainWrapperWidget extends StatelessWidget {
                 ZipSnackbar.show(ctx, snapshot.data!);
               });
             }
-            return Stack(
-              children: [
-                if (child != null) child!,
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: const AppIcon(),
-                    onPressed: () => _showLanguageDialog(context),
-                  ),
-                ),
-              ],
+            return StreamBuilder<PopupModel>(
+              stream: GetIt.I<SnackbarService>().popupStream,
+              builder: (final ctx, final snapshot) {
+                if (snapshot.hasData) {
+                  SchedulerBinding.instance.addPostFrameCallback((final _) {
+                    ZipSnackbar.show(ctx, snapshot.data!);
+                  });
+                }
+                return Stack(
+                  children: [
+                    if (child != null) child!,
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const AppIcon(),
+                        onPressed: () => _showLanguageDialog(context),
+                      ),
+                    ),
+                  ],
+                );
+              },
             );
           },
         ),

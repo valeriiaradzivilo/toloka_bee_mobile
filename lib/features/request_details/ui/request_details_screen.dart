@@ -149,19 +149,36 @@ class RequestDetailsScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              context
-                                  .read<RequestDetailsBloc>()
-                                  .add(const AcceptRequest());
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              translate('request.details.help'),
+                        if (!state.isCurrentUsersRequest)
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                context
+                                    .read<RequestDetailsBloc>()
+                                    .add(const AcceptRequest());
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                translate('request.details.help'),
+                              ),
                             ),
                           ),
-                        ),
+                        if (state.isCurrentUsersRequest)
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                context.read<RequestDetailsBloc>().add(
+                                      RemoveRequest(
+                                        state.requestNotificationModel.id,
+                                      ),
+                                    );
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                translate('request.details.remove'),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

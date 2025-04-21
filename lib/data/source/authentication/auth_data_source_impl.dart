@@ -168,6 +168,13 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<void> deleteUser(final String userId) async {
+    if (userId != FirebaseAuth.instance.currentUser?.uid) {
+      throw Exception('You can only delete your own account');
+    }
+
+    await _auth.currentUser?.delete();
+    await _auth.signOut();
+
     final response = await _dio.delete(
       '$_basePath/delete/$userId',
       options: Options(

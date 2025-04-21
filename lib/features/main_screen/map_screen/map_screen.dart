@@ -280,8 +280,8 @@ class _AccountInfo extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: isAuthenticated
-                    ? () => Navigator.of(context)
-                        .pushReplacementNamed(Routes.profileScreen)
+                    ? () =>
+                        Navigator.of(context).pushNamed(Routes.profileScreen)
                     : null,
                 icon: Container(
                   width: 100,

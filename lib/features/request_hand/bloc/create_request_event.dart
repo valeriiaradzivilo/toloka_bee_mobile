@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 abstract class CreateRequestEvent {}
 
 class SetDeadlineEvent extends CreateRequestEvent {
@@ -37,4 +39,8 @@ class SetLocationEvent extends CreateRequestEvent {
   SetLocationEvent(this.latitude, this.longitude);
 }
 
-class SendRequestEvent extends CreateRequestEvent {}
+class SendRequestEvent extends CreateRequestEvent {
+  final BuildContext context;
+
+  SendRequestEvent(this.context);
+}

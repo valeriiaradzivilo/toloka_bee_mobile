@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/snackbar/snackbar_service.dart';
 import 'repository/authentication/auth_repository.dart';
 import 'repository/authentication/auth_repository_impl.dart';
 import 'repository/notifications/notification_repository.dart';
@@ -13,11 +14,16 @@ import 'source/authentication/auth_data_source_impl.dart';
 import 'source/geolocation/geo_data_source.dart';
 import 'source/geolocation/geo_data_source_imp.dart';
 import 'source/notifications/fcm_data_source.dart';
+import 'source/notifications/fcm_data_source_impl.dart';
 import 'source/users/user_data_source.dart';
 import 'source/users/user_data_source_impl.dart';
+import 'usecase/accept_request_usecase.dart';
+import 'usecase/delete_request_usecase.dart';
+import 'usecase/delete_user_usecase.dart';
 import 'usecase/get_all_requests_usecase.dart';
 import 'usecase/get_current_user_data_usecase.dart';
 import 'usecase/get_notification_by_id_usecase.dart';
+import 'usecase/get_requests_by_user_id_usecase.dart';
 import 'usecase/get_user_by_id_usecase.dart';
 import 'usecase/get_volunteers_by_location_usecase.dart';
 import 'usecase/login_user_usecase.dart';
@@ -55,10 +61,13 @@ Future<void> initDatasources() async {
       .registerLazySingleton<GeoDataSource>(() => GeoDataSourceImp(dio));
   serviceLocator
       .registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(dio));
-  serviceLocator.registerLazySingleton<FcmDataSource>(() => FcmDataSource(dio));
+  serviceLocator
+      .registerLazySingleton<FcmDataSource>(() => FcmDataSourceImpl(dio));
   serviceLocator.registerLazySingleton<FcmService>(() => FcmService());
   serviceLocator
       .registerLazySingleton<UserDataSource>(() => UserDataSourceImpl(dio));
+
+  serviceLocator.registerSingleton<SnackbarService>(SnackbarService());
 }
 
 Future<void> initRepository() async {
@@ -114,6 +123,20 @@ Future<void> initUseCases() async {
     () => UpdateUserUsecase(serviceLocator()),
   );
 
+  serviceLocator.registerLazySingleton<GetRequestsByUserIdUsecase>(
+    () => GetRequestsByUserIdUsecase(serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton<DeleteUserUsecase>(
+    () => DeleteUserUsecase(serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton<DeleteRequestUsecase>(
+    () => DeleteRequestUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<AcceptRequestUsecase>(
+    () => AcceptRequestUsecase(serviceLocator()),
+  );
   serviceLocator.registerLazySingleton<SendNotificationUsecase>(
     () => SendNotificationUsecase(serviceLocator()),
   );
