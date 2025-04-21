@@ -80,7 +80,13 @@
         "email": "Email",
         "phone": "Phone",
         "button": "Save",
-        "actions.back": "Back to Map",
+        "actions": {
+            "back": "Back to Map",
+            "edit": "Edit profile",
+            "delete": "Delete account",
+            "delete.confirm": "Are you sure you want to delete your account? This action cannot be undone.",
+            "delete.success": "Account deleted successfully. Goodbye!"
+        },
         "age": "You are {age} years old",
         "about": "About you: "
     },
@@ -105,8 +111,8 @@
             "field": {
                 "not.empty": "This field cannot be empty.",
                 "not.number": "This field must be a number.",
-                "min.value": "This value must be at least {min}.",
-                "max.value": "This value must be at most {max}."
+                "min.value": "This value must be at least {value}.",
+                "max.value": "This value must be at most {value}."
             },
             "email": {
                 "invalid": "Please enter a valid email address."
@@ -148,6 +154,11 @@
                 "title": "Price",
                 "description": "What is the approximate price for this task? For example, if the task is to go to the shop, write approximate price of the shopping list. Leave empty if there is no price.",
                 "label": "Price (hryvnya)"
+            },
+            "volunteers": {
+                "title": "How many volunteers do you need?",
+                "description": "Select how many volunteers do you need to complete this task. Default value - 1. Maximum value - 5.",
+                "label": "Number of volunteers"
             },
             "submit": "Create request"
         },

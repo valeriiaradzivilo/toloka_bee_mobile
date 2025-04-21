@@ -47,4 +47,22 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(Fail('Failed to logout'));
     }
   }
+
+  @override
+  Future<Either<Fail, void>> updateUser(final UserAuthModel user) async {
+    try {
+      return Right(await _authDataSource.updateUser(user));
+    } catch (e) {
+      return Left(Fail('Failed to update user'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> deleteUser(final String userId) async {
+    try {
+      return Right(await _authDataSource.deleteUser(userId));
+    } catch (e) {
+      return Left(Fail('Failed to delete user'));
+    }
+  }
 }

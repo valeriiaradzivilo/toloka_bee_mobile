@@ -10,4 +10,8 @@ abstract class AuthDataSource {
   Future<String> getAccessToken();
 
   Future<UserAuthModel> getCurrentUserData();
+
+  Future<void> updateUser(final UserAuthModel user);
+
+  Future<void> deleteUser(final String userId);
 }

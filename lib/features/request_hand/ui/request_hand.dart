@@ -20,6 +20,8 @@ class RequestHandModal extends StatefulWidget {
 
 class _RequestHandModalState extends State<RequestHandModal> {
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _volunteerCountContoller =
+      TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   @override
@@ -170,6 +172,44 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                   label: translate('request.hand.price.label'),
                                   minValue: 0,
                                   maxValue: 10000,
+                                  onChanged: (final value) {
+                                    final double? parsedValue =
+                                        double.tryParse(value);
+                                    if (parsedValue == null) {
+                                      return;
+                                    }
+                                    context.read<CreateRequestBloc>().add(
+                                          SetPriceEvent(parsedValue),
+                                        );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: ListTile(
+                                  title: Text(
+                                    translate('request.hand.volunteers.title'),
+                                  ),
+                                  subtitle: Text(
+                                    translate(
+                                      'request.hand.volunteers.description',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: LinNumberEditingField(
+                                  controller: _volunteerCountContoller
+                                    ..text = '1',
+                                  label: translate(
+                                    'request.hand.volunteers.label',
+                                  ),
+                                  minValue: 1,
+                                  maxValue: 5,
                                   onChanged: (final value) {
                                     final double? parsedValue =
                                         double.tryParse(value);

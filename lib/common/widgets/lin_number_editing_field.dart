@@ -32,6 +32,7 @@ class _LinNumberEditingFieldState extends State<LinNumberEditingField> {
           errorMaxLines: 3,
         ),
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (final value) {
           if (value == null || (widget.isRequired && value.isEmpty)) {
             return translate('validation.error.field.not.empty');

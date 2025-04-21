@@ -21,14 +21,20 @@ class AuthDataSourceImpl implements AuthDataSource {
     final String username,
     final String password,
   ) async {
-    final UserCredential userCredential = await _auth
-        .signInWithEmailAndPassword(email: username, password: password);
+    try {
+      final UserCredential userCredential = await _auth
+          .signInWithEmailAndPassword(email: username, password: password);
 
-    final String? idToken = userCredential.user?.uid;
+      final String? idToken = userCredential.user?.uid;
 
-    if (idToken == null) throw Exception('Failed to get ID token');
+      if (idToken == null) throw Exception('Failed to get ID token');
 
-    return await getCurrentUserData(idToken: idToken);
+      return await getCurrentUserData(idToken: idToken);
+    } catch (e) {
+      logger.severe('Login failed: $e');
+      await _auth.signOut();
+      rethrow;
+    }
   }
 
   @override
@@ -122,6 +128,39 @@ class AuthDataSourceImpl implements AuthDataSource {
       return UserAuthModel.fromJson(userRecord);
     } else {
       throw Exception('Failed to login: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<void> updateUser(final UserAuthModel user) async {
+    final response = await _dio.put(
+      '$_basePath/update',
+      data: jsonEncode(user.toJson()),
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update user: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<void> deleteUser(final String userId) async {
+    final response = await _dio.delete(
+      '$_basePath/delete/$userId',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete user: ${response.statusCode}');
     }
   }
 }

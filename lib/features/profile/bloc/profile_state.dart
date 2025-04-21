@@ -1,28 +1,27 @@
-part of 'profile_cubit.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-sealed class ProfileState extends Equatable {
-  const ProfileState();
+import '../../../data/models/user_auth_model.dart';
 
-  @override
-  List<Object?> get props => [];
-}
+@immutable
+abstract class ProfileState {}
 
-class ProfileInitialState extends ProfileState {}
+class ProfileInitial extends ProfileState {}
 
-class ProfileLoadingState extends ProfileState {}
+class ProfileLoading extends ProfileState {}
 
-class ProfileLoadedState extends ProfileState {
+class ProfileLoaded extends ProfileState {
   final UserAuthModel user;
-  const ProfileLoadedState(this.user);
-
-  @override
-  List<Object?> get props => [user];
+  ProfileLoaded(this.user);
 }
 
-class ProfileErrorState extends ProfileState {
-  final String message;
-  const ProfileErrorState(this.message);
+class ProfileUpdating extends ProfileState {}
 
-  @override
-  List<Object?> get props => [message];
+class ProfileUpdated extends ProfileState {
+  final UserAuthModel user;
+  ProfileUpdated(this.user);
+}
+
+class ProfileError extends ProfileState {
+  final String message;
+  ProfileError(this.message);
 }
