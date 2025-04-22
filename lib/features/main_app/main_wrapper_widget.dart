@@ -49,7 +49,9 @@ class MainWrapperWidget extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: IconButton(
                         icon: const AppIcon(),
-                        onPressed: () => _showLanguageDialog(context),
+                        onPressed: () => _showLanguageDialog(
+                          MainApp.navigatorKey.currentState!.context,
+                        ),
                       ),
                     ),
                   ],
@@ -65,7 +67,7 @@ class MainWrapperWidget extends StatelessWidget {
   void _showLanguageDialog(final BuildContext context) {
     final notifier = context.read<LocaleNotifier>();
     showAboutDialog(
-      context: MainApp.navigatorKey.currentState!.context,
+      context: context,
       applicationVersion: 'v1.0.0',
       applicationIcon: const AppIcon(),
       applicationLegalese: translate('app.about'),

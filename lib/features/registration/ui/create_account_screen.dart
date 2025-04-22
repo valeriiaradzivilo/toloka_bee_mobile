@@ -53,6 +53,7 @@ class _Screen extends StatelessWidget {
                     onTelegramChanged: registerBloc.setContactTelegram,
                     onWhatsAppChanged: registerBloc.setContactWhatsApp,
                     onViberChanged: registerBloc.setContactViber,
+                    onEmailChanged: registerBloc.setContactEmail,
                   ),
               },
             ),

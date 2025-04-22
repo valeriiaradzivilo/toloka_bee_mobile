@@ -6,20 +6,24 @@ import '../../../../../common/theme/zip_fonts.dart';
 import '../../../../../common/widgets/lin_number_editing_field.dart';
 import '../../../../../common/widgets/lin_text_editing_field.dart';
 import '../../../../../data/models/contact_info_model.dart';
+import '../../../../../data/models/country.dart';
 import '../../data/e_steps.dart';
 import '../next_back_button_row.dart';
+import '../phone_code_dropdown.dart';
 
 class FourthStepCreateAccount extends StatefulWidget {
   const FourthStepCreateAccount({
     super.key,
     required this.onPreferredMethodChanged,
     required this.onPhoneChanged,
+    required this.onEmailChanged,
     required this.onViberChanged,
     required this.onTelegramChanged,
     required this.onWhatsAppChanged,
     this.showNextBackButton = true,
     this.preferredMethod,
     this.phone,
+    this.email,
     this.viber,
     this.telegram,
     this.whatsApp,
@@ -27,12 +31,14 @@ class FourthStepCreateAccount extends StatefulWidget {
 
   final ContactMethod? preferredMethod;
   final String? phone;
+  final String? email;
   final String? viber;
   final String? telegram;
   final String? whatsApp;
 
-  final Function(ContactMethod) onPreferredMethodChanged;
+  final void Function(ContactMethod) onPreferredMethodChanged;
   final void Function(String) onPhoneChanged;
+  final void Function(String) onEmailChanged;
   final void Function(String) onViberChanged;
   final void Function(String) onTelegramChanged;
   final void Function(String) onWhatsAppChanged;
@@ -45,13 +51,16 @@ class FourthStepCreateAccount extends StatefulWidget {
 
 class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
   final _menuController = MenuController();
-  ContactMethod? _preferredMethod;
-  bool _isPreferredValid = false;
-
+  final _dropdownKey = GlobalKey<PhoneCodeDropdownState>();
   final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
   final _viberController = TextEditingController();
   final _telegramController = TextEditingController();
   final _whatsAppController = TextEditingController();
+  bool _isPreferredValid = false;
+  bool _numberInitialized = false;
+  ContactMethod? _preferredMethod;
+  Country? _selectedCountry;
 
   final _icons = {
     ContactMethod.phone: Icons.smartphone_outlined,
@@ -63,19 +72,19 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
 
   @override
   void initState() {
+    super.initState();
     _preferredMethod = widget.preferredMethod;
     _isPreferredValid = _preferredMethod != null;
-    _phoneController.text = widget.phone ?? '';
+    _emailController.text = widget.email ?? '';
     _viberController.text = widget.viber ?? '';
     _telegramController.text = widget.telegram ?? '';
     _whatsAppController.text = widget.whatsApp ?? '';
-
-    super.initState();
   }
 
   @override
   void dispose() {
     _phoneController.dispose();
+    _emailController.dispose();
     _viberController.dispose();
     _telegramController.dispose();
     _whatsAppController.dispose();
@@ -85,6 +94,16 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
   @override
   Widget build(final BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
+
+    WidgetsBinding.instance.addPostFrameCallback((final _) {
+      if (!_numberInitialized && widget.phone != null) {
+        final rem = _dropdownKey.currentState?.remainder;
+        if (rem != null) {
+          _phoneController.text = rem;
+          _numberInitialized = true;
+        }
+      }
+    });
 
     return SingleChildScrollView(
       child: Card(
@@ -117,31 +136,27 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
               MenuAnchor(
                 controller: _menuController,
                 menuChildren: [
-                  for (final method in ContactMethod.values)
+                  for (final m in ContactMethod.values)
                     ListTile(
-                      leading: Icon(_icons[method], color: primary),
-                      title: Text(method.text),
+                      leading: Icon(_icons[m], color: primary),
+                      title: Text(m.text),
                       onTap: () {
-                        widget.onPreferredMethodChanged.call(method);
+                        widget.onPreferredMethodChanged(m);
                         _menuController.close();
                         setState(() {
-                          _preferredMethod = method;
+                          _preferredMethod = m;
                           _isPreferredValid = true;
                         });
                       },
                     ),
                 ],
-                builder: (final ctx, final controller, final child) => InkWell(
-                  onTap: () {
-                    if (controller.isOpen) {
-                      controller.close();
-                    } else {
-                      controller.open();
-                    }
-                  },
+                builder: (final ctx, final ctrl, final child) => InkWell(
+                  onTap: () => ctrl.isOpen ? ctrl.close() : ctrl.open(),
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(8),
@@ -158,15 +173,13 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                         Expanded(
                           child: Text(
                             _preferredMethod == null
-                                ? translate(
-                                    'contacts.preferred',
-                                  )
+                                ? translate('contacts.preferred')
                                 : _preferredMethod!.text,
                             style: ZipFonts.medium.style,
                           ),
                         ),
                         Icon(
-                          controller.isOpen
+                          ctrl.isOpen
                               ? Icons.arrow_drop_up
                               : Icons.arrow_drop_down,
                           color: Colors.grey,
@@ -177,36 +190,85 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                 ),
               ),
               const Gap(24),
-              _buildField(
-                Icons.smartphone_outlined,
-                translate('contacts.phone'),
-                _phoneController,
-                widget.onPhoneChanged,
-                true,
+              Row(
+                children: [
+                  PhoneCodeDropdown(
+                    key: _dropdownKey,
+                    initialValue: widget.phone,
+                    onChanged: (final c) {
+                      setState(() => _selectedCountry = c);
+                    },
+                  ),
+                  const Gap(12),
+                  Expanded(
+                    child: LinNumberEditingField(
+                      controller: _phoneController,
+                      label: translate('contacts.phone'),
+                      onChanged: (final value) {
+                        final full =
+                            '${_selectedCountry?.dialCode ?? ''}$value';
+                        widget.onPhoneChanged(full);
+                      },
+                    ),
+                  ),
+                ],
               ),
               const Gap(12),
-              _buildField(
-                Icons.chat,
-                translate('contacts.viber'),
-                _viberController,
-                widget.onViberChanged,
-                false,
+              Row(
+                children: [
+                  Icon(_icons[ContactMethod.email], color: primary),
+                  const Gap(12),
+                  Expanded(
+                    child: LinTextField(
+                      controller: _emailController,
+                      option: TextFieldOption.email,
+                      label: translate('contacts.email'),
+                      onChanged: widget.onEmailChanged,
+                    ),
+                  ),
+                ],
               ),
               const Gap(12),
-              _buildField(
-                Icons.send,
-                translate('contacts.telegram'),
-                _telegramController,
-                widget.onTelegramChanged,
-                false,
+              Row(
+                children: [
+                  Icon(_icons[ContactMethod.viber], color: primary),
+                  const Gap(12),
+                  Expanded(
+                    child: LinTextField(
+                      controller: _viberController,
+                      label: translate('contacts.viber'),
+                      onChanged: widget.onViberChanged,
+                    ),
+                  ),
+                ],
               ),
               const Gap(12),
-              _buildField(
-                Icons.call_outlined,
-                translate('contacts.whatsapp'),
-                _whatsAppController,
-                widget.onWhatsAppChanged,
-                false,
+              Row(
+                children: [
+                  Icon(_icons[ContactMethod.telegram], color: primary),
+                  const Gap(12),
+                  Expanded(
+                    child: LinTextField(
+                      controller: _telegramController,
+                      label: translate('contacts.telegram'),
+                      onChanged: widget.onTelegramChanged,
+                    ),
+                  ),
+                ],
+              ),
+              const Gap(12),
+              Row(
+                children: [
+                  Icon(_icons[ContactMethod.whatsapp], color: primary),
+                  const Gap(12),
+                  Expanded(
+                    child: LinTextField(
+                      controller: _whatsAppController,
+                      label: translate('contacts.whatsapp'),
+                      onChanged: widget.onWhatsAppChanged,
+                    ),
+                  ),
+                ],
               ),
               const Gap(20),
               Center(
@@ -228,31 +290,4 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
       ),
     );
   }
-
-  Widget _buildField(
-    final IconData icon,
-    final String label,
-    final TextEditingController controller,
-    final ValueChanged<String> onChanged,
-    final bool isNumberField,
-  ) =>
-      Row(
-        children: [
-          Icon(icon, color: Theme.of(context).colorScheme.primary),
-          const Gap(12),
-          Expanded(
-            child: isNumberField
-                ? LinNumberEditingField(
-                    controller: controller,
-                    label: label,
-                    onChanged: onChanged,
-                  )
-                : LinTextField(
-                    controller: controller,
-                    label: label,
-                    onChanged: onChanged,
-                  ),
-          ),
-        ],
-      );
 }

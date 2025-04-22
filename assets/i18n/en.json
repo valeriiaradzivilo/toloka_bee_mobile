@@ -78,6 +78,7 @@
         }
     },
     "profile": {
+        "your": "Your profile",
         "title": "Profile",
         "username": "Username",
         "email": "Email",

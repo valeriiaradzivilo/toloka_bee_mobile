@@ -122,17 +122,22 @@ class _LoadedProfile extends StatelessWidget {
             ),
           ),
           SizedBox.square(
+            key: UniqueKey(),
             dimension: 150,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: MemoryImage(
-                    base64Decode(user.photo),
-                  ),
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
+            child: Builder(
+              builder: (final context) {
+                try {
+                  final bytes = base64Decode(user.photo);
+                  return Image.memory(
+                    bytes,
+                    fit: BoxFit.scaleDown,
+                    errorBuilder: (final _, final __, final ___) =>
+                        const Icon(Icons.person, size: 75),
+                  );
+                } catch (_) {
+                  return const Icon(Icons.person, size: 75);
+                }
+              },
             ),
           ),
           Text(
@@ -224,36 +229,33 @@ class _LoadedProfile extends StatelessWidget {
           ] else ...[
             if (contactInfo!.phone != null)
               Text(
-                contactInfo!.phone!,
+                '${ContactMethod.phone.text}: ${contactInfo!.phone!}',
                 style: ZipFonts.small.style,
               ),
             if (contactInfo!.email != null)
               Text(
-                contactInfo!.email!,
+                '${ContactMethod.email.text}: ${contactInfo!.email!}',
                 style: ZipFonts.small.style,
               ),
             if (contactInfo!.viber != null)
               Text(
-                contactInfo!.viber!,
+                '${ContactMethod.viber.text}: ${contactInfo!.viber!}',
                 style: ZipFonts.small.style,
               ),
             if (contactInfo!.whatsapp != null)
               Text(
-                contactInfo!.whatsapp!,
+                '${ContactMethod.whatsapp.text}: ${contactInfo!.whatsapp!}',
                 style: ZipFonts.small.style,
               ),
             if (contactInfo!.telegram != null)
               Text(
-                contactInfo!.telegram!,
+                '${ContactMethod.telegram.text}: ${contactInfo!.telegram!}',
                 style: ZipFonts.small.style,
               ),
             Text(
-              translate(
+              "${translate(
                 'contacts.preferred',
-                args: {
-                  'method': contactInfo!.preferredMethod.text,
-                },
-              ),
+              )}: ${contactInfo!.preferredMethod.text.toLowerCase()}",
               style: ZipFonts.small.style,
             ),
           ],
@@ -263,39 +265,52 @@ class _LoadedProfile extends StatelessWidget {
               String? viber = contactInfo?.viber;
               String? telegram = contactInfo?.telegram;
               String? whatsapp = contactInfo?.whatsapp;
+              String? email = contactInfo?.email;
               ContactMethod? preferredMethod = contactInfo?.preferredMethod;
-              await showDialog(
+              final change = await showDialog<bool?>(
                 context: context,
                 builder: (final context) => Dialog(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        FourthStepCreateAccount(
-                          onPhoneChanged: (final value) => phone = value,
-                          onViberChanged: (final value) => viber = value,
-                          onTelegramChanged: (final value) => telegram = value,
-                          onWhatsAppChanged: (final value) => whatsapp = value,
-                          onPreferredMethodChanged: (final value) =>
-                              preferredMethod = value,
-                          showNextBackButton: false,
-                          phone: contactInfo?.phone,
-                          viber: contactInfo?.viber,
-                          telegram: contactInfo?.telegram,
-                          whatsApp: contactInfo?.whatsapp,
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () => Navigator.pop(context),
-                          label: Text(translate('profile.contacts.save')),
-                          icon: const Icon(
-                            Icons.save,
-                            color: ZipColor.onPrimary,
+                  insetPadding: const EdgeInsets.all(2),
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          FourthStepCreateAccount(
+                            onPhoneChanged: (final value) => phone = value,
+                            onViberChanged: (final value) => viber = value,
+                            onTelegramChanged: (final value) =>
+                                telegram = value,
+                            onWhatsAppChanged: (final value) =>
+                                whatsapp = value,
+                            onEmailChanged: (final value) => email = value,
+                            onPreferredMethodChanged: (final value) =>
+                                preferredMethod = value,
+                            showNextBackButton: false,
+                            phone: contactInfo?.phone,
+                            viber: contactInfo?.viber,
+                            telegram: contactInfo?.telegram,
+                            whatsApp: contactInfo?.whatsapp,
+                            email: contactInfo?.email,
                           ),
-                        ),
-                      ],
+                          ElevatedButton.icon(
+                            onPressed: () => Navigator.pop(context, true),
+                            label: Text(translate('profile.contacts.save')),
+                            icon: const Icon(
+                              Icons.save,
+                              color: ZipColor.onPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               );
+              if (change == null || !change) {
+                return;
+              }
+
               if (preferredMethod == null) {
                 return;
               }
@@ -305,6 +320,7 @@ class _LoadedProfile extends StatelessWidget {
                 viber: viber,
                 telegram: telegram,
                 whatsapp: whatsapp,
+                email: email,
                 preferredMethod: preferredMethod!,
               );
             },

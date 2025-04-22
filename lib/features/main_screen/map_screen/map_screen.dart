@@ -278,36 +278,64 @@ class _AccountInfo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                onPressed: isAuthenticated
+              InkWell(
+                onTap: isAuthenticated
                     ? () =>
                         Navigator.of(context).pushNamed(Routes.profileScreen)
                     : null,
-                icon: Container(
-                  width: 100,
-                  height: 100,
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: ZipColor.primary, width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: user == null || (user!.photo.isEmpty)
-                      ? const Icon(
-                          Icons.person_4_rounded,
-                          size: 50,
-                          color: ZipColor.primary,
-                        )
-                      : DecoratedBox(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: MemoryImage(
-                                base64Decode(user!.photo),
-                              ),
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
+                child: Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: ZipColor.primary, width: 2),
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                        clipBehavior: Clip.hardEdge,
+                        child: user == null || (user!.photo.isEmpty)
+                            ? const Icon(
+                                Icons.person_4_rounded,
+                                size: 50,
+                                color: ZipColor.primary,
+                              )
+                            : DecoratedBox(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: MemoryImage(
+                                      base64Decode(user!.photo),
+                                    ),
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                    Transform.rotate(
+                      angle: 0.3,
+                      child: Container(
+                        width: 70,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: ZipColor.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          translate('profile.your'),
+                          style: ZipFonts.tiny.style.copyWith(
+                            color: ZipColor.onPrimary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               OutlinedButton(

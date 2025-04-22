@@ -62,6 +62,8 @@ class ContactsDataSourceImpl implements ContactsDataSource {
       options: Options(headers: {'Content-Type': 'application/json'}),
     );
     if (response.statusCode == 200 && response.data != null) {
+      if (response.data is String) return null;
+
       return ContactInfoModel.fromJson(response.data);
     } else if (response.statusCode == 404) {
       return null;

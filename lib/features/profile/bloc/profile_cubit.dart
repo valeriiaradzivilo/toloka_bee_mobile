@@ -168,6 +168,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     required final String? viber,
     required final String? telegram,
     required final String? whatsapp,
+    required final String? email,
     required final ContactMethod preferredMethod,
   }) async {
     if (state case final ProfileLoaded currentState) {
@@ -179,6 +180,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             viber: viber,
             telegram: telegram,
             whatsapp: whatsapp,
+            email: email,
             preferredMethod: preferredMethod,
           ),
         false => currentState.contactInfo!.copyWith(
@@ -186,6 +188,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             viber: viber,
             telegram: telegram,
             whatsapp: whatsapp,
+            email: email,
             preferredMethod: preferredMethod,
           )
       };
