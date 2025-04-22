@@ -99,6 +99,7 @@ class RegisterBloc extends ZipBloc {
   }
 
   void setAboutMe(final String v) => _aboutMeController.add(v);
+  // ignore: use_setters_to_change_properties
   void setPosition(final EPosition p) {
     _position = p;
   }
