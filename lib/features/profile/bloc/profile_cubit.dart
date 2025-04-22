@@ -1,10 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../../data/models/contact_info_model.dart';
+import '../../../data/models/ui/e_popup_type.dart';
+import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../../data/usecase/contacts/get_contacts_by_user_id_usecase.dart';
+import '../../../data/usecase/contacts/save_contacts_usecase.dart';
+import '../../../data/usecase/contacts/update_contacts_usecase.dart';
 import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
 import '../../../data/usecase/user_management/update_user_usecase.dart';
+import '../../snackbar/snackbar_service.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
@@ -12,11 +20,19 @@ class ProfileCubit extends Cubit<ProfileState> {
       : _updateUserUsecase = getIt<UpdateUserUsecase>(),
         _getRequestsByUserIdUsecase = getIt<GetRequestsByUserIdUsecase>(),
         _getContactByUserIdUsecase = getIt<GetContactByUserIdUsecase>(),
+        _updateContactUsecase = getIt<UpdateContactUsecase>(),
+        _snackbarService = getIt<SnackbarService>(),
+        _saveContactUsecase = getIt<SaveContactUsecase>(),
         super(const ProfileLoading());
 
   final UpdateUserUsecase _updateUserUsecase;
   final GetRequestsByUserIdUsecase _getRequestsByUserIdUsecase;
   final GetContactByUserIdUsecase _getContactByUserIdUsecase;
+  final UpdateContactUsecase _updateContactUsecase;
+  final SaveContactUsecase _saveContactUsecase;
+
+  final SnackbarService _snackbarService;
+
   late UserAuthModel _currentUser;
 
   UserAuthModel get currentUser => _currentUser;
@@ -145,6 +161,70 @@ class ProfileCubit extends Cubit<ProfileState> {
   void cancelEdit() {
     emit(const ProfileLoading());
     loadUser(_currentUser);
+  }
+
+  void addContactInfo({
+    required final String? phone,
+    required final String? viber,
+    required final String? telegram,
+    required final String? whatsapp,
+    required final ContactMethod preferredMethod,
+  }) async {
+    if (state case final ProfileLoaded currentState) {
+      final newContactInfo = switch (currentState.contactInfo == null) {
+        true => ContactInfoModel(
+            id: '',
+            userId: currentState.user.id,
+            phone: phone,
+            viber: viber,
+            telegram: telegram,
+            whatsapp: whatsapp,
+            preferredMethod: preferredMethod,
+          ),
+        false => currentState.contactInfo!.copyWith(
+            phone: phone,
+            viber: viber,
+            telegram: telegram,
+            whatsapp: whatsapp,
+            preferredMethod: preferredMethod,
+          )
+      };
+
+      final result = switch (newContactInfo.id.isEmpty) {
+        true => await _saveContactUsecase.call(
+            newContactInfo.copyWith(
+              id: const Uuid().v4(),
+            ),
+          ),
+        false => await _updateContactUsecase.call(
+            newContactInfo,
+          )
+      };
+
+      result.fold(
+        (final failure) => _snackbarService.show(
+          PopupModel(
+            title: translate('profile.contacts.error'),
+            type: EPopupType.error,
+          ),
+        ),
+        (final _) {
+          _snackbarService.show(
+            PopupModel(
+              title: translate(
+                'profile.contacts.updated',
+              ),
+              type: EPopupType.success,
+            ),
+          );
+          emit(
+            currentState.copyWith(
+              contactInfo: newContactInfo,
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override

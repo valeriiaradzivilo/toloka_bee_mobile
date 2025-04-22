@@ -42,6 +42,21 @@ class UserBloc extends ZipBloc {
         locator<FcmService>().listenToBackgroundMessages();
       }),
     );
+
+    addSubscription(
+      FirebaseAuth.instance.authStateChanges().listen((final user) {
+        if (user == null) {
+          _user.add(const OptionalNull());
+          return;
+        }
+        _getCurrentUserDataUsecase.call().then((final result) {
+          result.fold(
+            (final error) => _user.add(const OptionalNull()),
+            (final user) => _user.add(OptionalValue(user)),
+          );
+        });
+      }),
+    );
   }
 
   final BehaviorSubject<Optional<UserAuthModel>> _user =
@@ -109,7 +124,6 @@ class UserBloc extends ZipBloc {
     result.fold(
       (final error) {},
       (final _) {
-        _user.add(const OptionalNull());
         _popupController.add(
           PopupModel(
             title: translate('logout.success'),

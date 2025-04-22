@@ -1,17 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../../common/theme/zip_fonts.dart';
+import '../../../../../common/widgets/lin_number_editing_field.dart';
 import '../../../../../common/widgets/lin_text_editing_field.dart';
 import '../../../../../data/models/contact_info_model.dart';
-import '../../../bloc/register_bloc.dart';
 import '../../data/e_steps.dart';
 import '../next_back_button_row.dart';
 
 class FourthStepCreateAccount extends StatefulWidget {
-  const FourthStepCreateAccount({super.key});
+  const FourthStepCreateAccount({
+    super.key,
+    required this.onPreferredMethodChanged,
+    required this.onPhoneChanged,
+    required this.onViberChanged,
+    required this.onTelegramChanged,
+    required this.onWhatsAppChanged,
+    this.showNextBackButton = true,
+    this.preferredMethod,
+    this.phone,
+    this.viber,
+    this.telegram,
+    this.whatsApp,
+  });
+
+  final ContactMethod? preferredMethod;
+  final String? phone;
+  final String? viber;
+  final String? telegram;
+  final String? whatsApp;
+
+  final Function(ContactMethod) onPreferredMethodChanged;
+  final void Function(String) onPhoneChanged;
+  final void Function(String) onViberChanged;
+  final void Function(String) onTelegramChanged;
+  final void Function(String) onWhatsAppChanged;
+  final bool showNextBackButton;
 
   @override
   State<FourthStepCreateAccount> createState() =>
@@ -38,7 +63,13 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
 
   @override
   void initState() {
+    _preferredMethod = widget.preferredMethod;
     _isPreferredValid = _preferredMethod != null;
+    _phoneController.text = widget.phone ?? '';
+    _viberController.text = widget.viber ?? '';
+    _telegramController.text = widget.telegram ?? '';
+    _whatsAppController.text = widget.whatsApp ?? '';
+
     super.initState();
   }
 
@@ -53,7 +84,6 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
 
   @override
   Widget build(final BuildContext context) {
-    final bloc = context.read<RegisterBloc>();
     final primary = Theme.of(context).colorScheme.primary;
 
     return SingleChildScrollView(
@@ -92,7 +122,7 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                       leading: Icon(_icons[method], color: primary),
                       title: Text(method.text),
                       onTap: () {
-                        bloc.setPreferredContactMethod(method);
+                        widget.onPreferredMethodChanged.call(method);
                         _menuController.close();
                         setState(() {
                           _preferredMethod = method;
@@ -151,28 +181,32 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                 Icons.smartphone_outlined,
                 translate('contacts.phone'),
                 _phoneController,
-                bloc.setContactPhone,
+                widget.onPhoneChanged,
+                true,
               ),
               const Gap(12),
               _buildField(
                 Icons.chat,
                 translate('contacts.viber'),
                 _viberController,
-                bloc.setContactViber,
+                widget.onViberChanged,
+                false,
               ),
               const Gap(12),
               _buildField(
                 Icons.send,
                 translate('contacts.telegram'),
                 _telegramController,
-                bloc.setContactTelegram,
+                widget.onTelegramChanged,
+                false,
               ),
               const Gap(12),
               _buildField(
                 Icons.call_outlined,
                 translate('contacts.whatsapp'),
                 _whatsAppController,
-                bloc.setContactWhatsApp,
+                widget.onWhatsAppChanged,
+                false,
               ),
               const Gap(20),
               Center(
@@ -183,10 +217,11 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                 ),
               ),
               const Gap(20),
-              NextBackButtonRow(
-                step: ESteps.addContactInfo,
-                areFieldsValid: _isPreferredValid,
-              ),
+              if (widget.showNextBackButton)
+                NextBackButtonRow(
+                  step: ESteps.addContactInfo,
+                  areFieldsValid: _isPreferredValid,
+                ),
             ],
           ),
         ),
@@ -199,17 +234,24 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
     final String label,
     final TextEditingController controller,
     final ValueChanged<String> onChanged,
+    final bool isNumberField,
   ) =>
       Row(
         children: [
           Icon(icon, color: Theme.of(context).colorScheme.primary),
           const Gap(12),
           Expanded(
-            child: LinTextField(
-              controller: controller,
-              label: label,
-              onChanged: onChanged,
-            ),
+            child: isNumberField
+                ? LinNumberEditingField(
+                    controller: controller,
+                    label: label,
+                    onChanged: onChanged,
+                  )
+                : LinTextField(
+                    controller: controller,
+                    label: label,
+                    onChanged: onChanged,
+                  ),
           ),
         ],
       );

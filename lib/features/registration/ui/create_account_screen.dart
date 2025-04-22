@@ -46,7 +46,14 @@ class _Screen extends StatelessWidget {
                 ESteps.checkGeneralInfo => const FirstStepCreateAccount(),
                 ESteps.addRegisterInfo => const SecondStepCreateAccount(),
                 ESteps.addExtraInfo => const ThirdStepCreateAccount(),
-                ESteps.addContactInfo => const FourthStepCreateAccount(),
+                ESteps.addContactInfo => FourthStepCreateAccount(
+                    onPreferredMethodChanged: (final method) =>
+                        registerBloc.setPreferredContactMethod(method),
+                    onPhoneChanged: registerBloc.setContactPhone,
+                    onTelegramChanged: registerBloc.setContactTelegram,
+                    onWhatsAppChanged: registerBloc.setContactWhatsApp,
+                    onViberChanged: registerBloc.setContactViber,
+                  ),
               },
             ),
           ],

@@ -20,6 +20,17 @@ class ProfileLoaded extends ProfileState {
     required this.requests,
     required this.contactInfo,
   });
+
+  ProfileLoaded copyWith({
+    final UserAuthModel? user,
+    final List<RequestNotificationModel>? requests,
+    final ContactInfoModel? contactInfo,
+  }) =>
+      ProfileLoaded(
+        user: user ?? this.user,
+        requests: requests ?? this.requests,
+        contactInfo: contactInfo ?? this.contactInfo,
+      );
 }
 
 class ProfileUpdating extends ProfileState {

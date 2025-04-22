@@ -106,9 +106,13 @@
         "requests": "Your requests:",
         "contacts": {
             "title": "Your contacts:",
-            "no": "No contacts available",
-            "add": "Add contacts",
-            "preferred": "preferred method of contact {method}"
+            "subtitle": "Your contacts will be shown to other user when they accept your request.\nIn case they have any questions, they will be able to contact you directly.",
+            "no": "No contacts available.\nPlease add at least one contact to help the ones who help you.",
+            "edit": "Edit contacts",
+            "preferred": "preferred method of contact {method}",
+            "updated": "Contacts updated successfully.",
+            "error": "Error occurred while updating contacts. Please try again later.",
+            "save": "Save contacts"
         }
     },
     "start": {
