@@ -7,7 +7,6 @@ import '../../../../common/widgets/zip_snackbar.dart';
 import '../../../../data/models/ui/e_popup_type.dart';
 import '../../../../data/models/ui/popup_model.dart';
 import '../../bloc/register_bloc.dart';
-import '../data/e_position.dart';
 import '../data/e_steps.dart';
 
 class NextBackButtonRow extends StatelessWidget {
@@ -15,11 +14,9 @@ class NextBackButtonRow extends StatelessWidget {
     super.key,
     required this.step,
     required this.areFieldsValid,
-    this.position,
   });
   final ESteps step;
   final bool areFieldsValid;
-  final EPosition? position;
 
   @override
   Widget build(final BuildContext context) {
@@ -53,9 +50,9 @@ class NextBackButtonRow extends StatelessWidget {
                 child: Text(translate('create.account.back')),
               ),
               ElevatedButton(
-                onPressed: areFieldsValid && position != null
+                onPressed: areFieldsValid
                     ? () {
-                        registerBloc.register(position!).then((final value) {
+                        registerBloc.register().then((final value) {
                           if (context.mounted) {
                             ZipSnackbar.show(
                               context,

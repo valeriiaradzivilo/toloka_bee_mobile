@@ -7,6 +7,7 @@ import '../bloc/register_bloc.dart';
 import 'data/e_steps.dart';
 import 'widget/step_counter.dart';
 import 'widget/steps/first_step_create_account.dart';
+import 'widget/steps/fourth_step_create_account.dart';
 import 'widget/steps/second_step_create_account.dart';
 import 'widget/steps/third_step_create_account.dart';
 
@@ -15,12 +16,12 @@ class CreateAccountScreen extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => Scaffold(
-      body: Provider(
-        create: (final _) => RegisterBloc(GetIt.I),
-        dispose: (final _, final value) => value.dispose(),
-        child: const _Screen(),
-      ),
-    );
+        body: Provider(
+          create: (final _) => RegisterBloc(GetIt.I),
+          dispose: (final _, final value) => value.dispose(),
+          child: const _Screen(),
+        ),
+      );
 }
 
 class _Screen extends StatelessWidget {
@@ -43,8 +44,9 @@ class _Screen extends StatelessWidget {
             Expanded(
               child: switch (step) {
                 ESteps.checkGeneralInfo => const FirstStepCreateAccount(),
-                ESteps.addRegistartInfo => const SecondStepCreateAccount(),
+                ESteps.addRegisterInfo => const SecondStepCreateAccount(),
                 ESteps.addExtraInfo => const ThirdStepCreateAccount(),
+                ESteps.addContactInfo => const FourthStepCreateAccount(),
               },
             ),
           ],

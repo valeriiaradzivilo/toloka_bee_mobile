@@ -1,17 +1,20 @@
 enum ESteps {
   checkGeneralInfo,
-  addRegistartInfo,
-  addExtraInfo;
+  addRegisterInfo,
+  addExtraInfo,
+  addContactInfo;
 
   ESteps? get nextStep => switch (this) {
-        checkGeneralInfo => addRegistartInfo,
-        addRegistartInfo => addExtraInfo,
-        addExtraInfo => null,
+        checkGeneralInfo => addRegisterInfo,
+        addRegisterInfo => addExtraInfo,
+        addExtraInfo => addContactInfo,
+        addContactInfo => null,
       };
 
   ESteps? get previousStep => switch (this) {
         checkGeneralInfo => null,
-        addRegistartInfo => checkGeneralInfo,
-        addExtraInfo => addRegistartInfo,
+        addRegisterInfo => checkGeneralInfo,
+        addExtraInfo => addRegisterInfo,
+        addContactInfo => addExtraInfo,
       };
 }

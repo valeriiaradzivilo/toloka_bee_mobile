@@ -1,0 +1,216 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../../common/theme/zip_fonts.dart';
+import '../../../../../common/widgets/lin_text_editing_field.dart';
+import '../../../../../data/models/contact_info_model.dart';
+import '../../../bloc/register_bloc.dart';
+import '../../data/e_steps.dart';
+import '../next_back_button_row.dart';
+
+class FourthStepCreateAccount extends StatefulWidget {
+  const FourthStepCreateAccount({super.key});
+
+  @override
+  State<FourthStepCreateAccount> createState() =>
+      _FourthStepCreateAccountState();
+}
+
+class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
+  final _menuController = MenuController();
+  ContactMethod? _preferredMethod;
+  bool _isPreferredValid = false;
+
+  final _phoneController = TextEditingController();
+  final _viberController = TextEditingController();
+  final _telegramController = TextEditingController();
+  final _whatsAppController = TextEditingController();
+
+  final _icons = {
+    ContactMethod.phone: Icons.smartphone_outlined,
+    ContactMethod.email: Icons.email,
+    ContactMethod.viber: Icons.chat,
+    ContactMethod.telegram: Icons.send,
+    ContactMethod.whatsapp: Icons.call_outlined,
+  };
+
+  @override
+  void initState() {
+    _isPreferredValid = _preferredMethod != null;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    _viberController.dispose();
+    _telegramController.dispose();
+    _whatsAppController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    final bloc = context.read<RegisterBloc>();
+    final primary = Theme.of(context).colorScheme.primary;
+
+    return SingleChildScrollView(
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.contact_phone, color: primary),
+                  const Gap(8),
+                  Flexible(
+                    child: Text(
+                      translate('create.account.contact.title'),
+                      style: ZipFonts.medium.style.copyWith(color: primary),
+                    ),
+                  ),
+                ],
+              ),
+              const Gap(4),
+              Text(
+                translate('create.account.contact.subtitle'),
+                style: ZipFonts.small.style.copyWith(color: Colors.black54),
+              ),
+              const Gap(24),
+              MenuAnchor(
+                controller: _menuController,
+                menuChildren: [
+                  for (final method in ContactMethod.values)
+                    ListTile(
+                      leading: Icon(_icons[method], color: primary),
+                      title: Text(method.text),
+                      onTap: () {
+                        bloc.setPreferredContactMethod(method);
+                        _menuController.close();
+                        setState(() {
+                          _preferredMethod = method;
+                          _isPreferredValid = true;
+                        });
+                      },
+                    ),
+                ],
+                builder: (final ctx, final controller, final child) => InkWell(
+                  onTap: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _preferredMethod == null
+                              ? Icons.help_outline
+                              : _icons[_preferredMethod]!,
+                          color: primary,
+                        ),
+                        const Gap(8),
+                        Expanded(
+                          child: Text(
+                            _preferredMethod == null
+                                ? translate(
+                                    'contacts.preferred',
+                                  )
+                                : _preferredMethod!.text,
+                            style: ZipFonts.medium.style,
+                          ),
+                        ),
+                        Icon(
+                          controller.isOpen
+                              ? Icons.arrow_drop_up
+                              : Icons.arrow_drop_down,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const Gap(24),
+              _buildField(
+                Icons.smartphone_outlined,
+                translate('contacts.phone'),
+                _phoneController,
+                bloc.setContactPhone,
+              ),
+              const Gap(12),
+              _buildField(
+                Icons.chat,
+                translate('contacts.viber'),
+                _viberController,
+                bloc.setContactViber,
+              ),
+              const Gap(12),
+              _buildField(
+                Icons.send,
+                translate('contacts.telegram'),
+                _telegramController,
+                bloc.setContactTelegram,
+              ),
+              const Gap(12),
+              _buildField(
+                Icons.call_outlined,
+                translate('contacts.whatsapp'),
+                _whatsAppController,
+                bloc.setContactWhatsApp,
+              ),
+              const Gap(20),
+              Center(
+                child: Text(
+                  translate('contacts.hint'),
+                  style: ZipFonts.small.style.copyWith(color: Colors.black54),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const Gap(20),
+              NextBackButtonRow(
+                step: ESteps.addContactInfo,
+                areFieldsValid: _isPreferredValid,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildField(
+    final IconData icon,
+    final String label,
+    final TextEditingController controller,
+    final ValueChanged<String> onChanged,
+  ) =>
+      Row(
+        children: [
+          Icon(icon, color: Theme.of(context).colorScheme.primary),
+          const Gap(12),
+          Expanded(
+            child: LinTextField(
+              controller: controller,
+              label: label,
+              onChanged: onChanged,
+            ),
+          ),
+        ],
+      );
+}

@@ -21,11 +21,11 @@ enum EPosition {
   String get text {
     switch (this) {
       case EPosition.volunteer:
-        return translate('create.account.preffered.position.volunteer');
+        return translate('create.account.preferred.position.volunteer');
       case EPosition.requester:
-        return translate('create.account.preffered.position.requester');
+        return translate('create.account.preferred.position.requester');
       case EPosition.both:
-        return translate('create.account.preffered.position.both');
+        return translate('create.account.preferred.position.both');
     }
   }
 }

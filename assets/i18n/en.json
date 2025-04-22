@@ -49,7 +49,6 @@
             "name": "Name",
             "surname": "Surname",
             "email": "Email",
-            "phone": "Phone",
             "button": "Create",
             "next": "Next",
             "back": "Back",
@@ -57,7 +56,7 @@
             "date.of.birth": "Date of birth",
             "age.limitations": "You must be at least 18 years old to use this app.",
             "register": "Register",
-            "preffered": {
+            "preferred": {
                 "position": {
                     "title": "Who do you want to be?",
                     "subtitle": "Select what applies to you the best",
@@ -71,7 +70,11 @@
                 "subtitle": "Tell us a bit more about yourself. People will see this information when they see your request.\nTell your story and why you might need extra help."
             },
             "error": "Error occurred while creating an account. Please try again later.",
-            "success": "Account created successfully. Welcome to Zip Way!"
+            "success": "Account created successfully. Welcome to Zip Way!",
+            "contact": {
+                "title": "How do you want to be contacted?",
+                "subtitle": "Select your preferred method of contact"
+            }
         }
     },
     "profile": {
@@ -105,7 +108,7 @@
             "title": "Your contacts:",
             "no": "No contacts available",
             "add": "Add contacts",
-            "preffered": "Preffered method of contact {method}"
+            "preferred": "preferred method of contact {method}"
         }
     },
     "start": {
@@ -246,6 +249,8 @@
         "email": "Email",
         "telegram": "Telegram",
         "whatsapp": "WhatsApp",
-        "viber": "Viber"
+        "viber": "Viber",
+        "preferred": "Preferred method of contact",
+        "hint": "You can add more contacts later in your profile by clicking on your image on the dashboard."
     }
 }

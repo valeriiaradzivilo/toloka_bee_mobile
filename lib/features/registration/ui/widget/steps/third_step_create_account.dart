@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../common/reactive/react_widget.dart';
 import '../../../../../common/theme/zip_fonts.dart';
 import '../../../../../common/widgets/lin_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
@@ -25,6 +26,14 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
   bool _isAboutMeValid = false;
 
   @override
+  void initState() {
+    _isAboutMeValid =
+        context.read<RegisterBloc>().aboutMeStream.value.isNotEmpty;
+    _position = context.read<RegisterBloc>().position;
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _aboutMeController.dispose();
     super.dispose();
@@ -43,15 +52,18 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                 style: ZipFonts.medium.style,
               ),
               Text(translate('create.account.about.subtitle')),
-              LinTextField(
-                controller: _aboutMeController,
-                label: translate('create.account.about.title'),
-                onChanged: (final p0) {
-                  context.read<RegisterBloc>().setAboutMe(p0);
-                  if (_isAboutMeValid != p0.isNotEmpty) {
-                    setState(() => _isAboutMeValid = p0.isNotEmpty);
-                  }
-                },
+              ReactWidget(
+                stream: context.read<RegisterBloc>().aboutMeStream,
+                builder: (final about) => LinTextField(
+                  controller: _aboutMeController..text = about,
+                  label: translate('create.account.about.title'),
+                  onChanged: (final p0) {
+                    context.read<RegisterBloc>().setAboutMe(p0);
+                    if (_isAboutMeValid != p0.isNotEmpty) {
+                      setState(() => _isAboutMeValid = p0.isNotEmpty);
+                    }
+                  },
+                ),
               ),
               MenuAnchor(
                 controller: _menuController,
@@ -63,6 +75,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                       ),
                       onTap: () => setState(() {
                         _menuController.close();
+                        context.read<RegisterBloc>().setPosition(position);
                         _position = position;
                       }),
                     ),
@@ -71,13 +84,13 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                     ListTile(
                   title: _position == null
                       ? Text(
-                          translate('create.account.preffered.position.title'),
+                          translate('create.account.preferred.position.title'),
                         )
                       : Text(_position!.text),
                   subtitle: _position == null
                       ? Text(
                           translate(
-                            'create.account.preffered.position.subtitle',
+                            'create.account.preferred.position.subtitle',
                           ),
                         )
                       : null,
@@ -89,8 +102,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
               ),
               NextBackButtonRow(
                 step: ESteps.addExtraInfo,
-                areFieldsValid: _isAboutMeValid,
-                position: _position,
+                areFieldsValid: _isAboutMeValid && _position != null,
               ),
             ],
           ),

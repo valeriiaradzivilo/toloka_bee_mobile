@@ -73,7 +73,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
         ),
         const Spacer(),
         NextBackButtonRow(
-          step: ESteps.addRegistartInfo,
+          step: ESteps.addRegisterInfo,
           areFieldsValid: _isEmailValid &&
               _isPasswordValid &&
               _isConfirmPasswordValid &&
