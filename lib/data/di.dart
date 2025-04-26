@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
-import '../features/snackbar/snackbar_service.dart';
 import 'repository/authentication/auth_repository.dart';
 import 'repository/authentication/auth_repository_impl.dart';
 import 'repository/contacts/contacts_repository.dart';
@@ -11,6 +10,7 @@ import 'repository/notifications/notification_repository_impl.dart';
 import 'repository/users/user_repository.dart';
 import 'repository/users/user_repository_impl.dart';
 import 'service/fcm_service.dart';
+import 'service/snackbar_service.dart';
 import 'source/authentication/auth_data_source.dart';
 import 'source/authentication/auth_data_source_impl.dart';
 import 'source/contacts/contacts_data_source.dart';

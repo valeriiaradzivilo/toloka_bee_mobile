@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 
 import '../../../common/theme/zip_fonts.dart';
 import '../bloc/request_details_bloc.dart';
+import '../bloc/request_details_event.dart';
 import '../bloc/request_details_state.dart';
-import '../bloc/request_detatils_event.dart';
 
 class RequestDetailsScreen extends StatelessWidget {
   const RequestDetailsScreen({

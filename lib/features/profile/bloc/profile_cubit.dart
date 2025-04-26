@@ -7,12 +7,12 @@ import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
+import '../../../data/service/snackbar_service.dart';
 import '../../../data/usecase/contacts/get_contacts_by_user_id_usecase.dart';
 import '../../../data/usecase/contacts/save_contacts_usecase.dart';
 import '../../../data/usecase/contacts/update_contacts_usecase.dart';
 import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
 import '../../../data/usecase/user_management/update_user_usecase.dart';
-import '../../snackbar/snackbar_service.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {

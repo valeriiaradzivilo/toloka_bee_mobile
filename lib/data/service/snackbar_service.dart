@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../../data/models/ui/popup_model.dart';
+import '../models/ui/popup_model.dart';
 
 class SnackbarService {
   SnackbarService._internal() {

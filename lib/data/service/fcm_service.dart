@@ -23,7 +23,7 @@ class FcmService {
 
   static final SimpleLogger _logger = SimpleLogger();
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
 
   Future<void> initializeNotifications() async {
@@ -34,10 +34,33 @@ class FcmService {
       importance: Importance.high,
     );
 
-    await flutterLocalNotificationsPlugin
+    await _localNotifications
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
+  }
+
+  Future<void> showLocalNotification({
+    required final String title,
+    required final String body,
+  }) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      LocationConstants.androidLocationChannelId,
+      'High Importance Notifications',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await _localNotifications.show(
+      10000000,
+      title,
+      body,
+      platformChannelSpecifics,
+    );
   }
 
   void listenToMessages() async {
@@ -48,7 +71,7 @@ class FcmService {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
-  static Future<void> _firebaseMessagingBackgroundHandler(
+  Future<void> _firebaseMessagingBackgroundHandler(
     final RemoteMessage message,
   ) async {
     final context = MainApp.navigatorKey.currentState?.context;

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_logger/simple_logger.dart';
 
+import '../../../common/exceptions/user_blocked_exception.dart';
 import '../../../features/profile/bloc/profile_state.dart';
 import '../../models/user_auth_model.dart';
 import 'auth_data_source.dart';
@@ -30,7 +31,15 @@ class AuthDataSourceImpl implements AuthDataSource {
 
       if (idToken == null) throw Exception('Failed to get ID token');
 
-      return await getCurrentUserData(idToken: idToken);
+      final user = await getCurrentUserData(idToken: idToken);
+
+      if (user.bannedUntil != null &&
+          user.bannedUntil!.isAfter(DateTime.now())) {
+        await _auth.signOut();
+        throw UserBlockedException(user.bannedUntil!);
+      }
+
+      return user;
     } catch (e) {
       logger.severe('Login failed: $e');
       await _auth.signOut();
@@ -125,10 +134,33 @@ class AuthDataSourceImpl implements AuthDataSource {
 
     if (response.statusCode == 200) {
       final userRecord = response.data;
+      userRecord['isAdmin'] = await _isAdmin(userRecord['id']);
       logger.info('User logged in successfully...');
       return UserAuthModel.fromJson(userRecord);
     } else {
       throw Exception('Failed to login: ${response.statusCode}');
+    }
+  }
+
+  Future<bool> _isAdmin(final String userId) async {
+    try {
+      final response = await _dio.get(
+        '/admin/is-admin/$userId',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        return response.data == true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      logger.severe('Failed to check if user is admin: $e');
+      return false;
     }
   }
 

@@ -34,7 +34,9 @@
         "or": "OR",
         "google": "Login with Google",
         "welcome": "Welcome back, {name}!",
-        "success": "Logged in successfully"
+        "success": "Logged in successfully",
+        "banned": "Your account is banned until {date}. If you think there was an error, please contact support.",
+        "banned_info": "Support can be contacted by clicking on the app logo at the top-right corner of the map screen."
     },
     "logout": {
         "success": "Logged out successfully",

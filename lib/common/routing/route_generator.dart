@@ -8,7 +8,7 @@ import '../../features/main_screen/main_screen.dart';
 import '../../features/profile/ui/profile_screen.dart';
 import '../../features/registration/ui/create_account_screen.dart';
 import '../../features/request_details/bloc/request_details_bloc.dart';
-import '../../features/request_details/bloc/request_detatils_event.dart';
+import '../../features/request_details/bloc/request_details_event.dart';
 import '../../features/request_details/ui/request_details_screen.dart';
 import 'routes.dart';
 

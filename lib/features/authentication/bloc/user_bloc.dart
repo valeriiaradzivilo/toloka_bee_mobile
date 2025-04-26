@@ -4,10 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../common/bloc/zip_bloc.dart';
 import '../../../common/constants/location_constants.dart';
+import '../../../common/exceptions/user_blocked_exception.dart';
 import '../../../common/optional_value.dart';
 import '../../../data/models/location_subscription_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
@@ -25,12 +27,21 @@ class UserBloc extends ZipBloc {
       : _loginUserUsecase = locator<LoginUserUsecase>(),
         _getCurrentUserDataUsecase = locator<GetCurrentUserDataUsecase>(),
         _logoutUserUsecase = locator<LogoutUserUsecase>(),
-        _subscribeToTopicUsecase = locator<SubscribeToTopicUsecase>() {
+        _subscribeToTopicUsecase = locator<SubscribeToTopicUsecase>(),
+        _fcmService = locator<FcmService>() {
     _initAuth();
     _initLocationControl();
 
     addSubscription(
-      _user.pairwise().listen((final users) {
+      _user.pairwise().listen((final users) async {
+        if (users[1].valueOrNull?.bannedUntil != null &&
+            users[1].valueOrNull!.bannedUntil!.isAfter(DateTime.now())) {
+          await logout();
+          _showBannedInfo(
+            users[1].valueOrNull!.bannedUntil!,
+          );
+          return;
+        }
         if (users[0].valueOrNull?.id == users[1].valueOrNull?.id) return;
         if (users[1].valueOrNull case OptionalValue<UserAuthModel>(:final value)
             when value.position.toLowerCase() ==
@@ -74,6 +85,8 @@ class UserBloc extends ZipBloc {
   final LogoutUserUsecase _logoutUserUsecase;
   final SubscribeToTopicUsecase _subscribeToTopicUsecase;
 
+  final FcmService _fcmService;
+
   final locationStream = Geolocator.getPositionStream();
   bool isFirstRun = true;
 
@@ -96,6 +109,12 @@ class UserBloc extends ZipBloc {
 
     return authResult.fold(
       (final error) {
+        if (error case final UserBlockedException userBlockedException) {
+          _showBannedInfo(userBlockedException.bannedUntil);
+          //TODO: add support contact info
+          return false;
+        }
+
         _popupController.add(
           PopupModel(
             title: translate('login.unable'),
@@ -116,6 +135,25 @@ class UserBloc extends ZipBloc {
         );
         return true;
       },
+    );
+  }
+
+  void _showBannedInfo(final DateTime bannedUntil) {
+    _popupController.add(
+      PopupModel(
+        title: translate('login.unable'),
+        message: translate(
+          'login.banned',
+          args: {
+            'date': DateFormat.yMMMMEEEEd().format(bannedUntil),
+          },
+        ),
+        type: EPopupType.error,
+      ),
+    );
+    _fcmService.showLocalNotification(
+      title: translate('login.banned'),
+      body: translate('login.banned_info'),
     );
   }
 

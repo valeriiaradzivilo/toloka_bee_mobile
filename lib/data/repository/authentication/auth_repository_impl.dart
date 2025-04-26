@@ -20,7 +20,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       return Right(await _authDataSource.login(username, password));
     } catch (e) {
-      return Left(Fail('Failed to login'));
+      return Left(Fail(e));
     }
   }
 

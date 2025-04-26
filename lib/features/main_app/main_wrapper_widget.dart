@@ -6,12 +6,13 @@ import 'package:provider/provider.dart';
 
 import '../../common/bloc/locale_notifier.dart';
 import '../../common/e_supported_localizations.dart';
+import '../../common/reactive/react_widget.dart';
 import '../../common/theme/zip_fonts.dart';
 import '../../common/widgets/app_icon.dart';
 import '../../common/widgets/zip_snackbar.dart';
 import '../../data/models/ui/popup_model.dart';
+import '../../data/service/snackbar_service.dart';
 import '../authentication/bloc/user_bloc.dart';
-import '../snackbar/snackbar_service.dart';
 import 'main_app.dart';
 
 class MainWrapperWidget extends StatelessWidget {
@@ -47,11 +48,47 @@ class MainWrapperWidget extends StatelessWidget {
                     if (child != null) child!,
                     Align(
                       alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: const AppIcon(),
-                        onPressed: () => _showLanguageDialog(
-                          MainApp.navigatorKey.currentState!.context,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ReactWidget(
+                            stream: context.read<UserBloc>().userStream,
+                            builder: (final user) => Visibility(
+                              visible: user.valueOrNull?.isAdmin ?? false,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Badge(
+                                  backgroundColor: Colors.red,
+                                  label: Text(
+                                    ' ',
+                                    style: ZipFonts.tiny.style.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 5,
+                                    ),
+                                  ),
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Icon(
+                                      Icons.report_rounded,
+                                      color: Colors.red.withValues(alpha: 0.6),
+                                      size: 40,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const AppIcon(),
+                            onPressed: () => _showLanguageDialog(
+                              MainApp.navigatorKey.currentState!.context,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
