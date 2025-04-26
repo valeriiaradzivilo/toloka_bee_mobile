@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 
 import '../../common/bloc/locale_notifier.dart';
 import '../../common/e_supported_localizations.dart';
@@ -13,6 +13,9 @@ import '../../common/widgets/zip_snackbar.dart';
 import '../../data/models/ui/popup_model.dart';
 import '../../data/service/snackbar_service.dart';
 import '../authentication/bloc/user_bloc.dart';
+import '../complaints/bloc/complaints_admin_bloc.dart';
+import '../complaints/bloc/complaints_admin_event.dart';
+import '../complaints/complaints_screen.dart';
 import 'main_app.dart';
 
 class MainWrapperWidget extends StatelessWidget {
@@ -56,7 +59,21 @@ class MainWrapperWidget extends StatelessWidget {
                             builder: (final user) => Visibility(
                               visible: user.valueOrNull?.isAdmin ?? false,
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () => showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  useSafeArea: true,
+                                  showDragHandle: true,
+                                  context: MainApp
+                                      .navigatorKey.currentState!.context,
+                                  builder: (final context) => BlocProvider(
+                                    create: (final context) =>
+                                        ComplaintsAdminBloc(GetIt.I)
+                                          ..add(
+                                            const GetComplaintsAdminEvent(),
+                                          ),
+                                    child: const ComplaintsScreen(),
+                                  ),
+                                ),
                                 icon: Badge(
                                   backgroundColor: Colors.red,
                                   label: Text(

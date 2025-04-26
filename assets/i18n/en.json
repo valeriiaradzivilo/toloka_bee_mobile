@@ -259,5 +259,11 @@
         "viber": "Viber",
         "preferred": "Preferred method of contact",
         "hint": "You can add more contacts later in your profile by clicking on your image on the dashboard."
+    },
+    "complaints": {
+        "requests": "Requests",
+        "users": "Users",
+        "title": "Complaints",
+        "count": "Complaints count: "
     }
 }

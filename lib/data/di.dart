@@ -3,6 +3,8 @@ import 'package:get_it/get_it.dart';
 
 import 'repository/authentication/auth_repository.dart';
 import 'repository/authentication/auth_repository_impl.dart';
+import 'repository/complaints/complaint_repository.dart';
+import 'repository/complaints/complaint_repository_impl.dart';
 import 'repository/contacts/contacts_repository.dart';
 import 'repository/contacts/contacts_repository_impl.dart';
 import 'repository/notifications/notification_repository.dart';
@@ -13,6 +15,8 @@ import 'service/fcm_service.dart';
 import 'service/snackbar_service.dart';
 import 'source/authentication/auth_data_source.dart';
 import 'source/authentication/auth_data_source_impl.dart';
+import 'source/complaints/complaint_data_source.dart';
+import 'source/complaints/complaint_data_source_impl.dart';
 import 'source/contacts/contacts_data_source.dart';
 import 'source/contacts/contacts_data_source_impl.dart';
 import 'source/geolocation/geo_data_source.dart';
@@ -21,6 +25,8 @@ import 'source/notifications/fcm_data_source.dart';
 import 'source/notifications/fcm_data_source_impl.dart';
 import 'source/users/user_data_source.dart';
 import 'source/users/user_data_source_impl.dart';
+import 'usecase/complaints/get_request_complaints_grouped_usecase.dart';
+import 'usecase/complaints/get_user_complaints_grouped_usecase.dart';
 import 'usecase/contacts/delete_contacts_by_id_usecase.dart';
 import 'usecase/contacts/get_contacts_by_user_id_usecase.dart';
 import 'usecase/contacts/save_contacts_usecase.dart';
@@ -70,6 +76,9 @@ Future<void> initDatasources() async {
   serviceLocator.registerLazySingleton<ContactsDataSource>(
     () => ContactsDataSourceImpl(dio),
   );
+  serviceLocator.registerLazySingleton<ComplaintDataSource>(
+    () => ComplaintDataSourceImpl(dio),
+  );
   serviceLocator.registerSingleton<SnackbarService>(SnackbarService());
   serviceLocator.registerLazySingleton<FcmService>(() => FcmService());
 }
@@ -86,6 +95,9 @@ Future<void> initRepository() async {
   );
   serviceLocator.registerLazySingleton<ContactsRepository>(
     () => ContactsRepositoryImpl(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<ComplaintRepository>(
+    () => ComplaintRepositoryImpl(serviceLocator()),
   );
 }
 
@@ -146,5 +158,11 @@ Future<void> initUseCases() async {
   );
   serviceLocator.registerLazySingleton<DeleteContactByIdUsecase>(
     () => DeleteContactByIdUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<GetRequestComplaintsGroupedUsecase>(
+    () => GetRequestComplaintsGroupedUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<GetUserComplaintsGroupedUsecase>(
+    () => GetUserComplaintsGroupedUsecase(serviceLocator()),
   );
 }

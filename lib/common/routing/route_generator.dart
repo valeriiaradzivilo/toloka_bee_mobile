@@ -34,6 +34,7 @@ class RouteGenerator {
             child: const RequestDetailsScreen(),
           ),
         );
+
       default:
         return MaterialPageRoute(builder: (final _) => const MainScreen());
     }
