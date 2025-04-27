@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../../data/usecase/complaints/get_request_complaints_grouped_usecase.dart';
-import '../../../data/usecase/complaints/get_user_complaints_grouped_usecase.dart';
+import '../../../../data/usecase/complaints/get_request_complaints_grouped_usecase.dart';
+import '../../../../data/usecase/complaints/get_user_complaints_grouped_usecase.dart';
 import 'complaints_admin_event.dart';
 import 'complaints_admin_state.dart';
 

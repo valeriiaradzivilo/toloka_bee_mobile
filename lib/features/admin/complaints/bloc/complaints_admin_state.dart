@@ -1,5 +1,5 @@
-import '../../../data/models/request_complaints_group_model.dart';
-import '../../../data/models/user_complaints_group_model.dart';
+import '../../../../data/models/request_complaints_group_model.dart';
+import '../../../../data/models/user_complaints_group_model.dart';
 
 sealed class ComplaintsAdminState {
   const ComplaintsAdminState();

@@ -84,7 +84,6 @@
         "title": "Profile",
         "username": "Username",
         "email": "Email",
-        "phone": "Phone",
         "button": "Save",
         "actions": {
             "back": "Back to Map",
@@ -94,6 +93,7 @@
             "delete.success": "Account deleted successfully. Goodbye!"
         },
         "age": "You are {age} years old",
+        "birth_date": "Date of birth: {date}",
         "about": "About you: ",
         "edit": {
             "title": "Edit profile",
@@ -255,7 +255,8 @@
             "title": "Error",
             "message": "An error occurred. Please restart the app."
         },
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "confirm": "Confirm"
     },
     "contacts": {
         "phone": "Phone",
@@ -271,6 +272,7 @@
         "users": "Users",
         "title": "Complaints",
         "count": "Complaints count: ",
+        "comments": "Comments",
         "predefine": {
             "incorrect_use_of_the_app": "Incorrect use of the app",
             "fake_user": "Fake user",
@@ -295,6 +297,18 @@
             "send": "Send",
             "target_request": "Request",
             "target_user": "User"
+        }
+    },
+    "admin": {
+        "complaint": {
+            "block_user": "Block user",
+            "block_user_forever": "Block user forever",
+            "block_user_message": "Are you sure you want to block this user? This action can be undone only by contacting support.",
+            "delete_request": "Delete request",
+            "delete_request_message": "Are you sure you want to delete this request? This action cannot be undone.",
+            "delete_request_and_block_user": "Delete request and block user",
+            "open_user_profile": "Open user profile",
+            "open_request": "Open request"
         }
     }
 }
