@@ -15,3 +15,21 @@ class RemoveRequest extends RequestDetailsEvent {
   const RemoveRequest(this.requestId);
   final String requestId;
 }
+
+class ReportRequestEvent extends RequestDetailsEvent {
+  const ReportRequestEvent({
+    required this.requestId,
+    required this.message,
+  });
+  final String requestId;
+  final String message;
+}
+
+class ReportUserEvent extends RequestDetailsEvent {
+  const ReportUserEvent({
+    required this.userId,
+    required this.message,
+  });
+  final String userId;
+  final String message;
+}

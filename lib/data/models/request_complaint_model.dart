@@ -7,6 +7,7 @@ part '../../generated/data/models/request_complaint_model.g.dart';
 class RequestComplaintModel with _$RequestComplaintModel {
   factory RequestComplaintModel({
     required final String reporterUserId,
+    required final String requestId,
     required final String reason,
     required final String createdAt,
   }) = _RequestComplaintModel;

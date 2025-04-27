@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../common/theme/zip_fonts.dart';
+import '../../data/models/request_complaints_group_model.dart';
+import '../../data/models/user_complaints_group_model.dart';
 import 'bloc/complaints_admin_bloc.dart';
 import 'bloc/complaints_admin_state.dart';
 
@@ -78,7 +80,8 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
         },
       );
 
-  Widget _buildRequestComplaintCard(final dynamic group) => Card(
+  Widget _buildRequestComplaintCard(final RequestComplaintsGroupModel group) =>
+      Card(
         margin: const EdgeInsets.only(bottom: 12),
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -88,7 +91,10 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              Text(translate('complaints.count') + group.totalComplaints),
+              Text(
+                translate('complaints.count') +
+                    group.totalComplaints.toString(),
+              ),
               const SizedBox(height: 8),
               ...group.complaints.map<Widget>(
                 (final complaint) => Padding(
@@ -101,7 +107,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
         ),
       );
 
-  Widget _buildUserComplaintCard(final dynamic group) => Card(
+  Widget _buildUserComplaintCard(final UserComplaintsGroupModel group) => Card(
         margin: const EdgeInsets.only(bottom: 12),
         elevation: 3,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

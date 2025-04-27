@@ -6,9 +6,13 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../data/models/request_complaint_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
+import '../../../data/models/user_complaint_model.dart';
 import '../../../data/service/snackbar_service.dart';
+import '../../../data/usecase/complaints/report_request_usecase.dart';
+import '../../../data/usecase/complaints/report_user_usecase.dart';
 import '../../../data/usecase/get_notification_by_id_usecase.dart';
 import '../../../data/usecase/requests/delete_request_usecase.dart';
 import '../../../data/usecase/user_management/get_user_by_id_usecase.dart';
@@ -22,10 +26,14 @@ class RequestDetailsBloc
         _getUserImageUsecase = locator<GetUserByIdUsecase>(),
         _deleteRequestUsecase = locator<DeleteRequestUsecase>(),
         _snackbarService = locator<SnackbarService>(),
+        _reportRequestUsecase = locator<ReportRequestUsecase>(),
+        _reportUserUsecase = locator<ReportUserUsecase>(),
         super(const RequestDetailsLoading()) {
     on<FetchRequestDetails>(_onFetchRequestDetails);
     on<AcceptRequest>(_onAcceptRequest);
     on<RemoveRequest>(_onRemoveRequest);
+    on<ReportRequestEvent>(_onReportRequest);
+    on<ReportUserEvent>(_onReportUser);
   }
 
   Future<void> _onFetchRequestDetails(
@@ -105,9 +113,75 @@ class RequestDetailsBloc
     );
   }
 
+  Future<void> _onReportRequest(
+    final ReportRequestEvent event,
+    final Emitter<RequestDetailsState> emit,
+  ) async {
+    final result = await _reportRequestUsecase(
+      RequestComplaintModel(
+        requestId: event.requestId,
+        reporterUserId: FirebaseAuth.instance.currentUser?.uid ?? '',
+        reason: event.message,
+        createdAt: DateTime.now().toIso8601String(),
+      ),
+    );
+    await result.fold(
+      (final failure) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.report.error'),
+            type: EPopupType.error,
+          ),
+        );
+      },
+      (final success) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.report.success'),
+            type: EPopupType.success,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _onReportUser(
+    final ReportUserEvent event,
+    final Emitter<RequestDetailsState> emit,
+  ) async {
+    final result = await _reportUserUsecase(
+      UserComplaintModel(
+        reportedUserId: event.userId,
+        reporterUserId: FirebaseAuth.instance.currentUser?.uid ?? '',
+        reason: event.message,
+        createdAt: DateTime.now().toIso8601String(),
+      ),
+    );
+    await result.fold(
+      (final failure) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.report.error'),
+            type: EPopupType.error,
+          ),
+        );
+      },
+      (final success) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.report.success'),
+            type: EPopupType.success,
+          ),
+        );
+      },
+    );
+  }
+
   final GetUserByIdUsecase _getUserImageUsecase;
   final GetNotificationByIdUsecase _getNotificationByIdUsecase;
   final DeleteRequestUsecase _deleteRequestUsecase;
+  final ReportRequestUsecase _reportRequestUsecase;
+  final ReportUserUsecase _reportUserUsecase;
 
   final SnackbarService _snackbarService;
 }

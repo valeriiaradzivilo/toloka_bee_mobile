@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:simple_logger/simple_logger.dart';
 
+import '../../models/request_complaint_model.dart';
 import '../../models/request_complaints_group_model.dart';
+import '../../models/user_complaint_model.dart';
 import '../../models/user_complaints_group_model.dart';
 import 'complaint_data_source.dart';
 
@@ -58,5 +60,23 @@ class ComplaintDataSourceImpl implements ComplaintDataSource {
       logger.severe('Failed to fetch user complaints grouped: $e');
       rethrow;
     }
+  }
+
+  @override
+  Future<void> reportRequest(
+    final RequestComplaintModel requestComplaintModel,
+  ) async {
+    await _dio.post(
+      '/complaints/request',
+      data: requestComplaintModel.toJson(),
+    );
+  }
+
+  @override
+  Future<void> reportUser(final UserComplaintModel userComplaintModel) async {
+    await _dio.post(
+      '/complaints/user',
+      data: userComplaintModel.toJson(),
+    );
   }
 }

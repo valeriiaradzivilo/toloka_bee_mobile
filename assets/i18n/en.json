@@ -211,7 +211,8 @@
             },
             "status": "Current request status is {status}",
             "help": "Help",
-            "remove": "Remove request"
+            "remove": "Remove request",
+            "report": "Report this request or user"
         },
         "delete": {
             "success": "Request deleted successfully.",
@@ -227,6 +228,10 @@
             "in_progress": "In progress",
             "expired": "Expired",
             "unknown": "Unknown"
+        },
+        "report": {
+            "success": "Reported successfully.",
+            "error": "Error occurred while reporting. Please try again later."
         }
     },
     "give": {
@@ -249,7 +254,8 @@
         "error": {
             "title": "Error",
             "message": "An error occurred. Please restart the app."
-        }
+        },
+        "cancel": "Cancel"
     },
     "contacts": {
         "phone": "Phone",
@@ -264,6 +270,31 @@
         "requests": "Requests",
         "users": "Users",
         "title": "Complaints",
-        "count": "Complaints count: "
+        "count": "Complaints count: ",
+        "predefine": {
+            "incorrect_use_of_the_app": "Incorrect use of the app",
+            "fake_user": "Fake user",
+            "offensive_behavior": "Offensive behavior",
+            "scam_attempt": "Scam attempt",
+            "inappropriate_content": "Inappropriate content",
+            "spam_activity": "Spam activity",
+            "violence_or_threats": "Violence or threats",
+            "false_information": "False information",
+            "unauthorized_advertising": "Unauthorized advertising",
+            "privacy_violation": "Privacy violation",
+            "other": "Other"
+        }
+    },
+    "report": {
+        "dialog": {
+            "title": "Submit a complaint",
+            "select_target": "Select what to report",
+            "select_reason": "Select a reason",
+            "additional_info": "Additional information",
+            "only_one_report": "You can leave only one complaint per request or user.",
+            "send": "Send",
+            "target_request": "Request",
+            "target_user": "User"
+        }
     }
 }

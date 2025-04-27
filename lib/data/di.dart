@@ -27,6 +27,8 @@ import 'source/users/user_data_source.dart';
 import 'source/users/user_data_source_impl.dart';
 import 'usecase/complaints/get_request_complaints_grouped_usecase.dart';
 import 'usecase/complaints/get_user_complaints_grouped_usecase.dart';
+import 'usecase/complaints/report_request_usecase.dart';
+import 'usecase/complaints/report_user_usecase.dart';
 import 'usecase/contacts/delete_contacts_by_id_usecase.dart';
 import 'usecase/contacts/get_contacts_by_user_id_usecase.dart';
 import 'usecase/contacts/save_contacts_usecase.dart';
@@ -164,5 +166,11 @@ Future<void> initUseCases() async {
   );
   serviceLocator.registerLazySingleton<GetUserComplaintsGroupedUsecase>(
     () => GetUserComplaintsGroupedUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<ReportUserUsecase>(
+    () => ReportUserUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<ReportRequestUsecase>(
+    () => ReportRequestUsecase(serviceLocator()),
   );
 }

@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:simple_logger/simple_logger.dart';
 
+import '../../models/request_complaint_model.dart';
 import '../../models/request_complaints_group_model.dart';
+import '../../models/user_complaint_model.dart';
 import '../../models/user_complaints_group_model.dart';
 import '../../source/complaints/complaint_data_source.dart';
 import 'complaint_repository.dart';
@@ -34,6 +36,36 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
     } catch (e) {
       logger.severe('Error fetching user complaints: $e');
       return Left(Fail('Failed to load user complaints'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> reportRequest(
+    final RequestComplaintModel requestComplaintModel,
+  ) async {
+    try {
+      await _dataSource.reportRequest(
+        requestComplaintModel,
+      );
+      return const Right(null);
+    } catch (e) {
+      logger.severe('Error reporting request: $e');
+      return Left(Fail('Failed to report request'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> reportUser(
+    final UserComplaintModel userComplaintModel,
+  ) async {
+    try {
+      await _dataSource.reportUser(
+        userComplaintModel,
+      );
+      return const Right(null);
+    } catch (e) {
+      logger.severe('Error reporting user: $e');
+      return Left(Fail('Failed to report user'));
     }
   }
 }
