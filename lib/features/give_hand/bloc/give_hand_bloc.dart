@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
@@ -40,6 +41,7 @@ class GiveHandBloc extends Bloc<GiveHandEvent, GiveHandState> {
         radius: currentState is GiveHandLoaded ? (currentState).radius : 100,
         onlyRemote:
             currentState is GiveHandLoaded ? (currentState).onlyRemote : false,
+        userId: FirebaseAuth.instance.currentUser!.uid,
       ),
     );
     await result.fold(

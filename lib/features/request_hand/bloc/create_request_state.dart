@@ -3,6 +3,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../data/models/e_request_hand_type.dart';
 import '../../../data/models/e_request_status.dart';
 import '../../../data/models/request_notification_model.dart';
 
@@ -13,6 +14,7 @@ class CreateRequestState {
   final DateTime? deadline;
   final double? price;
   final LatLng location;
+  final ERequestHandType? requestType;
 
   CreateRequestState({
     required this.description,
@@ -21,6 +23,7 @@ class CreateRequestState {
     required this.location,
     this.deadline,
     this.price,
+    required this.requestType,
   });
 
   CreateRequestState copyWith({
@@ -30,6 +33,7 @@ class CreateRequestState {
     final DateTime? deadline,
     final double? price,
     final LatLng? location,
+    final ERequestHandType? requestType,
   }) =>
       CreateRequestState(
         description: description ?? this.description,
@@ -38,6 +42,7 @@ class CreateRequestState {
         deadline: deadline ?? this.deadline,
         price: price ?? this.price,
         location: location ?? this.location,
+        requestType: requestType ?? this.requestType,
       );
 
   RequestNotificationModel toRequestNotificationModel() =>
@@ -56,5 +61,10 @@ class CreateRequestState {
         updatedAt: null,
         title: translate('request.title'),
         body: translate('request.body'),
+        requestType: requestType ?? ERequestHandType.other,
       );
+
+  bool get canCreateRequest =>
+      description.isNotEmpty &&
+      (isRemote || (location.latitude != 0 && location.longitude != 0));
 }

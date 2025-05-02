@@ -35,6 +35,10 @@ class _LinNumberEditingFieldState extends State<LinNumberEditingField> {
         keyboardType: TextInputType.number,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (final value) {
+          if (!widget.isRequired && (value == null || value.isEmpty)) {
+            return null;
+          }
+
           if (value == null || (widget.isRequired && value.isEmpty)) {
             return translate('validation.error.field.not.empty');
           }

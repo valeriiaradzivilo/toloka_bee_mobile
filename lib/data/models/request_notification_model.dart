@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+import 'e_request_hand_type.dart';
 import 'e_request_status.dart';
 
 class RequestNotificationModel implements Equatable {
@@ -19,6 +20,7 @@ class RequestNotificationModel implements Equatable {
   final DateTime? updatedAt;
   final String title;
   final String body;
+  final ERequestHandType requestType;
 
   RequestNotificationModel({
     required this.id,
@@ -35,6 +37,7 @@ class RequestNotificationModel implements Equatable {
     required this.updatedAt,
     required this.title,
     required this.body,
+    required this.requestType,
   });
 
   factory RequestNotificationModel.fromFCM(final Map<String, dynamic> json) {
@@ -59,6 +62,7 @@ class RequestNotificationModel implements Equatable {
       updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
       title: '',
       body: '',
+      requestType: ERequestHandType.fromJson(json['requestType'] ?? ''),
     );
   }
 
@@ -79,6 +83,7 @@ class RequestNotificationModel implements Equatable {
         updatedAt: DateTime.tryParse(json['updatedAt'] ?? ''),
         title: json['title'] ?? '',
         body: json['body'] ?? '',
+        requestType: ERequestHandType.fromJson(json['requestType'] ?? ''),
       );
 
   Map<String, dynamic> toJson() => {
@@ -98,6 +103,7 @@ class RequestNotificationModel implements Equatable {
         'updatedAt': updatedAt?.toIso8601String(),
         'title': title,
         'body': body,
+        'requestType': requestType.name,
       };
 
   RequestNotificationModel copyWith({
@@ -115,6 +121,7 @@ class RequestNotificationModel implements Equatable {
     final DateTime? updatedAt,
     final String? title,
     final String? body,
+    final ERequestHandType? requestType,
   }) =>
       RequestNotificationModel(
         id: id ?? this.id,
@@ -132,6 +139,7 @@ class RequestNotificationModel implements Equatable {
         updatedAt: updatedAt ?? this.updatedAt,
         title: title ?? this.title,
         body: body ?? this.body,
+        requestType: requestType ?? this.requestType,
       );
 
   @override
@@ -148,6 +156,9 @@ class RequestNotificationModel implements Equatable {
         description,
         createdAt,
         updatedAt,
+        title,
+        body,
+        requestType,
       ];
 
   @override

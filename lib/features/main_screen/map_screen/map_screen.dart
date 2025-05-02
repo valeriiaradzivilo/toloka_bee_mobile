@@ -19,7 +19,7 @@ import '../../give_hand/bloc/give_hand_bloc.dart';
 import '../../give_hand/bloc/give_hand_event.dart';
 import '../../give_hand/ui/give_hand_screen.dart';
 import '../../request_hand/bloc/create_request_bloc.dart';
-import '../../request_hand/ui/request_hand.dart';
+import '../../request_hand/ui/request_hand_screen.dart';
 import 'bloc/map_screen_bloc.dart';
 import 'data/location_service_state.dart';
 

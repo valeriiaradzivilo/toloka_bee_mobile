@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../data/models/e_request_hand_type.dart';
+
 abstract class CreateRequestEvent {}
 
 class SetDeadlineEvent extends CreateRequestEvent {
@@ -43,4 +45,10 @@ class SendRequestEvent extends CreateRequestEvent {
   final BuildContext context;
 
   SendRequestEvent(this.context);
+}
+
+class SetRequestTypeEvent extends CreateRequestEvent {
+  final ERequestHandType requestType;
+
+  SetRequestTypeEvent(this.requestType);
 }

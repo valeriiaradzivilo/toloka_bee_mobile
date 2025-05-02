@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../common/widgets/lin_number_editing_field.dart';
 import '../../../common/widgets/lin_text_editing_field.dart';
+import '../../../data/models/e_request_hand_type.dart';
 import '../../authentication/bloc/user_bloc.dart';
 import '../bloc/create_request_bloc.dart';
 import '../bloc/create_request_event.dart';
@@ -20,9 +21,11 @@ class RequestHandModal extends StatefulWidget {
 
 class _RequestHandModalState extends State<RequestHandModal> {
   final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _volunteerCountContoller =
+  final TextEditingController _volunteerCountController =
       TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  ERequestHandType? _selectedType;
 
   @override
   void dispose() {
@@ -62,6 +65,26 @@ class _RequestHandModalState extends State<RequestHandModal> {
                             translate('request.hand.title'),
                             style: ZipFonts.big.style,
                           ),
+                          DropdownButtonFormField<ERequestHandType>(
+                            value: _selectedType,
+                            hint: Text(translate('request.hand.type.label')),
+                            items: ERequestHandType.values
+                                .map(
+                                  (final type) =>
+                                      DropdownMenuItem<ERequestHandType>(
+                                    value: type,
+                                    child: Text(type.text),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (final value) {
+                              if (value == null) return;
+
+                              context.read<CreateRequestBloc>().add(
+                                    SetRequestTypeEvent(value),
+                                  );
+                            },
+                          ),
                           LinTextField(
                             controller: _descriptionController,
                             label: translate('request.hand.description'),
@@ -75,9 +98,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                           CheckboxListTile(
                             value: state.isRemote,
                             onChanged: (final value) {
-                              if (value == null) {
-                                return;
-                              }
+                              if (value == null) return;
                               context.read<CreateRequestBloc>().add(
                                     SetIsRemoteEvent(value),
                                   );
@@ -91,9 +112,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                             CheckboxListTile(
                               value: state.isPhysicalStrength,
                               onChanged: (final value) {
-                                if (value == null) {
-                                  return;
-                                }
+                                if (value == null) return;
                                 context.read<CreateRequestBloc>().add(
                                       SetIsPhysicalStrengthEvent(value),
                                     );
@@ -114,9 +133,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                 lastDate: now.add(const Duration(days: 365)),
                               );
 
-                              if (dateOfBirth == null) {
-                                return;
-                              }
+                              if (dateOfBirth == null) return;
                               if (context.mounted) {
                                 context.read<CreateRequestBloc>().add(
                                       SetDeadlineEvent(dateOfBirth),
@@ -131,9 +148,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    '${translate(
-                                      'request.hand.deadline.description',
-                                    )}\n',
+                                    '${translate('request.hand.deadline.description')}\n',
                                   ),
                                   Text(
                                     translate(
@@ -174,11 +189,10 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                   minValue: 0,
                                   maxValue: 10000,
                                   onChanged: (final value) {
-                                    final double? parsedValue =
-                                        double.tryParse(value);
-                                    if (parsedValue == null) {
-                                      return;
-                                    }
+                                    final double? parsedValue = value.isNotEmpty
+                                        ? double.tryParse(value)
+                                        : 0;
+                                    if (parsedValue == null) return;
                                     context.read<CreateRequestBloc>().add(
                                           SetPriceEvent(parsedValue),
                                         );
@@ -204,7 +218,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                               ),
                               Expanded(
                                 child: LinNumberEditingField(
-                                  controller: _volunteerCountContoller
+                                  controller: _volunteerCountController
                                     ..text = '1',
                                   label: translate(
                                     'request.hand.volunteers.label',
@@ -214,9 +228,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                   onChanged: (final value) {
                                     final double? parsedValue =
                                         double.tryParse(value);
-                                    if (parsedValue == null) {
-                                      return;
-                                    }
+                                    if (parsedValue == null) return;
                                     context.read<CreateRequestBloc>().add(
                                           SetPriceEvent(parsedValue),
                                         );
@@ -227,12 +239,14 @@ class _RequestHandModalState extends State<RequestHandModal> {
                           ),
                           Center(
                             child: ElevatedButton(
-                              onPressed: () {
-                                context.read<CreateRequestBloc>().add(
-                                      SendRequestEvent(context),
-                                    );
-                                Navigator.of(context).pop();
-                              },
+                              onPressed: state.canCreateRequest
+                                  ? () {
+                                      context.read<CreateRequestBloc>().add(
+                                            SendRequestEvent(context),
+                                          );
+                                      Navigator.of(context).pop();
+                                    }
+                                  : null,
                               child: Text(
                                 translate('request.hand.submit'),
                               ),

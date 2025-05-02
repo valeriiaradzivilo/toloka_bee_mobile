@@ -58,57 +58,64 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
             runSpacing: 20,
             children: [
               if (!widget.state.onlyRemote)
-                Row(
+                Wrap(
+                  spacing: 5,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(
                       '${translate('give.hand.radius')}: ',
-                      style: ZipFonts.medium.style,
+                      style: ZipFonts.small.style,
                     ),
-                    IconButton(
-                      onPressed: () {
-                        if (widget.state.radius - 1 < 1) {
-                          return;
-                        }
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            if (widget.state.radius - 1 < 1) {
+                              return;
+                            }
 
-                        context.read<GiveHandBloc>().add(
-                              ChangeRadiusEvent(widget.state.radius - 1),
-                            );
-                      },
-                      icon: const Icon(Icons.remove_circle_outline),
-                    ),
-                    SizedBox(
-                      width: 60,
-                      child: LinNumberEditingField(
-                        maxValue: 1000,
-                        minValue: 1,
-                        controller: _controller
-                          ..text = widget.state.radius.toString(),
-                        onChanged: (final p0) {
-                          final parsed = int.tryParse(p0);
-
-                          if (parsed != null) {
                             context.read<GiveHandBloc>().add(
-                                  ChangeRadiusEvent(parsed),
+                                  ChangeRadiusEvent(widget.state.radius - 1),
                                 );
-                          }
-                        },
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        if (widget.state.radius + 1 > 1000) {
-                          return;
-                        }
+                          },
+                          icon: const Icon(Icons.remove_circle_outline),
+                        ),
+                        SizedBox(
+                          width: 40,
+                          child: LinNumberEditingField(
+                            maxValue: 1000,
+                            minValue: 1,
+                            controller: _controller
+                              ..text = widget.state.radius.toString(),
+                            onChanged: (final p0) {
+                              final parsed = int.tryParse(p0);
 
-                        context.read<GiveHandBloc>().add(
-                              ChangeRadiusEvent(widget.state.radius + 1),
-                            );
-                      },
-                      icon: const Icon(Icons.add_circle_outline),
-                    ),
-                    Text(
-                      'km',
-                      style: ZipFonts.medium.style,
+                              if (parsed != null) {
+                                context.read<GiveHandBloc>().add(
+                                      ChangeRadiusEvent(parsed),
+                                    );
+                              }
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (widget.state.radius + 1 > 1000) {
+                              return;
+                            }
+
+                            context.read<GiveHandBloc>().add(
+                                  ChangeRadiusEvent(widget.state.radius + 1),
+                                );
+                          },
+                          icon: const Icon(Icons.add_circle_outline),
+                        ),
+                        Text(
+                          'km',
+                          style: ZipFonts.small.style,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -122,7 +129,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                 },
                 title: Text(
                   translate('give.hand.only_remote'),
-                  style: ZipFonts.medium.style,
+                  style: ZipFonts.small.style,
                 ),
               ),
             ],

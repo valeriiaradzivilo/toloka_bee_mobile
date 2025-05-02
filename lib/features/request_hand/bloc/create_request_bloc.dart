@@ -22,6 +22,7 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
             location: const LatLng(0, 0),
             isPhysicalStrength: false,
             deadline: DateTime.now().add(const Duration(days: 7)),
+            requestType: null,
           ),
         ) {
     on<SetDeadlineEvent>(
@@ -87,5 +88,10 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
         },
       );
     });
+
+    on<SetRequestTypeEvent>(
+      (final event, final emit) =>
+          emit(state.copyWith(requestType: event.requestType)),
+    );
   }
 }

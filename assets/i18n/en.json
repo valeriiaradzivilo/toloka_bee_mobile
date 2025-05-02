@@ -181,13 +181,18 @@
             },
             "price": {
                 "title": "Price",
-                "description": "What is the approximate price for this task? For example, if the task is to go to the shop, write approximate price of the shopping list. Leave empty if there is no price.",
-                "label": "Price (hryvnya)"
+                "description": "What is the approximate price for this task?\nFor example, if the task is to go to the shop, write approximate price of the shopping list. Leave empty if there is no price.",
+                "label": "Price (₴)"
             },
             "volunteers": {
                 "title": "How many volunteers do you need?",
-                "description": "Select how many volunteers do you need to complete this task. Default value - 1. Maximum value - 5.",
-                "label": "Number of volunteers"
+                "description": "Select how many volunteers do you need to complete this task.\nDefault value - 1.\nMaximum value - 5.",
+                "label": "Volunteers"
+            },
+            "type": {
+                "title": "What type of help do you need?",
+                "description": "Select the type of help you need. This will help volunteers to find your request.",
+                "label": "Type of help"
             },
             "submit": "Create request",
             "success": "Request created successfully.",
@@ -237,6 +242,18 @@
         "accept": {
             "success": "Request accepted successfully. Now the request in progress is placed in your profile.",
             "error": "Error occurred while accepting the request. Please try again later."
+        },
+        "hand_type": {
+            "organization_of_volunteering": "Volunteering coordination",
+            "domestic_help": "Domestic help",
+            "medical_help": "Medical assistance",
+            "transportation": "Transportation",
+            "food_support": "Food aid",
+            "clothing_support": "Clothing donation",
+            "furniture_support": "Furniture supply",
+            "financial_aid": "Financial aid",
+            "psychological_support": "Psychological support",
+            "other": "Other"
         }
     },
     "give": {
@@ -244,7 +261,7 @@
             "no_requests": "No requests available at the moment. Check again later or set a bigger search radius.",
             "deadline": "Needs to be done by {date} ({days} days left)",
             "price": "Price: {price}",
-            "radius": "Search radius",
+            "radius": "Maximum search radius",
             "search": "Search",
             "only_remote": "Show only remote requests",
             "remote": "Remote",

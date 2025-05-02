@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../models/get_requests_model.dart';
@@ -82,12 +81,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
     try {
       final notifications = await _fcmDataSource.getAllRequests(location);
       return Right(
-        notifications
-            .where(
-              (final notification) =>
-                  notification.userId != FirebaseAuth.instance.currentUser?.uid,
-            )
-            .toList(),
+        notifications,
       );
     } catch (e) {
       logger.severe(
