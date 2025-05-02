@@ -58,7 +58,6 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
   final _telegramController = TextEditingController();
   final _whatsAppController = TextEditingController();
   bool _isPreferredValid = false;
-  bool _numberInitialized = false;
   ContactMethod? _preferredMethod;
   Country? _selectedCountry;
 
@@ -94,16 +93,6 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
   @override
   Widget build(final BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
-
-    WidgetsBinding.instance.addPostFrameCallback((final _) {
-      if (!_numberInitialized && widget.phone != null) {
-        final rem = _dropdownKey.currentState?.remainder;
-        if (rem != null) {
-          _phoneController.text = rem;
-          _numberInitialized = true;
-        }
-      }
-    });
 
     return SingleChildScrollView(
       child: Card(
@@ -211,64 +200,48 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                       },
                     ),
                   ),
-                ],
-              ),
-              const Gap(12),
-              Row(
-                children: [
-                  Icon(_icons[ContactMethod.email], color: primary),
-                  const Gap(12),
-                  Expanded(
-                    child: LinTextField(
-                      controller: _emailController,
-                      option: TextFieldOption.email,
-                      label: translate('contacts.email'),
-                      onChanged: widget.onEmailChanged,
+                  Tooltip(
+                    message: ContactMethod.phone.hint,
+                    triggerMode: TooltipTriggerMode.tap,
+                    child: Icon(
+                      Icons.info_outline,
+                      color: primary,
+                      size: 16,
                     ),
                   ),
                 ],
               ),
               const Gap(12),
-              Row(
-                children: [
-                  Icon(_icons[ContactMethod.viber], color: primary),
-                  const Gap(12),
-                  Expanded(
-                    child: LinTextField(
-                      controller: _viberController,
-                      label: translate('contacts.viber'),
-                      onChanged: widget.onViberChanged,
-                    ),
-                  ),
-                ],
+              _ContactRow(
+                icon: _icons[ContactMethod.email],
+                option: TextFieldOption.email,
+                controller: _emailController,
+                onChanged: widget.onEmailChanged,
+                method: ContactMethod.email,
               ),
               const Gap(12),
-              Row(
-                children: [
-                  Icon(_icons[ContactMethod.telegram], color: primary),
-                  const Gap(12),
-                  Expanded(
-                    child: LinTextField(
-                      controller: _telegramController,
-                      label: translate('contacts.telegram'),
-                      onChanged: widget.onTelegramChanged,
-                    ),
-                  ),
-                ],
+              _ContactRow(
+                icon: _icons[ContactMethod.viber],
+                option: TextFieldOption.undefined,
+                controller: _viberController,
+                onChanged: widget.onViberChanged,
+                method: ContactMethod.viber,
               ),
               const Gap(12),
-              Row(
-                children: [
-                  Icon(_icons[ContactMethod.whatsapp], color: primary),
-                  const Gap(12),
-                  Expanded(
-                    child: LinTextField(
-                      controller: _whatsAppController,
-                      label: translate('contacts.whatsapp'),
-                      onChanged: widget.onWhatsAppChanged,
-                    ),
-                  ),
-                ],
+              _ContactRow(
+                icon: _icons[ContactMethod.telegram],
+                option: TextFieldOption.undefined,
+                controller: _telegramController,
+                onChanged: widget.onTelegramChanged,
+                method: ContactMethod.telegram,
+              ),
+              const Gap(12),
+              _ContactRow(
+                icon: _icons[ContactMethod.whatsapp],
+                option: TextFieldOption.undefined,
+                controller: _whatsAppController,
+                onChanged: widget.onWhatsAppChanged,
+                method: ContactMethod.whatsapp,
               ),
               const Gap(20),
               Center(
@@ -290,4 +263,45 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
       ),
     );
   }
+}
+
+class _ContactRow extends StatelessWidget {
+  const _ContactRow({
+    required this.onChanged,
+    required this.controller,
+    required this.icon,
+    required this.option,
+    required this.method,
+  });
+  final TextEditingController controller;
+  final IconData? icon;
+  final TextFieldOption option;
+  final Function(String)? onChanged;
+  final ContactMethod method;
+
+  @override
+  Widget build(final BuildContext context) => Row(
+        children: [
+          Icon(icon, color: Theme.of(context).colorScheme.primary),
+          const Gap(12),
+          Expanded(
+            child: LinTextField(
+              controller: controller,
+              option: option,
+              label: method.text,
+              onChanged: onChanged,
+              maxSymbols: 20,
+            ),
+          ),
+          Tooltip(
+            message: method.hint,
+            triggerMode: TooltipTriggerMode.tap,
+            child: Icon(
+              Icons.info_outline,
+              color: Theme.of(context).colorScheme.primary,
+              size: 16,
+            ),
+          ),
+        ],
+      );
 }

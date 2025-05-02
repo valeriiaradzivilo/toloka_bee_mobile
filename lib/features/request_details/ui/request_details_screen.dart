@@ -96,9 +96,20 @@ class RequestDetailsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   if (state.requestNotificationModel.isRemote)
-                                    Text(
-                                      translate('request.details.remote'),
-                                      style: ZipFonts.medium.style,
+                                    DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: ZipColor.onTertiaryFixed,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          translate('request.details.remote'),
+                                          style: ZipFonts.medium.style.copyWith(
+                                            color: ZipColor.onTertiary,
+                                          ),
+                                        ),
+                                      ),
                                     )
                                   else
                                     Text(
@@ -150,6 +161,7 @@ class RequestDetailsScreen extends StatelessWidget {
                                   state.requestNotificationModel.status.text,
                             },
                           ),
+                          style: ZipFonts.small.style,
                         ),
                         if (!state.isCurrentUsersRequest) ...[
                           Center(
@@ -351,4 +363,8 @@ class __ReportDialogState extends State<_ReportDialog> {
           ),
         ],
       );
+  //TODO: Add notification for requester that request was accepted
+//TODO: Add subscription to request updates for requester
+//TODO: Implement ability to confirm request completion by requester and volunteer
+//TODO: Add a list for completed or in progress requests for volunteers
 }

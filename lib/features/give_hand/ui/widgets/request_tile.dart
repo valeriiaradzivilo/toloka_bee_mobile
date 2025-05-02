@@ -65,13 +65,13 @@ class RequestTile extends StatelessWidget {
         trailing: ElevatedButton(
           onPressed: () => Navigator.of(context).pushNamed(
             Routes.requestDetailsScreen,
-            arguments: request,
+            arguments: request.id,
           ),
           child: Text(translate('common.action.learn')),
         ),
         onTap: () => Navigator.of(context).pushNamed(
           Routes.requestDetailsScreen,
-          arguments: request,
+          arguments: request.id,
         ),
       );
 }

@@ -32,7 +32,6 @@ class UserProfileScreen extends StatelessWidget {
                     spacing: 20,
                     children: [
                       SizedBox.square(
-                        key: UniqueKey(),
                         dimension: 200,
                         child: Builder(
                           builder: (final context) {

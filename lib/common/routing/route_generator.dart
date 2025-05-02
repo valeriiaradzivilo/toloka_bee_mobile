@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../data/models/request_notification_model.dart';
 import '../../features/admin/user_profile/bloc/user_profile_bloc.dart';
 import '../../features/admin/user_profile/bloc/user_profile_event.dart';
 import '../../features/admin/user_profile/user_profile_screen.dart';
@@ -27,12 +26,12 @@ class RouteGenerator {
       case Routes.profileScreen:
         return MaterialPageRoute(builder: (final _) => const ProfileScreen());
       case Routes.requestDetailsScreen:
-        final args = settings.arguments as RequestNotificationModel;
+        final args = settings.arguments as String;
         return MaterialPageRoute(
           builder: (final _) => BlocProvider(
             create: (final _) => RequestDetailsBloc(GetIt.I)
               ..add(
-                FetchRequestDetails(args.id),
+                FetchRequestDetails(args),
               ),
             child: const RequestDetailsScreen(),
           ),

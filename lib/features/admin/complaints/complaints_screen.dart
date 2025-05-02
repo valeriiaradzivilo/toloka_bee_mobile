@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
@@ -115,10 +116,25 @@ class _UserComplaintCardState extends State<_UserComplaintCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 8,
                   children: [
-                    Text(
-                      'ID: ${widget.group.reportedUserId}',
-                      style: ZipFonts.small.style.copyWith(
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onLongPress: () {
+                        Clipboard.setData(
+                          ClipboardData(text: widget.group.reportedUserId),
+                        ).then((final _) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(translate('common.copied')),
+                              ),
+                            );
+                          }
+                        });
+                      },
+                      child: Text(
+                        'ID: ${widget.group.reportedUserId}',
+                        style: ZipFonts.small.style.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     Text(
@@ -294,10 +310,25 @@ class _RequestComplaintCardState extends State<_RequestComplaintCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 8,
                   children: [
-                    Text(
-                      'Request ID: ${widget.group.requestId}',
-                      style: ZipFonts.small.style.copyWith(
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onLongPress: () {
+                        Clipboard.setData(
+                          ClipboardData(text: widget.group.requestId),
+                        ).then((final _) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(translate('common.copied')),
+                              ),
+                            );
+                          }
+                        });
+                      },
+                      child: Text(
+                        'ID: ${widget.group.requestId}',
+                        style: ZipFonts.small.style.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     Text(
@@ -324,7 +355,15 @@ class _RequestComplaintCardState extends State<_RequestComplaintCard> {
               MenuAnchor(
                 controller: _menuAnchorController,
                 menuChildren: [
-                  //TODO: Open request
+                  ListTile(
+                    title: Text(translate('admin.complaint.open_request')),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        Routes.requestDetailsScreen,
+                        arguments: widget.group.requestId,
+                      );
+                    },
+                  ),
                   ListTile(
                     title: Text(translate('admin.complaint.delete_request')),
                     onTap: () {
@@ -362,7 +401,7 @@ class _RequestComplaintCardState extends State<_RequestComplaintCard> {
                   ListTile(
                     title: Text(
                       translate(
-                        'admin.complaint.delete_request_and_bloc_user',
+                        'admin.complaint.delete_request_and_block_user',
                       ),
                     ),
                     onTap: () {
@@ -371,7 +410,7 @@ class _RequestComplaintCardState extends State<_RequestComplaintCard> {
                         builder: (final context) => AlertDialog(
                           title: Text(
                             translate(
-                              'admin.complaint.delete_request_and_bloc_user',
+                              'admin.complaint.delete_request_and_block_user',
                             ),
                           ),
                           content: Text(

@@ -28,6 +28,7 @@ class LinTextField extends StatefulWidget {
     this.onChanged,
     this.onValidate,
     this.maxLines,
+    this.maxSymbols,
   });
   final TextEditingController controller;
   final String? initialValue;
@@ -38,6 +39,7 @@ class LinTextField extends StatefulWidget {
   final int? maxLines;
   final Function(String)? onChanged;
   final Function(bool)? onValidate;
+  final int? maxSymbols;
 
   @override
   State<LinTextField> createState() => _LinTextFieldState();
@@ -92,6 +94,7 @@ class _LinTextFieldState extends State<LinTextField> {
                 enableSuggestions: widget.option != TextFieldOption.password,
                 autocorrect: widget.option != TextFieldOption.password,
                 validator: (final value) => _validate(value, context),
+                maxLength: widget.maxSymbols,
                 decoration: InputDecoration(
                   label: Text(
                     widget.label ?? '',

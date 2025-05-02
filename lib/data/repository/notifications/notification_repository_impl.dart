@@ -180,4 +180,19 @@ class NotificationRepositoryImpl implements NotificationRepository {
       return Left(Fail('Failed to get all requests by user id'));
     }
   }
+
+  @override
+  Future<Either<Fail, List<RequestNotificationModel>>> getRequestsByIds(
+    final List<String> ids,
+  ) async {
+    try {
+      final notifications = await _fcmDataSource.getRequestsByIds(ids);
+      return Right(notifications);
+    } catch (e) {
+      logger.severe(
+        '❌ Error while getting requests by ids: ${e.toString()}',
+      );
+      return Left(Fail('Failed to get requests by ids'));
+    }
+  }
 }

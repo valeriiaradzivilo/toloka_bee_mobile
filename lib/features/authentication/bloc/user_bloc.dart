@@ -68,6 +68,16 @@ class UserBloc extends ZipBloc {
         });
       }),
     );
+    addSubscription(
+      Stream.periodic(const Duration(seconds: 120)).listen((final _) {
+        _getCurrentUserDataUsecase.call().then((final result) {
+          result.fold(
+            (final error) => _user.add(const OptionalNull()),
+            (final user) => _user.add(OptionalValue(user)),
+          );
+        });
+      }),
+    );
   }
 
   final BehaviorSubject<Optional<UserAuthModel>> _user =
@@ -104,6 +114,8 @@ class UserBloc extends ZipBloc {
       'l' when kDebugMode => await _loginUserUsecase('lera@z.com', 'Lera1234!'),
       't' when kDebugMode =>
         await _loginUserUsecase('test@user.com', 'Lera1234!'),
+      's' when kDebugMode =>
+        await _loginUserUsecase('sofiia@gmail.com', 'Lera1234!'),
       _ => await _loginUserUsecase(username, password),
     };
 
@@ -111,7 +123,6 @@ class UserBloc extends ZipBloc {
       (final error) {
         if (error case final UserBlockedException userBlockedException) {
           _showBannedInfo(userBlockedException.bannedUntil);
-          //TODO: add support contact info
           return false;
         }
 

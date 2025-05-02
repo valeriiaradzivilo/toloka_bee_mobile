@@ -32,4 +32,8 @@ abstract class FcmDataSource {
   Future<List<RequestNotificationModel>> getAllRequestsByUserId(
     final String userId,
   );
+
+  Future<List<RequestNotificationModel>> getRequestsByIds(
+    final List<String> ids,
+  );
 }

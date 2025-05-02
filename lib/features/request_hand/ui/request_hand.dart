@@ -70,6 +70,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                     SetDescriptionEvent(p0),
                                   );
                             },
+                            maxSymbols: 500,
                           ),
                           CheckboxListTile(
                             value: state.isRemote,

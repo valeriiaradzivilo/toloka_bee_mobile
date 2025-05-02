@@ -63,6 +63,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                       setState(() => _isAboutMeValid = p0.isNotEmpty);
                     }
                   },
+                  maxSymbols: 250,
                 ),
               ),
               MenuAnchor(

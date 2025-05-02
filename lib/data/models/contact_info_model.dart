@@ -40,4 +40,40 @@ enum ContactMethod {
         telegram => translate('contacts.telegram'),
         whatsapp => translate('contacts.whatsapp'),
       };
+
+  Uri? uri(final String value) {
+    switch (this) {
+      case ContactMethod.telegram:
+        final username = value.split('@').last;
+        return Uri.parse('https://t.me/$username');
+
+      case ContactMethod.whatsapp:
+        String number = value;
+        if (number.startsWith('+')) {
+          number = number.substring(1);
+        }
+        if (number.startsWith('0')) {
+          number = number.substring(1);
+        }
+        if (number.startsWith('0')) {
+          number = number.substring(1);
+        }
+        return Uri.parse('https://wa.me/$value');
+      case ContactMethod.phone:
+        return Uri.parse('tel:$value');
+      case ContactMethod.email:
+        return Uri.parse('mailto:$value');
+
+      default:
+        return null;
+    }
+  }
+
+  String get hint => switch (this) {
+        phone => translate('contacts.phone_hint'),
+        email => translate('contacts.email_hint'),
+        viber => translate('contacts.viber_hint'),
+        telegram => translate('contacts.telegram_hint'),
+        whatsapp => translate('contacts.whatsapp_hint'),
+      };
 }

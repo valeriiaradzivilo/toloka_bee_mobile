@@ -346,4 +346,36 @@ class FcmDataSourceImpl implements FcmDataSource {
       }
     });
   }
+
+  @override
+  Future<List<RequestNotificationModel>> getRequestsByIds(
+    final List<String> ids,
+  ) async {
+    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
+
+    if (accessToken.isEmpty) {
+      throw Exception('Access token is null');
+    }
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    final response = await _dio.post(
+      '$_basePathRequest/get-by-ids',
+      options: Options(headers: headers),
+      data: jsonEncode(ids),
+    );
+
+    if (response.statusCode == 200) {
+      return (response.data as List)
+          .map((final e) => RequestNotificationModel.fromJson(e))
+          .toList();
+    } else {
+      throw Exception(
+        'Failed to get requests by ids: ${response.statusCode}',
+      );
+    }
+  }
 }

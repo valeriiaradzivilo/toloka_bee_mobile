@@ -51,7 +51,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   Future<void> logout() => _auth.signOut();
 
   @override
-  Future<void> register(final UserAuthModel user) async {
+  Future<String> register(final UserAuthModel user) async {
     if (user.password == null) {
       throw Exception('Password is required');
     }
@@ -85,10 +85,12 @@ class AuthDataSourceImpl implements AuthDataSource {
 
     if (response.statusCode == 200) {
       final userRecord = response.data;
-      logger.info('User registered successfully: $userRecord');
-    } else {
-      throw Exception('Failed to register user: ${response.statusCode}');
+      if (userRecord is String && userRecord.isNotEmpty) {
+        return userRecord;
+      }
     }
+
+    throw Exception('Failed to register user: ${response.statusCode}');
   }
 
   @override

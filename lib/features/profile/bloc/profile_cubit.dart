@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
@@ -11,8 +12,11 @@ import '../../../data/service/snackbar_service.dart';
 import '../../../data/usecase/contacts/get_contacts_by_user_id_usecase.dart';
 import '../../../data/usecase/contacts/save_contacts_usecase.dart';
 import '../../../data/usecase/contacts/update_contacts_usecase.dart';
+import '../../../data/usecase/requests/get_requests_by_ids_usecase.dart';
 import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
+import '../../../data/usecase/user_management/delete_user_usecase.dart';
 import '../../../data/usecase/user_management/update_user_usecase.dart';
+import '../../../data/usecase/volunteer_work/get_volunteer_work_by_user_id.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
@@ -20,9 +24,13 @@ class ProfileCubit extends Cubit<ProfileState> {
       : _updateUserUsecase = getIt<UpdateUserUsecase>(),
         _getRequestsByUserIdUsecase = getIt<GetRequestsByUserIdUsecase>(),
         _getContactByUserIdUsecase = getIt<GetContactByUserIdUsecase>(),
+        _getVolunteerWorksByUserIdUsecase =
+            getIt<GetVolunteerWorksByUserIdUsecase>(),
         _updateContactUsecase = getIt<UpdateContactUsecase>(),
-        _snackbarService = getIt<SnackbarService>(),
         _saveContactUsecase = getIt<SaveContactUsecase>(),
+        _getRequestsByIdsUsecase = getIt<GetRequestsByIdsUsecase>(),
+        _snackbarService = getIt<SnackbarService>(),
+        _deleteUserUsecase = getIt<DeleteUserUsecase>(),
         super(const ProfileLoading());
 
   final UpdateUserUsecase _updateUserUsecase;
@@ -30,6 +38,9 @@ class ProfileCubit extends Cubit<ProfileState> {
   final GetContactByUserIdUsecase _getContactByUserIdUsecase;
   final UpdateContactUsecase _updateContactUsecase;
   final SaveContactUsecase _saveContactUsecase;
+  final GetVolunteerWorksByUserIdUsecase _getVolunteerWorksByUserIdUsecase;
+  final GetRequestsByIdsUsecase _getRequestsByIdsUsecase;
+  final DeleteUserUsecase _deleteUserUsecase;
 
   final SnackbarService _snackbarService;
 
@@ -46,26 +57,47 @@ class ProfileCubit extends Cubit<ProfileState> {
         ProfileLoaded(
           user: user,
           requests: [],
+          volunteerWorks: [],
           contactInfo: null,
         ),
       ),
       (final requests) async {
         final contactsResult = await _getContactByUserIdUsecase.call(user.id);
-        contactsResult.fold(
-          (final failure) => emit(
-            ProfileLoaded(
-              user: user,
-              requests: requests,
-              contactInfo: null,
-            ),
+        final worksResult =
+            await _getVolunteerWorksByUserIdUsecase.call(user.id);
+
+        await contactsResult.fold(
+          (final failure) async => emit(
+            const ProfileError('Unable to load contacts'),
           ),
-          (final contactInfo) => emit(
-            ProfileLoaded(
-              user: user,
-              requests: requests,
-              contactInfo: contactInfo,
-            ),
-          ),
+          (final contactInfo) async {
+            await worksResult.fold(
+              (final failure) async => emit(
+                const ProfileError('Unable to load volunteer works'),
+              ),
+              (final works) async {
+                final workRequestsResult = await _getRequestsByIdsUsecase.call(
+                  works.map((final work) => work.requestId).toList(),
+                );
+
+                workRequestsResult.fold(
+                  (final failure) => emit(
+                    const ProfileError('Unable to load volunteer works'),
+                  ),
+                  (final workRequests) {
+                    emit(
+                      ProfileLoaded(
+                        user: user,
+                        requests: requests,
+                        volunteerWorks: workRequests,
+                        contactInfo: contactInfo,
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          },
         );
       },
     );
@@ -75,7 +107,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (state case final ProfileUpdating currentState) {
       emit(
         currentState.copyWith(
-          changedUser: currentState.changedUser.copyWith(about: about),
+          user: currentState.changedUser.copyWith(about: about),
         ),
       );
     }
@@ -85,7 +117,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (state case final ProfileUpdating currentState) {
       emit(
         currentState.copyWith(
-          changedUser: currentState.changedUser.copyWith(position: position),
+          user: currentState.changedUser.copyWith(position: position),
         ),
       );
     }
@@ -95,7 +127,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (state case final ProfileUpdating currentState) {
       emit(
         currentState.copyWith(
-          changedUser: currentState.changedUser.copyWith(password: password),
+          user: currentState.changedUser.copyWith(password: password),
         ),
       );
     }
@@ -115,7 +147,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (state case final ProfileUpdating currentState) {
       emit(
         currentState.copyWith(
-          changedUser: currentState.changedUser.copyWith(name: name),
+          user: currentState.changedUser.copyWith(name: name),
         ),
       );
     }
@@ -125,7 +157,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (state case final ProfileUpdating currentState) {
       emit(
         currentState.copyWith(
-          changedUser: currentState.changedUser.copyWith(surname: surname),
+          user: currentState.changedUser.copyWith(surname: surname),
         ),
       );
     }
@@ -155,6 +187,25 @@ class ProfileCubit extends Cubit<ProfileState> {
       ProfileUpdating(
         changedUser: _currentUser,
       ),
+    );
+  }
+
+  void deleteUser() async {
+    emit(const ProfileLoading());
+    final result = await _deleteUserUsecase.call(_currentUser.id);
+    result.fold(
+      (final failure) => emit(
+        const ProfileError('Unable to delete user'),
+      ),
+      (final _) {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('profile.deleted'),
+            type: EPopupType.success,
+          ),
+        );
+        FirebaseAuth.instance.signOut();
+      },
     );
   }
 

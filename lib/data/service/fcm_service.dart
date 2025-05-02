@@ -103,6 +103,7 @@ class FcmService {
         ) /
         1000;
 
+//TODO: Add ability to set distance in profile
     if (distanceKm > 100) return;
 
     ZipSnackbar.show(
@@ -118,7 +119,7 @@ class FcmService {
         onPressed: (final BuildContext context) {
           Navigator.of(context).pushNamed(
             Routes.requestDetailsScreen,
-            arguments: data,
+            arguments: data.id,
           );
         },
         type: EPopupType.helpNeeded,

@@ -57,10 +57,11 @@ class RegisterBloc extends ZipBloc {
       photoFormat: _photoController.value.contentType,
     );
     final result = await _registerUserUsecase(user);
-    if (result.isRight()) {
+
+    await result.fold((final _) {}, (final registeredUser) async {
       final contact = ContactInfoModel(
         id: const Uuid().v4(),
-        userId: user.id,
+        userId: registeredUser.id,
         preferredMethod: _preferredMethodController.value!,
         phone: _phoneController.value.isEmpty ? null : _phoneController.value,
         email: _emailContactController.value.isEmpty
@@ -75,7 +76,8 @@ class RegisterBloc extends ZipBloc {
             : _whatsAppController.value,
       );
       await _saveContactUsecase(contact);
-    }
+    });
+
     return result.isRight();
   }
 

@@ -18,10 +18,10 @@ import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../authentication/bloc/user_bloc.dart';
 import '../../give_hand/ui/widgets/request_tile.dart';
-import '../../registration/ui/widget/steps/fourth_step_create_account.dart';
 import '../bloc/profile_cubit.dart';
 import '../bloc/profile_state.dart';
 import 'profile_edit_screen.dart';
+import 'widgets/profile_contacts.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -56,6 +56,7 @@ class ProfileScreen extends StatelessWidget {
                   ProfileUpdated() ||
                   ProfileLoading() =>
                     const Center(child: CircularProgressIndicator()),
+                  ProfileUpdating() => const ProfileEditScreen(),
                   ProfileLoaded(
                     :final user,
                     :final requests,
@@ -65,6 +66,7 @@ class ProfileScreen extends StatelessWidget {
                       user: user,
                       requests: requests,
                       contactInfo: contactInfo,
+                      volunteerWorks: state.volunteerWorks,
                     ),
                   ProfileError(:final message) => Center(
                       child: Column(
@@ -85,7 +87,6 @@ class ProfileScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ProfileUpdating() => const ProfileEditScreen(),
                 },
               ),
             ),
@@ -98,284 +99,211 @@ class _LoadedProfile extends StatelessWidget {
   const _LoadedProfile({
     required this.user,
     required this.requests,
-    this.contactInfo,
+    required this.contactInfo,
+    required this.volunteerWorks,
   });
   final UserAuthModel user;
   final List<RequestNotificationModel> requests;
   final ContactInfoModel? contactInfo;
+  final List<RequestNotificationModel> volunteerWorks;
 
   @override
-  Widget build(final BuildContext context) {
-    final cubit = context.read<ProfileCubit>();
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        spacing: 20,
-        children: [
-          TextButton.icon(
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, Routes.mainScreen),
-            label: Text(translate('profile.actions.back')),
-            icon: const Icon(
-              Icons.arrow_back,
-              color: ZipColor.primary,
+  Widget build(final BuildContext context) => SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 20,
+          children: [
+            TextButton.icon(
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, Routes.mainScreen),
+              label: Text(translate('profile.actions.back')),
+              icon: const Icon(
+                Icons.arrow_back,
+                color: ZipColor.primary,
+              ),
             ),
-          ),
-          SizedBox.square(
-            key: UniqueKey(),
-            dimension: 150,
-            child: Builder(
-              builder: (final context) {
-                try {
-                  final bytes = base64Decode(user.photo);
-                  return Image.memory(
-                    bytes,
-                    fit: BoxFit.scaleDown,
-                    errorBuilder: (final _, final __, final ___) =>
-                        const Icon(Icons.person, size: 75),
-                  );
-                } catch (_) {
-                  return const Icon(Icons.person, size: 75);
-                }
-              },
+            SizedBox.square(
+              dimension: 150,
+              child: Builder(
+                builder: (final context) {
+                  try {
+                    final bytes = base64Decode(user.photo);
+                    return Image.memory(
+                      bytes,
+                      fit: BoxFit.scaleDown,
+                      errorBuilder: (final _, final __, final ___) =>
+                          const Icon(Icons.person, size: 75),
+                    );
+                  } catch (_) {
+                    return const Icon(Icons.person, size: 75);
+                  }
+                },
+              ),
             ),
-          ),
-          Text(
-            '${user.name} ${user.surname}',
-            style: ZipFonts.big.style,
-          ),
-          Text(
-            user.email,
-            style: ZipFonts.small.style.copyWith(
+            Text(
+              '${user.name} ${user.surname}',
+              style: ZipFonts.big.style,
+            ),
+            Text(
+              user.email,
+              style: ZipFonts.small.style.copyWith(
+                color: ZipColor.onSurfaceVariant.withValues(
+                  alpha: 0.7,
+                ),
+              ),
+            ),
+            if (requests.isNotEmpty) ...[
+              const Divider(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  translate('profile.requests'),
+                  style: ZipFonts.medium.style,
+                ),
+              ),
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (final _, final index) =>
+                      _RequestTile(requests[index]),
+                  itemCount: requests.length,
+                ),
+              ),
+            ],
+            _VolunteerWork(volunteerWorks),
+            const Divider(),
+            ProfileContacts(
+              contactInfo: contactInfo,
+            ),
+            Divider(
               color: ZipColor.onSurfaceVariant.withValues(
                 alpha: 0.7,
               ),
             ),
-          ),
-          const Divider(),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              translate('profile.requests'),
-              style: ZipFonts.medium.style,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '${translate(
+                  'profile.about',
+                )} ${user.about}',
+                style: ZipFonts.small.style,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 200,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (final _, final index) {
-                final request = requests[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Container(
-                        width: 300,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: ZipColor.primary,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: RequestTile(request: request),
-                      ),
-                      Transform.rotate(
-                        angle: 0.2,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: request.status.color,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            request.status.text,
-                            style: ZipFonts.small.style.copyWith(
-                              color: ZipColor.onPrimary,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                translate(
+                  'profile.age',
+                  args: {
+                    'age': (DateTime.parse(user.birthDate)
+                                .difference(DateTime.now())
+                                .inDays ~/
+                            365)
+                        .abs(),
+                  },
+                ),
+                style: ZipFonts.small.style,
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => context.read<ProfileCubit>().editUser(),
+              label: Text(translate('profile.actions.edit')),
+              icon: const Icon(
+                Icons.edit,
+                color: ZipColor.onPrimary,
+              ),
+            ),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ZipColor.onErrorContainer,
+              ),
+              onPressed: () {
+                context.read<ProfileCubit>().deleteUser();
+                Navigator.pushReplacementNamed(
+                  context,
+                  Routes.mainScreen,
                 );
               },
-              itemCount: requests.length,
-            ),
-          ),
-          const Divider(),
-          Text(
-            translate('profile.contacts.title'),
-            style: ZipFonts.medium.style,
-          ),
-          Text(
-            translate('profile.contacts.subtitle'),
-            style: ZipFonts.tiny.style.copyWith(
-              color: ZipColor.onSurfaceVariant.withValues(
-                alpha: 0.7,
+              label: Text(translate('profile.actions.delete')),
+              icon: const Icon(
+                Icons.delete_forever,
+                color: ZipColor.onPrimary,
               ),
             ),
-          ),
-          if (contactInfo == null) ...[
-            Text(
-              translate('profile.contacts.no'),
-              style: ZipFonts.small.error,
-              textAlign: TextAlign.center,
-            ),
-          ] else ...[
-            if (contactInfo!.phone != null)
-              Text(
-                '${ContactMethod.phone.text}: ${contactInfo!.phone!}',
-                style: ZipFonts.small.style,
-              ),
-            if (contactInfo!.email != null)
-              Text(
-                '${ContactMethod.email.text}: ${contactInfo!.email!}',
-                style: ZipFonts.small.style,
-              ),
-            if (contactInfo!.viber != null)
-              Text(
-                '${ContactMethod.viber.text}: ${contactInfo!.viber!}',
-                style: ZipFonts.small.style,
-              ),
-            if (contactInfo!.whatsapp != null)
-              Text(
-                '${ContactMethod.whatsapp.text}: ${contactInfo!.whatsapp!}',
-                style: ZipFonts.small.style,
-              ),
-            if (contactInfo!.telegram != null)
-              Text(
-                '${ContactMethod.telegram.text}: ${contactInfo!.telegram!}',
-                style: ZipFonts.small.style,
-              ),
-            Text(
-              "${translate(
-                'contacts.preferred',
-              )}: ${contactInfo!.preferredMethod.text.toLowerCase()}",
-              style: ZipFonts.small.style,
-            ),
+            const Gap(20),
           ],
-          ElevatedButton.icon(
-            onPressed: () async {
-              String? phone = contactInfo?.phone;
-              String? viber = contactInfo?.viber;
-              String? telegram = contactInfo?.telegram;
-              String? whatsapp = contactInfo?.whatsapp;
-              String? email = contactInfo?.email;
-              ContactMethod? preferredMethod = contactInfo?.preferredMethod;
-              final change = await showDialog<bool?>(
-                context: context,
-                builder: (final context) => Dialog(
-                  insetPadding: const EdgeInsets.all(2),
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          FourthStepCreateAccount(
-                            onPhoneChanged: (final value) => phone = value,
-                            onViberChanged: (final value) => viber = value,
-                            onTelegramChanged: (final value) =>
-                                telegram = value,
-                            onWhatsAppChanged: (final value) =>
-                                whatsapp = value,
-                            onEmailChanged: (final value) => email = value,
-                            onPreferredMethodChanged: (final value) =>
-                                preferredMethod = value,
-                            showNextBackButton: false,
-                            phone: contactInfo?.phone,
-                            viber: contactInfo?.viber,
-                            telegram: contactInfo?.telegram,
-                            whatsApp: contactInfo?.whatsapp,
-                            email: contactInfo?.email,
-                          ),
-                          ElevatedButton.icon(
-                            onPressed: () => Navigator.pop(context, true),
-                            label: Text(translate('profile.contacts.save')),
-                            icon: const Icon(
-                              Icons.save,
-                              color: ZipColor.onPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+        ),
+      );
+}
+
+class _RequestTile extends StatelessWidget {
+  const _RequestTile(this.request);
+  final RequestNotificationModel request;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          alignment: Alignment.topRight,
+          children: [
+            Container(
+              width: 300,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: ZipColor.primary,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: RequestTile(request: request),
+            ),
+            Transform.rotate(
+              angle: 0.2,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 5,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: request.status.color,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  request.status.text,
+                  style: ZipFonts.small.style.copyWith(
+                    color: ZipColor.onPrimary,
                   ),
                 ),
-              );
-              if (change == null || !change) {
-                return;
-              }
+              ),
+            ),
+          ],
+        ),
+      );
+}
 
-              if (preferredMethod == null) {
-                return;
-              }
+class _VolunteerWork extends StatelessWidget {
+  const _VolunteerWork(this.volunteerWorks);
+  final List<RequestNotificationModel> volunteerWorks;
 
-              cubit.addContactInfo(
-                phone: phone,
-                viber: viber,
-                telegram: telegram,
-                whatsapp: whatsapp,
-                email: email,
-                preferredMethod: preferredMethod!,
-              );
-            },
-            label: Text(translate('profile.contacts.edit')),
-            icon: const Icon(
-              Icons.contact_mail_rounded,
-              color: ZipColor.onPrimary,
+  @override
+  Widget build(final BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (volunteerWorks.isNotEmpty) ...[
+            Text(
+              translate('profile.volunteer_work'),
+              style: ZipFonts.medium.style,
             ),
-          ),
-          Divider(
-            color: ZipColor.onSurfaceVariant.withValues(
-              alpha: 0.7,
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                itemBuilder: (final _, final index) =>
+                    _RequestTile(volunteerWorks[index]),
+                itemCount: volunteerWorks.length,
+                scrollDirection: Axis.horizontal,
+              ),
             ),
-          ),
-          Text(
-            '${translate(
-              'profile.about',
-            )} ${user.about}',
-            style: ZipFonts.small.style,
-          ),
-          Text(
-            translate(
-              'profile.age',
-              args: {
-                'age': (DateTime.parse(user.birthDate)
-                            .difference(DateTime.now())
-                            .inDays ~/
-                        365)
-                    .abs(),
-              },
-            ),
-            style: ZipFonts.small.style,
-          ),
-          ElevatedButton.icon(
-            onPressed: () => context.read<ProfileCubit>().editUser(),
-            label: Text(translate('profile.actions.edit')),
-            icon: const Icon(
-              Icons.edit,
-              color: ZipColor.onPrimary,
-            ),
-          ),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: ZipColor.onErrorContainer,
-            ),
-            onPressed: () => context.read<ProfileCubit>().editUser(),
-            label: Text(translate('profile.actions.delete')),
-            icon: const Icon(
-              Icons.delete_forever,
-              color: ZipColor.onPrimary,
-            ),
-          ),
-          const Gap(20),
+          ],
         ],
-      ),
-    );
-  }
+      );
 }
