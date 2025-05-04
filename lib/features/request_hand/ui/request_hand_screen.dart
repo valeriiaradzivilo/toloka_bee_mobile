@@ -21,8 +21,6 @@ class RequestHandModal extends StatefulWidget {
 
 class _RequestHandModalState extends State<RequestHandModal> {
   final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _volunteerCountController =
-      TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   ERequestHandType? _selectedType;
@@ -247,24 +245,56 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                     ),
                                   ),
                                   Expanded(
-                                    child: LinNumberEditingField(
-                                      controller: _volunteerCountController
-                                        ..text = '1',
-                                      label: translate(
-                                        'request.hand.volunteers.label',
-                                      ),
-                                      minValue: 1,
-                                      maxValue: 5,
-                                      onChanged: (final value) {
-                                        final double? parsedValue =
-                                            double.tryParse(value);
-                                        if (parsedValue == null) return;
-                                        context.read<CreateRequestBloc>().add(
-                                              SetRequiredVolunteersCountEvent(
-                                                parsedValue.toInt(),
-                                              ),
-                                            );
-                                      },
+                                    child: Row(
+                                      spacing: 2,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            if (state.requiredVolunteersCount <
+                                                2) {
+                                              return;
+                                            }
+
+                                            context
+                                                .read<CreateRequestBloc>()
+                                                .add(
+                                                  SetRequiredVolunteersCountEvent(
+                                                    state.requiredVolunteersCount -
+                                                        1,
+                                                  ),
+                                                );
+                                          },
+                                          icon: const Icon(
+                                            Icons.remove,
+                                            size: 40,
+                                          ),
+                                        ),
+                                        Text(
+                                          state.requiredVolunteersCount
+                                              .toString(),
+                                          style: ZipFonts.medium.style,
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            if (state.requiredVolunteersCount >
+                                                4) {
+                                              return;
+                                            }
+                                            context
+                                                .read<CreateRequestBloc>()
+                                                .add(
+                                                  SetRequiredVolunteersCountEvent(
+                                                    state.requiredVolunteersCount +
+                                                        1,
+                                                  ),
+                                                );
+                                          },
+                                          icon: const Icon(
+                                            Icons.add,
+                                            size: 40,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -300,5 +330,4 @@ class _RequestHandModalState extends State<RequestHandModal> {
           ),
         ),
       );
-  //TODO: Зміна кількості волонтерів не працює
 }

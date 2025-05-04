@@ -86,11 +86,14 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
     );
 
     on<SetRequiredVolunteersCountEvent>(
-      (final event, final emit) => emit(
-        state.loadedState.copyWith(
-          requiredVolunteersCount: event.requiredVolunteersCount,
-        ),
-      ),
+      (final event, final emit) {
+        if (event.requiredVolunteersCount == null) return;
+        emit(
+          state.loadedState.copyWith(
+            requiredVolunteersCount: event.requiredVolunteersCount,
+          ),
+        );
+      },
     );
 
     on<SendRequestEvent>((final event, final emit) async {

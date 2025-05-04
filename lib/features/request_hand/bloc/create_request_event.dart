@@ -56,7 +56,7 @@ class SetRequestTypeEvent extends CreateRequestEvent {
 }
 
 class SetRequiredVolunteersCountEvent extends CreateRequestEvent {
-  final int requiredVolunteersCount;
+  final int? requiredVolunteersCount;
 
   SetRequiredVolunteersCountEvent(this.requiredVolunteersCount);
 }

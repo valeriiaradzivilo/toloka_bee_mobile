@@ -10,9 +10,6 @@ analyzer:
     - "gen/**"
 
 
-custom_lint:
-class_match_file_name: true
-
 # Lint rules
 linter:
   rules:
