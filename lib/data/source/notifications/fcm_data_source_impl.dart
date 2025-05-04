@@ -156,6 +156,9 @@ class FcmDataSourceImpl implements FcmDataSource {
     if (response.statusCode == 200) {
       return (response.data as List)
           .map((final e) => RequestNotificationModel.fromJson(e))
+          .where(
+            (final element) => element.status.canBeHelped,
+          )
           .toList();
     } else {
       throw Exception(
@@ -337,9 +340,17 @@ class FcmDataSourceImpl implements FcmDataSource {
     )
         .then((final response) {
       if (response.statusCode == 200) {
-        return (response.data as List)
+        final result = (response.data as List)
             .map((final e) => RequestNotificationModel.fromJson(e))
             .toList();
+
+        if (userId == FirebaseAuth.instance.currentUser?.uid) {
+          result.sort(
+            (final a, final b) => a.status.compareTo(b.status),
+          );
+        }
+
+        return result;
       } else {
         throw Exception(
           'Failed to get all requests by user id: ${response.statusCode}',

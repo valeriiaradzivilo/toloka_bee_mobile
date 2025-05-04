@@ -50,15 +50,6 @@ class UserBloc extends ZipBloc {
           await logout();
           return;
         }
-
-        if (users[1].valueOrNull case OptionalValue<UserAuthModel>(:final value)
-            when value.position.toLowerCase() ==
-                EPosition.requester.name.toLowerCase()) {
-          return;
-        }
-
-        _fcmService.listenToMessages();
-        _fcmService.listenToBackgroundMessages();
       }),
     );
 

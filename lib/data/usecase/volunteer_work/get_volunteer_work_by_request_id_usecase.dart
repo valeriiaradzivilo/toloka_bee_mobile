@@ -12,5 +12,5 @@ class GetVolunteerWorkByRequestIdUsecase
 
   @override
   Future<Either<Fail, List<VolunteerWorkModel>>> call(final String userId) =>
-      repository.getWorksByRequester(userId);
+      repository.getWorksByRequestId(userId);
 }

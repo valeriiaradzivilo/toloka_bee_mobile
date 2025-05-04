@@ -63,6 +63,7 @@ final GetIt serviceLocator = GetIt.instance;
 
 Future<void> init() async {
   await initDatasources();
+  await initServices();
   await initRepository();
   await initUseCases();
 }
@@ -94,10 +95,13 @@ Future<void> initDatasources() async {
   serviceLocator.registerLazySingleton<VolunteerWorkDataSource>(
     () => VolunteerWorkDataSourceImpl(dio),
   );
+}
 
-  serviceLocator.registerSingleton<SnackbarService>(SnackbarService());
+Future<void> initServices() async {
   serviceLocator
-      .registerLazySingleton<FcmService>(() => FcmService(serviceLocator()));
+      .registerLazySingleton<SnackbarService>(() => SnackbarService());
+  serviceLocator
+      .registerLazySingleton<FcmService>(() => FcmService(serviceLocator));
 }
 
 Future<void> initRepository() async {

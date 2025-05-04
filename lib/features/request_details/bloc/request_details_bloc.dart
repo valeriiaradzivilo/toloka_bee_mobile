@@ -14,12 +14,16 @@ import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../../data/models/user_complaint_model.dart';
+import '../../../data/models/volunteer_work_model.dart';
 import '../../../data/service/snackbar_service.dart';
 import '../../../data/usecase/complaints/report_request_usecase.dart';
 import '../../../data/usecase/complaints/report_user_usecase.dart';
+import '../../../data/usecase/contacts/get_contacts_by_user_id_usecase.dart';
 import '../../../data/usecase/get_notification_by_id_usecase.dart';
 import '../../../data/usecase/requests/delete_request_usecase.dart';
 import '../../../data/usecase/user_management/get_user_by_id_usecase.dart';
+import '../../../data/usecase/volunteer_work/confirm_volunteer_work_by_requester_usecase.dart';
+import '../../../data/usecase/volunteer_work/confirm_volunteer_work_by_volunteer_usecase.dart';
 import '../../../data/usecase/volunteer_work/get_volunteer_work_by_request_id_usecase.dart';
 import '../../../data/usecase/volunteer_work/start_volunteer_work_usecase.dart';
 import 'request_details_event.dart';
@@ -37,12 +41,23 @@ class RequestDetailsBloc
         _startVolunteerWorkUsecase = locator<StartVolunteerWorkUsecase>(),
         _getVolunteerWorkByRequestIdUsecase =
             locator<GetVolunteerWorkByRequestIdUsecase>(),
+        _confirmVolunteerWorkByRequesterUsecase =
+            locator<ConfirmVolunteerWorkByRequesterUsecase>(),
+        _confirmVolunteerWorkByVolunteerUsecase =
+            locator<ConfirmVolunteerWorkByVolunteerUsecase>(),
+        _getContactByUserIdUsecase = locator<GetContactByUserIdUsecase>(),
         super(const RequestDetailsLoading()) {
     on<FetchRequestDetails>(_onFetchRequestDetails);
     on<AcceptRequest>(_onAcceptRequest);
     on<RemoveRequest>(_onRemoveRequest);
     on<ReportRequestEvent>(_onReportRequest);
     on<ReportUserEvent>(_onReportUser);
+    on<ConfirmRequestIsCompletedVolunteerEvent>(
+      _confirmRequestIsCompletedVolunteer,
+    );
+    on<ConfirmRequestIsCompletedRequesterEvent>(
+      _confirmRequestIsCompletedRequester,
+    );
   }
 
   Future<void> _onFetchRequestDetails(
@@ -73,20 +88,28 @@ class RequestDetailsBloc
               currentPosition.longitude,
             );
 
+            final contactsEither = await _getContactByUserIdUsecase(
+              requestNotificationModel.userId,
+            );
+
+            final contactsResult = contactsEither.fold(
+              (final failure) => null,
+              (final contactInfo) => contactInfo,
+            );
+
             final volunteerWork = await _getVolunteerWorkByRequestIdUsecase(
               requestNotificationModel.id,
             );
 
-            final volunteersFutures = volunteerWork
-                .fold(
-                  (final failure) => [],
-                  (final volunteerWorkList) => volunteerWorkList
-                      .map((final e) => e.volunteerId)
-                      .toList(),
-                )
-                .map(
-                  (final volunteerId) => _getUserByIdUsecase(volunteerId),
-                );
+            final volunteerWorksResult = volunteerWork.fold(
+              (final failure) => <VolunteerWorkModel>[],
+              (final volunteerWorkList) => volunteerWorkList,
+            );
+
+            final volunteersFutures =
+                volunteerWorksResult.map((final e) => e.volunteerId).map(
+                      (final volunteerId) => _getUserByIdUsecase(volunteerId),
+                    );
 
             final volunteers =
                 await Future.wait<Either<Fail<dynamic>, UserAuthModel>>(
@@ -106,7 +129,7 @@ class RequestDetailsBloc
               RequestDetailsLoaded(
                 requestNotificationModel: requestNotificationModel,
                 distance: distance / 1000,
-                user: userAuthModel,
+                requester: userAuthModel,
                 image: base64Decode(userAuthModel.photo),
                 isCurrentUsersRequest:
                     userAuthModel.id == FirebaseAuth.instance.currentUser?.uid,
@@ -114,7 +137,9 @@ class RequestDetailsBloc
                   (final volunteer) =>
                       volunteer.id == FirebaseAuth.instance.currentUser?.uid,
                 ),
+                volunteerWorks: volunteerWorksResult,
                 volunteers: volunteersList,
+                requesterContactInfo: contactsResult,
               ),
             );
           },
@@ -267,13 +292,82 @@ class RequestDetailsBloc
     );
   }
 
+  Future<void> _confirmRequestIsCompletedVolunteer(
+    final ConfirmRequestIsCompletedVolunteerEvent event,
+    final Emitter<RequestDetailsState> emit,
+  ) async {
+    emit(const RequestDetailsLoading());
+    if (event.workId == null) return;
+    final result = await _confirmVolunteerWorkByVolunteerUsecase(
+      ConfirmVolunteerWorkParams(
+        workId: event.workId!,
+        requestId: event.requestId,
+      ),
+    );
+    await result.fold(
+      (final failure) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.confirm.error'),
+            type: EPopupType.error,
+          ),
+        );
+      },
+      (final success) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.confirm.success'),
+            type: EPopupType.success,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _confirmRequestIsCompletedRequester(
+    final ConfirmRequestIsCompletedRequesterEvent event,
+    final Emitter<RequestDetailsState> emit,
+  ) async {
+    emit(const RequestDetailsLoading());
+    if (event.workId == null) return;
+    final result = await _confirmVolunteerWorkByRequesterUsecase(
+      ConfirmVolunteerWorkParams(
+        workId: event.workId!,
+        requestId: event.requestId,
+      ),
+    );
+    await result.fold(
+      (final failure) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.confirm.error'),
+            type: EPopupType.error,
+          ),
+        );
+      },
+      (final success) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.confirm.success'),
+            type: EPopupType.success,
+          ),
+        );
+      },
+    );
+  }
+
   final GetUserByIdUsecase _getUserByIdUsecase;
+  final GetContactByUserIdUsecase _getContactByUserIdUsecase;
   final GetNotificationByIdUsecase _getNotificationByIdUsecase;
   final DeleteRequestUsecase _deleteRequestUsecase;
   final ReportRequestUsecase _reportRequestUsecase;
   final ReportUserUsecase _reportUserUsecase;
   final StartVolunteerWorkUsecase _startVolunteerWorkUsecase;
   final GetVolunteerWorkByRequestIdUsecase _getVolunteerWorkByRequestIdUsecase;
+  final ConfirmVolunteerWorkByRequesterUsecase
+      _confirmVolunteerWorkByRequesterUsecase;
+  final ConfirmVolunteerWorkByVolunteerUsecase
+      _confirmVolunteerWorkByVolunteerUsecase;
 
   final SnackbarService _snackbarService;
 }

@@ -35,5 +35,19 @@ class ReportUserEvent extends RequestDetailsEvent {
 }
 
 class ConfirmRequestIsCompletedVolunteerEvent extends RequestDetailsEvent {
-  const ConfirmRequestIsCompletedVolunteerEvent();
+  final String? workId;
+  final String requestId;
+  const ConfirmRequestIsCompletedVolunteerEvent({
+    required this.workId,
+    required this.requestId,
+  });
+}
+
+class ConfirmRequestIsCompletedRequesterEvent extends RequestDetailsEvent {
+  final String? workId;
+  final String requestId;
+  const ConfirmRequestIsCompletedRequesterEvent({
+    required this.workId,
+    required this.requestId,
+  });
 }

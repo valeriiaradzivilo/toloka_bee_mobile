@@ -85,6 +85,10 @@ class ProfileCubit extends Cubit<ProfileState> {
                     const ProfileError('Unable to load volunteer works'),
                   ),
                   (final workRequests) {
+                    workRequests.sort(
+                      (final a, final b) => a.status.compareTo(b.status),
+                    );
+
                     emit(
                       ProfileLoaded(
                         user: user,

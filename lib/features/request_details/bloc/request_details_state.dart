@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
+import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/request_notification_model.dart';
 import '../../../data/models/user_auth_model.dart';
+import '../../../data/models/volunteer_work_model.dart';
 
 sealed class RequestDetailsState {
   const RequestDetailsState();
@@ -15,16 +17,20 @@ final class RequestDetailsLoaded extends RequestDetailsState {
   const RequestDetailsLoaded({
     required this.requestNotificationModel,
     required this.distance,
-    required this.user,
+    required this.requester,
     required this.image,
     required this.isCurrentUsersRequest,
     required this.isCurrentUserVolunteerForRequest,
-    this.volunteers = const [],
+    required this.volunteers,
+    required this.volunteerWorks,
+    required this.requesterContactInfo,
   });
   final RequestNotificationModel requestNotificationModel;
+  final List<VolunteerWorkModel> volunteerWorks;
   final List<UserAuthModel> volunteers;
   final double distance;
-  final UserAuthModel user;
+  final UserAuthModel requester;
+  final ContactInfoModel? requesterContactInfo;
   final Uint8List image;
   final bool isCurrentUsersRequest;
   final bool isCurrentUserVolunteerForRequest;

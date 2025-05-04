@@ -3,17 +3,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 import 'common/widgets/error_screen.dart';
 import 'data/di.dart';
+import 'data/service/fcm_service.dart';
 import 'features/main_app/main_app.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppInitializer.initialize();
+  GetIt.instance<FcmService>().listenToMessages();
+  GetIt.instance<FcmService>().listenToBackgroundMessages();
   runApp(const App());
 }
 

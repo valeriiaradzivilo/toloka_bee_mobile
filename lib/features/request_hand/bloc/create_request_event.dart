@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../data/models/e_request_hand_type.dart';
 
-abstract class CreateRequestEvent {}
+abstract class CreateRequestEvent {
+  const CreateRequestEvent();
+}
 
 class SetDeadlineEvent extends CreateRequestEvent {
   final DateTime? deadline;
@@ -57,4 +59,8 @@ class SetRequiredVolunteersCountEvent extends CreateRequestEvent {
   final int requiredVolunteersCount;
 
   SetRequiredVolunteersCountEvent(this.requiredVolunteersCount);
+}
+
+class InitCreateRequestEvent extends CreateRequestEvent {
+  const InitCreateRequestEvent();
 }

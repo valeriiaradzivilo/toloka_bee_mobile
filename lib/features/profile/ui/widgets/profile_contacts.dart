@@ -41,23 +41,23 @@ class ProfileContacts extends StatelessWidget {
         ] else ...[
           Column(
             children: [
-              _ContactDataText(
+              ContactDataText(
                 method: ContactMethod.phone,
                 value: contactInfo!.phone,
               ),
-              _ContactDataText(
+              ContactDataText(
                 method: ContactMethod.viber,
                 value: contactInfo!.viber,
               ),
-              _ContactDataText(
+              ContactDataText(
                 method: ContactMethod.telegram,
                 value: contactInfo!.telegram,
               ),
-              _ContactDataText(
+              ContactDataText(
                 method: ContactMethod.whatsapp,
                 value: contactInfo!.whatsapp,
               ),
-              _ContactDataText(
+              ContactDataText(
                 method: ContactMethod.email,
                 value: contactInfo!.email,
               ),
@@ -164,8 +164,8 @@ class ProfileContacts extends StatelessWidget {
   }
 }
 
-class _ContactDataText extends StatelessWidget {
-  const _ContactDataText({required this.method, this.value});
+class ContactDataText extends StatelessWidget {
+  const ContactDataText({super.key, required this.method, this.value});
   final ContactMethod method;
   final String? value;
 

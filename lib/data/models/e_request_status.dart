@@ -45,4 +45,24 @@ enum ERequestStatus {
         needsMorePeople => true,
         unknown => false,
       };
+
+  List<ERequestStatus> get _orderForProfile => [
+        ERequestStatus.inProgress,
+        ERequestStatus.needsMorePeople,
+        ERequestStatus.pending,
+        ERequestStatus.completed,
+        ERequestStatus.expired,
+        ERequestStatus.cancelled,
+      ];
+
+  int compareTo(final ERequestStatus other) {
+    final thisIndex = _orderForProfile.indexOf(this);
+    final otherIndex = _orderForProfile.indexOf(other);
+
+    if (thisIndex == -1 || otherIndex == -1) {
+      return 0;
+    }
+
+    return thisIndex.compareTo(otherIndex);
+  }
 }

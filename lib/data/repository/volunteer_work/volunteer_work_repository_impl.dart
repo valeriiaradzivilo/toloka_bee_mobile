@@ -33,12 +33,10 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
       final currentVolunteersForTheRequest =
           await _volunteerWorkDataSource.getWorksByRequester(requesterId);
 
-      if (request.requiredVolunteersCount + 1 >
-          currentVolunteersForTheRequest.length) {
+      if (currentVolunteersForTheRequest.length + 1 >
+          request.requiredVolunteersCount) {
         throw RequestAlreadyAcceptedException();
       }
-
-      await _fcmDataSource.subscribeToRequestUpdates(requestId);
 
       await _volunteerWorkDataSource.startWork(
         volunteerId,
@@ -59,6 +57,8 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
         requestId,
         ERequestUpdate.acceptedByVolunteer,
       );
+
+      await _fcmDataSource.subscribeToRequestUpdates(requestId);
 
       return const Right(null);
     } catch (e) {
@@ -122,6 +122,19 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
     try {
       final works =
           await _volunteerWorkDataSource.getWorksByRequester(requesterId);
+      return Right(works);
+    } catch (e) {
+      return Left(Fail(e));
+    }
+  }
+
+  @override
+  Future<Either<Fail<dynamic>, List<VolunteerWorkModel>>> getWorksByRequestId(
+    final String requestId,
+  ) async {
+    try {
+      final works =
+          await _volunteerWorkDataSource.getWorksByRequestId(requestId);
       return Right(works);
     } catch (e) {
       return Left(Fail(e));

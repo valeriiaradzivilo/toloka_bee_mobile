@@ -22,4 +22,7 @@ abstract interface class VolunteerWorkRepository {
   Future<Either<Fail, List<VolunteerWorkModel>>> getWorksByRequester(
     final String requesterId,
   );
+  Future<Either<Fail, List<VolunteerWorkModel>>> getWorksByRequestId(
+    final String requestId,
+  );
 }

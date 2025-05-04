@@ -1,11 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 
+import '../../../common/list_extension.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
+import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/ui/e_predefined_report_message.dart';
+import '../../profile/ui/widgets/profile_contacts.dart';
 import '../bloc/request_details_bloc.dart';
 import '../bloc/request_details_event.dart';
 import '../bloc/request_details_state.dart';
@@ -47,6 +51,22 @@ class RequestDetailsScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if (state.isCurrentUsersRequest)
+                          Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: ZipColor.secondaryContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: Text(
+                                translate('request.details.your_request'),
+                                style: ZipFonts.big.style.copyWith(
+                                  color: ZipColor.secondary,
+                                ),
+                              ),
+                            ),
+                          ),
                         Row(
                           children: [
                             if (state.image.isNotEmpty)
@@ -75,8 +95,8 @@ class RequestDetailsScreen extends StatelessWidget {
                                       translate(
                                         'request.details.user.name',
                                         args: {
-                                          'name': state.user.name,
-                                          'surname': state.user.surname,
+                                          'name': state.requester.name,
+                                          'surname': state.requester.surname,
                                         },
                                       ),
                                       style: ZipFonts.big.style.copyWith(
@@ -89,12 +109,29 @@ class RequestDetailsScreen extends StatelessWidget {
                                       translate(
                                         'request.details.user.about',
                                         args: {
-                                          'about': state.user.about,
+                                          'about': state.requester.about,
                                         },
                                       ),
                                       style: ZipFonts.medium.style,
                                     ),
                                   ),
+                                  if (state.requestNotificationModel
+                                      .requiresPhysicalStrength)
+                                    DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: ZipColor.onPrimaryFixed,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          translate('request.details.physical'),
+                                          style: ZipFonts.medium.style.copyWith(
+                                            color: ZipColor.onTertiary,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   if (state.requestNotificationModel.isRemote)
                                     DecoratedBox(
                                       decoration: BoxDecoration(
@@ -122,6 +159,21 @@ class RequestDetailsScreen extends StatelessWidget {
                                       ),
                                       style: ZipFonts.medium.style,
                                     ),
+                                  Text(
+                                    translate(
+                                      'request.details.status',
+                                      args: {
+                                        'status': state.requestNotificationModel
+                                            .status.text
+                                            .toLowerCase(),
+                                      },
+                                    ),
+                                    style: ZipFonts.small.style.copyWith(
+                                      color: state.requestNotificationModel
+                                          .status.color,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -166,24 +218,6 @@ class RequestDetailsScreen extends StatelessWidget {
                           ),
                           style: ZipFonts.small.style,
                         ),
-                        if (state
-                            .requestNotificationModel.requiresPhysicalStrength)
-                          Text(
-                            translate('request.details.physical'),
-                            style: ZipFonts.small.style,
-                          ),
-                        Text(
-                          translate(
-                            'request.details.status',
-                            args: {
-                              'status':
-                                  state.requestNotificationModel.status.text,
-                            },
-                          ),
-                          style: ZipFonts.small.style.copyWith(
-                            color: state.requestNotificationModel.status.color,
-                          ),
-                        ),
                         if (!state.isCurrentUsersRequest &&
                             state.requestNotificationModel.status
                                 .canBeHelped) ...[
@@ -200,23 +234,121 @@ class RequestDetailsScreen extends StatelessWidget {
                                   'request.details.help',
                                   args: {
                                     'user':
-                                        '${state.user.name} ${state.user.surname}',
+                                        '${state.requester.name} ${state.requester.surname}',
                                   },
                                 ),
                               ),
                               icon: const Icon(
-                                Icons.check,
+                                Icons.volunteer_activism_rounded,
                                 color: ZipColor.onPrimary,
                               ),
                             ),
                           ),
                         ],
-                        if (state.isCurrentUserVolunteerForRequest)
+                        if (state.requesterContactInfo == null)
+                          Text(
+                            translate('request.details.no_contacts'),
+                            style: ZipFonts.medium.style.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        if (state.isCurrentUserVolunteerForRequest &&
+                            state.requesterContactInfo != null)
+                          Center(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (final context) => AlertDialog(
+                                    title: Text(
+                                      translate('request.details.contacts'),
+                                      style: ZipFonts.big.style,
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      spacing: 10,
+                                      children: [
+                                        Text(
+                                          translate(
+                                            'request.details.contacts_hint',
+                                          ),
+                                          style: ZipFonts.small.style,
+                                        ),
+                                        ContactDataText(
+                                          method: ContactMethod.phone,
+                                          value:
+                                              state.requesterContactInfo!.phone,
+                                        ),
+                                        ContactDataText(
+                                          method: ContactMethod.viber,
+                                          value:
+                                              state.requesterContactInfo!.viber,
+                                        ),
+                                        ContactDataText(
+                                          method: ContactMethod.telegram,
+                                          value: state
+                                              .requesterContactInfo!.telegram,
+                                        ),
+                                        ContactDataText(
+                                          method: ContactMethod.whatsapp,
+                                          value: state
+                                              .requesterContactInfo!.whatsapp,
+                                        ),
+                                        ContactDataText(
+                                          method: ContactMethod.email,
+                                          value:
+                                              state.requesterContactInfo!.email,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              label: Text(
+                                translate('request.details.see_contacts'),
+                              ),
+                              icon: const Icon(
+                                Icons.phone,
+                                color: ZipColor.onError,
+                              ),
+                            ),
+                          ),
+                        if (state.isCurrentUsersRequest)
+                          Text(
+                            '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname}').join(', ')}',
+                            style: ZipFonts.small.style,
+                          ),
+                        if (state.isCurrentUserVolunteerForRequest ||
+                            state.isCurrentUsersRequest)
                           Center(
                             child: ElevatedButton.icon(
                               onPressed: () {
                                 context.read<RequestDetailsBloc>().add(
-                                      const ConfirmRequestIsCompletedVolunteerEvent(),
+                                      state.isCurrentUserVolunteerForRequest
+                                          ? ConfirmRequestIsCompletedVolunteerEvent(
+                                              requestId: state
+                                                  .requestNotificationModel.id,
+                                              workId: state.volunteerWorks
+                                                  .firstWhereOrNull(
+                                                    (final e) =>
+                                                        e.volunteerId ==
+                                                        FirebaseAuth.instance
+                                                            .currentUser?.uid,
+                                                  )
+                                                  ?.id,
+                                            )
+                                          : ConfirmRequestIsCompletedRequesterEvent(
+                                              requestId: state
+                                                  .requestNotificationModel.id,
+                                              workId: state.volunteerWorks
+                                                  .firstWhereOrNull(
+                                                    (final e) =>
+                                                        e.volunteerId ==
+                                                        FirebaseAuth.instance
+                                                            .currentUser?.uid,
+                                                  )
+                                                  ?.id,
+                                            ),
                                     );
                                 Navigator.of(context).pop();
                               },
@@ -233,7 +365,7 @@ class RequestDetailsScreen extends StatelessWidget {
                           child: ElevatedButton.icon(
                             onPressed: () => _showReportDialog(
                               context,
-                              state.user.id,
+                              state.requester.id,
                               state.requestNotificationModel.id,
                               context.read<RequestDetailsBloc>(),
                             ),
@@ -251,17 +383,55 @@ class RequestDetailsScreen extends StatelessWidget {
                         ),
                         if (state.isCurrentUsersRequest)
                           Center(
-                            child: ElevatedButton(
+                            child: ElevatedButton.icon(
                               onPressed: () {
-                                context.read<RequestDetailsBloc>().add(
-                                      RemoveRequest(
-                                        state.requestNotificationModel.id,
+                                // dialog to confirm
+                                showDialog(
+                                  context: context,
+                                  builder: (final context) => AlertDialog(
+                                    title: Text(
+                                      translate('request.details.remove'),
+                                      style: ZipFonts.big.style,
+                                    ),
+                                    content: Text(
+                                      translate(
+                                        'request.details.remove_confirm',
                                       ),
-                                    );
-                                Navigator.of(context).pop();
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text(
+                                          translate('common.cancel'),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          context
+                                              .read<RequestDetailsBloc>()
+                                              .add(
+                                                RemoveRequest(
+                                                  state.requestNotificationModel
+                                                      .id,
+                                                ),
+                                              );
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          translate('common.delete'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
                               },
-                              child: Text(
+                              label: Text(
                                 translate('request.details.remove'),
+                              ),
+                              icon: const Icon(
+                                Icons.delete_forever_rounded,
+                                color: ZipColor.onError,
                               ),
                             ),
                           ),

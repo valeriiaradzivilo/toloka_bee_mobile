@@ -68,7 +68,7 @@ class _NotificationCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Row(
             children: [
               Icon(model.type.icon, color: model.type.color),
@@ -83,7 +83,7 @@ class _NotificationCard extends StatelessWidget {
                       style:
                           ZipFonts.medium.style.copyWith(color: Colors.black),
                     ),
-                    if (model.message != null)
+                    if (model.message != null && model.message!.isNotEmpty)
                       Text(
                         model.message!,
                         style: ZipFonts.small.style

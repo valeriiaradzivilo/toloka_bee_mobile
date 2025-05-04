@@ -17,8 +17,17 @@ class ContactInfoModel with _$ContactInfoModel {
     @JsonKey(includeIfNull: false) final String? whatsapp,
   }) = _ContactInfoModel;
 
+  const ContactInfoModel._();
+
   factory ContactInfoModel.fromJson(final Map<String, dynamic> json) =>
       _$ContactInfoModelFromJson(json);
+
+  bool get hasContactInfo =>
+      phone != null ||
+      email != null ||
+      viber != null ||
+      telegram != null ||
+      whatsapp != null;
 }
 
 enum ContactMethod {

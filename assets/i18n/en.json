@@ -172,6 +172,7 @@
         "hand": {
             "title": "What help do you need?",
             "description": "Describe the service that you need",
+            "no_contact_info": "No contact information available.\nPlease add at least one contact to help the ones who help you...",
             "remote": {
                 "title": "Can be done remotely",
                 "description": "Pick if the task does not require a physical presence, it can be done remotely."
@@ -225,8 +226,15 @@
             "status": "Current request status is {status}",
             "help": "Help {user}",
             "remove": "Remove request",
+            "remove_confirm": "Are you sure you want to remove this request? This action cannot be undone.",
             "report": "Report this request or user",
-            "confirm_done": "Mark request as done"
+            "confirm_done": "Mark request as done",
+            "your_request": "Your request",
+            "see_contacts": "See contacts",
+            "contacts": "Contacts",
+            "contacts_hint": "You can contact the user directly by clicking on their contact method. If you have any questions, please ask them directly.\nHold contact for a second to copy it.",
+            "no_contacts": "No contacts available...",
+            "volunteers": "Volunteers"
         },
         "delete": {
             "success": "Request deleted successfully.",
@@ -301,7 +309,8 @@
         "cancel": "Cancel",
         "confirm": "Confirm",
         "copied": "Copied to your clipboard !",
-        "ok": "OK"
+        "ok": "OK",
+        "delete": "Delete"
     },
     "contacts": {
         "phone": "Phone",

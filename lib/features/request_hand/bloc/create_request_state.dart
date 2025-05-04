@@ -7,7 +7,17 @@ import '../../../data/models/e_request_hand_type.dart';
 import '../../../data/models/e_request_status.dart';
 import '../../../data/models/request_notification_model.dart';
 
-class CreateRequestState {
+sealed class CreateRequestState {
+  const CreateRequestState();
+
+  LoadedCreateRequestState get loadedState => this as LoadedCreateRequestState;
+}
+
+final class CreateRequestLoading extends CreateRequestState {
+  const CreateRequestLoading();
+}
+
+class LoadedCreateRequestState extends CreateRequestState {
   final String description;
   final bool isRemote;
   final bool isPhysicalStrength;
@@ -16,8 +26,9 @@ class CreateRequestState {
   final LatLng location;
   final ERequestHandType? requestType;
   final int requiredVolunteersCount;
+  final bool userHasContactInfo;
 
-  CreateRequestState({
+  LoadedCreateRequestState({
     required this.description,
     required this.isRemote,
     required this.isPhysicalStrength,
@@ -26,9 +37,10 @@ class CreateRequestState {
     this.price,
     required this.requestType,
     required this.requiredVolunteersCount,
+    required this.userHasContactInfo,
   });
 
-  CreateRequestState copyWith({
+  LoadedCreateRequestState copyWith({
     final String? description,
     final bool? isRemote,
     final bool? isPhysicalStrength,
@@ -37,8 +49,9 @@ class CreateRequestState {
     final LatLng? location,
     final ERequestHandType? requestType,
     final int? requiredVolunteersCount,
+    final bool? userHasContactInfo,
   }) =>
-      CreateRequestState(
+      LoadedCreateRequestState(
         description: description ?? this.description,
         isRemote: isRemote ?? this.isRemote,
         isPhysicalStrength: isPhysicalStrength ?? this.isPhysicalStrength,
@@ -48,6 +61,7 @@ class CreateRequestState {
         requestType: requestType ?? this.requestType,
         requiredVolunteersCount:
             requiredVolunteersCount ?? this.requiredVolunteersCount,
+        userHasContactInfo: userHasContactInfo ?? this.userHasContactInfo,
       );
 
   RequestNotificationModel toRequestNotificationModel() =>
@@ -71,6 +85,7 @@ class CreateRequestState {
       );
 
   bool get canCreateRequest =>
+      userHasContactInfo &&
       description.isNotEmpty &&
       (isRemote || (location.latitude != 0 && location.longitude != 0)) &&
       requiredVolunteersCount > 0;
