@@ -211,7 +211,7 @@ class RequestDetailsScreen extends StatelessWidget {
                             ),
                           ),
                         ],
-                        if (true)
+                        if (state.isCurrentUserVolunteerForRequest)
                           Center(
                             child: ElevatedButton.icon(
                               onPressed: () {

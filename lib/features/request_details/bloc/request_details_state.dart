@@ -18,12 +18,16 @@ final class RequestDetailsLoaded extends RequestDetailsState {
     required this.user,
     required this.image,
     required this.isCurrentUsersRequest,
+    required this.isCurrentUserVolunteerForRequest,
+    this.volunteers = const [],
   });
   final RequestNotificationModel requestNotificationModel;
+  final List<UserAuthModel> volunteers;
   final double distance;
   final UserAuthModel user;
   final Uint8List image;
   final bool isCurrentUsersRequest;
+  final bool isCurrentUserVolunteerForRequest;
 }
 
 final class RequestDetailsError extends RequestDetailsState {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -11,6 +12,7 @@ import '../../../common/exceptions/request_expired_exception.dart';
 import '../../../data/models/request_complaint_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
+import '../../../data/models/user_auth_model.dart';
 import '../../../data/models/user_complaint_model.dart';
 import '../../../data/service/snackbar_service.dart';
 import '../../../data/usecase/complaints/report_request_usecase.dart';
@@ -18,6 +20,7 @@ import '../../../data/usecase/complaints/report_user_usecase.dart';
 import '../../../data/usecase/get_notification_by_id_usecase.dart';
 import '../../../data/usecase/requests/delete_request_usecase.dart';
 import '../../../data/usecase/user_management/get_user_by_id_usecase.dart';
+import '../../../data/usecase/volunteer_work/get_volunteer_work_by_request_id_usecase.dart';
 import '../../../data/usecase/volunteer_work/start_volunteer_work_usecase.dart';
 import 'request_details_event.dart';
 import 'request_details_state.dart';
@@ -26,12 +29,14 @@ class RequestDetailsBloc
     extends Bloc<RequestDetailsEvent, RequestDetailsState> {
   RequestDetailsBloc(final GetIt locator)
       : _getNotificationByIdUsecase = locator<GetNotificationByIdUsecase>(),
-        _getUserImageUsecase = locator<GetUserByIdUsecase>(),
+        _getUserByIdUsecase = locator<GetUserByIdUsecase>(),
         _deleteRequestUsecase = locator<DeleteRequestUsecase>(),
         _snackbarService = locator<SnackbarService>(),
         _reportRequestUsecase = locator<ReportRequestUsecase>(),
         _reportUserUsecase = locator<ReportUserUsecase>(),
         _startVolunteerWorkUsecase = locator<StartVolunteerWorkUsecase>(),
+        _getVolunteerWorkByRequestIdUsecase =
+            locator<GetVolunteerWorkByRequestIdUsecase>(),
         super(const RequestDetailsLoading()) {
     on<FetchRequestDetails>(_onFetchRequestDetails);
     on<AcceptRequest>(_onAcceptRequest);
@@ -52,7 +57,7 @@ class RequestDetailsBloc
       (final failure) async =>
           emit(RequestDetailsError(error: failure.toString())),
       (final requestNotificationModel) async {
-        final user = await _getUserImageUsecase(
+        final user = await _getUserByIdUsecase(
           requestNotificationModel.userId,
         );
 
@@ -68,6 +73,35 @@ class RequestDetailsBloc
               currentPosition.longitude,
             );
 
+            final volunteerWork = await _getVolunteerWorkByRequestIdUsecase(
+              requestNotificationModel.id,
+            );
+
+            final volunteersFutures = volunteerWork
+                .fold(
+                  (final failure) => [],
+                  (final volunteerWorkList) => volunteerWorkList
+                      .map((final e) => e.volunteerId)
+                      .toList(),
+                )
+                .map(
+                  (final volunteerId) => _getUserByIdUsecase(volunteerId),
+                );
+
+            final volunteers =
+                await Future.wait<Either<Fail<dynamic>, UserAuthModel>>(
+              volunteersFutures,
+            );
+            final List<UserAuthModel> volunteersList = volunteers
+                .map(
+                  (final e) => e.fold(
+                    (final failure) => null,
+                    (final userAuthModel) => userAuthModel,
+                  ),
+                )
+                .nonNulls
+                .toList();
+
             emit(
               RequestDetailsLoaded(
                 requestNotificationModel: requestNotificationModel,
@@ -76,6 +110,11 @@ class RequestDetailsBloc
                 image: base64Decode(userAuthModel.photo),
                 isCurrentUsersRequest:
                     userAuthModel.id == FirebaseAuth.instance.currentUser?.uid,
+                isCurrentUserVolunteerForRequest: volunteersList.any(
+                  (final volunteer) =>
+                      volunteer.id == FirebaseAuth.instance.currentUser?.uid,
+                ),
+                volunteers: volunteersList,
               ),
             );
           },
@@ -228,12 +267,13 @@ class RequestDetailsBloc
     );
   }
 
-  final GetUserByIdUsecase _getUserImageUsecase;
+  final GetUserByIdUsecase _getUserByIdUsecase;
   final GetNotificationByIdUsecase _getNotificationByIdUsecase;
   final DeleteRequestUsecase _deleteRequestUsecase;
   final ReportRequestUsecase _reportRequestUsecase;
   final ReportUserUsecase _reportUserUsecase;
   final StartVolunteerWorkUsecase _startVolunteerWorkUsecase;
+  final GetVolunteerWorkByRequestIdUsecase _getVolunteerWorkByRequestIdUsecase;
 
   final SnackbarService _snackbarService;
 }

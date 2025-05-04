@@ -55,6 +55,7 @@ import 'usecase/user_management/register_user_usecase.dart';
 import 'usecase/user_management/update_user_usecase.dart';
 import 'usecase/volunteer_work/confirm_volunteer_work_by_requester_usecase.dart';
 import 'usecase/volunteer_work/confirm_volunteer_work_by_volunteer_usecase.dart';
+import 'usecase/volunteer_work/get_volunteer_work_by_request_id_usecase.dart';
 import 'usecase/volunteer_work/get_volunteer_work_by_user_id.dart';
 import 'usecase/volunteer_work/start_volunteer_work_usecase.dart';
 
@@ -200,6 +201,9 @@ Future<void> initUseCases() async {
   );
   serviceLocator.registerLazySingleton<GetVolunteerWorksByUserIdUsecase>(
     () => GetVolunteerWorksByUserIdUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<GetVolunteerWorkByRequestIdUsecase>(
+    () => GetVolunteerWorkByRequestIdUsecase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton<GetRequestsByIdsUsecase>(
     () => GetRequestsByIdsUsecase(serviceLocator()),
