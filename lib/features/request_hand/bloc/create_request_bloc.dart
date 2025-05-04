@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../common/widgets/zip_snackbar.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
-import '../../../data/usecase/send_notification_usecase.dart';
+import '../../../data/usecase/requests/send_notification_usecase.dart';
 import 'create_request_event.dart';
 import 'create_request_state.dart';
 

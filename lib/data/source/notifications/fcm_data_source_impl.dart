@@ -9,6 +9,7 @@ import '../../../common/constants/location_constants.dart';
 import '../../di.dart';
 import '../../models/accept_request_model.dart';
 import '../../models/e_request_status.dart';
+import '../../models/e_request_update.dart';
 import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
@@ -377,5 +378,65 @@ class FcmDataSourceImpl implements FcmDataSource {
         'Failed to get requests by ids: ${response.statusCode}',
       );
     }
+  }
+
+  @override
+  Future<void> subscribeToRequestUpdates(final String requestId) async {
+    await _firebaseMessaging.subscribeToTopic(requestId);
+  }
+
+  @override
+  Future<void> unsubscribeFromRequestUpdates(final String requestId) async {
+    await _firebaseMessaging.unsubscribeFromTopic(requestId);
+  }
+
+  @override
+  Future<void> sendRequestUpdateNotification(
+    final String requestId,
+    final ERequestUpdate requestUpdate,
+  ) async {
+    final postUrl =
+        'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
+
+    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
+
+    if (accessToken.isEmpty) {
+      throw Exception('Access token is null');
+    }
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    final title = requestUpdate.text;
+
+    final payload = {
+      'message': {
+        'topic': requestId,
+        'notification': {
+          'title': title,
+          'body': '',
+        },
+        'android': {
+          'priority': 'high',
+          'notification': {
+            'channel_id': LocationConstants.androidLocationChannelId,
+            'visibility': 'PUBLIC',
+            'sound': 'default',
+            'default_sound': true,
+            'default_vibrate_timings': true,
+            'default_light_settings': true,
+          },
+        },
+        'data': {},
+      },
+    };
+
+    await _dio.post(
+      postUrl,
+      options: Options(headers: headers),
+      data: payload,
+    );
   }
 }

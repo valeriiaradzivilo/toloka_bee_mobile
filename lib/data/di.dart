@@ -44,7 +44,7 @@ import 'usecase/requests/delete_request_usecase.dart';
 import 'usecase/requests/get_all_requests_usecase.dart';
 import 'usecase/requests/get_requests_by_ids_usecase.dart';
 import 'usecase/requests/get_requests_by_user_id_usecase.dart';
-import 'usecase/send_notification_usecase.dart';
+import 'usecase/requests/send_notification_usecase.dart';
 import 'usecase/subscribe_to_topic_usecase.dart';
 import 'usecase/user_management/delete_user_usecase.dart';
 import 'usecase/user_management/get_current_user_data_usecase.dart';
@@ -96,7 +96,8 @@ Future<void> initDatasources() async {
   );
 
   serviceLocator.registerSingleton<SnackbarService>(SnackbarService());
-  serviceLocator.registerLazySingleton<FcmService>(() => FcmService());
+  serviceLocator
+      .registerLazySingleton<FcmService>(() => FcmService(serviceLocator()));
 }
 
 Future<void> initRepository() async {

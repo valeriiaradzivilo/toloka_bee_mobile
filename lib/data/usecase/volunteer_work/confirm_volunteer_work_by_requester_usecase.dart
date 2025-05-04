@@ -12,5 +12,5 @@ class ConfirmVolunteerWorkByRequesterUsecase
 
   @override
   Future<Either<Fail, void>> call(final ConfirmVolunteerWorkParams params) =>
-      repository.confirmByRequester(params.workId);
+      repository.confirmByRequester(params.workId, params.requestId);
 }

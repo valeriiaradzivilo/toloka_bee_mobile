@@ -46,7 +46,10 @@ class VolunteerWorkBloc extends Bloc<VolunteerWorkEvent, VolunteerWorkState> {
     emit(VolunteerWorkLoading());
     try {
       await _confirmByVolunteerUsecase(
-        ConfirmVolunteerWorkParams(workId: event.workId),
+        ConfirmVolunteerWorkParams(
+          workId: event.workId,
+          requestId: event.requestId,
+        ),
       );
       emit(VolunteerWorkSuccess());
     } catch (e) {
@@ -61,7 +64,10 @@ class VolunteerWorkBloc extends Bloc<VolunteerWorkEvent, VolunteerWorkState> {
     emit(VolunteerWorkLoading());
     try {
       await _confirmByRequesterUsecase(
-        ConfirmVolunteerWorkParams(workId: event.workId),
+        ConfirmVolunteerWorkParams(
+          workId: event.workId,
+          requestId: event.requestId,
+        ),
       );
       emit(VolunteerWorkSuccess());
     } catch (e) {

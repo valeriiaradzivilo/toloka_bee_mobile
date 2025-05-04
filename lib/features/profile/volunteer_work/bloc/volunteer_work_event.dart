@@ -14,12 +14,20 @@ class StartVolunteerWork extends VolunteerWorkEvent {
 
 class ConfirmVolunteerWorkByVolunteer extends VolunteerWorkEvent {
   final String workId;
+  final String requestId;
 
-  ConfirmVolunteerWorkByVolunteer({required this.workId});
+  ConfirmVolunteerWorkByVolunteer({
+    required this.workId,
+    required this.requestId,
+  });
 }
 
 class ConfirmVolunteerWorkByRequester extends VolunteerWorkEvent {
   final String workId;
+  final String requestId;
 
-  ConfirmVolunteerWorkByRequester({required this.workId});
+  ConfirmVolunteerWorkByRequester({
+    required this.workId,
+    required this.requestId,
+  });
 }

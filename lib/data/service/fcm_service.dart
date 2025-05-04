@@ -1,25 +1,26 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_it/get_it.dart';
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../common/constants/location_constants.dart';
 import '../../common/routing/routes.dart';
-import '../../common/widgets/zip_snackbar.dart';
-import '../../features/main_app/main_app.dart';
 import '../models/request_notification_model.dart';
 import '../models/ui/e_popup_type.dart';
 import '../models/ui/popup_model.dart';
+import 'snackbar_service.dart';
 
 class FcmService {
-  FcmService() {
+  FcmService(final GetIt serviceLocator)
+      : _snackbarService = serviceLocator<SnackbarService>() {
     initializeNotifications();
   }
+
+  final SnackbarService _snackbarService;
 
   static final SimpleLogger _logger = SimpleLogger();
 
@@ -64,7 +65,11 @@ class FcmService {
   }
 
   void listenToMessages() async {
-    FirebaseMessaging.onMessage.listen(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
+  }
+
+  void listenToBackgroundMessages() {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
   }
 
   void stopListeningToMessages() {
@@ -72,32 +77,60 @@ class FcmService {
     FirebaseMessaging.onBackgroundMessage((final _) async {});
   }
 
-  void listenToBackgroundMessages() {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
+  ///
+  /// Private handlers
+  ///
 
-  Future<void> _firebaseMessagingBackgroundHandler(
+  Future<void> _firebaseMessagingHandler(
     final RemoteMessage message,
   ) async {
-    final context = MainApp.navigatorKey.currentState?.context;
+    final messageData = message.data;
 
-    if (context == null || !context.mounted) {
-      _logger.warning('❌ Контекст не знайдено');
-      return;
-    }
-
-    final data = RequestNotificationModel.fromFCM(message.data);
-
-    if (data.userId == FirebaseAuth.instance.currentUser?.uid) {
-      return;
-    }
+    final title = message.notification?.title;
+    final body = message.notification?.body;
 
     _logger.info('🔕 Фонове повідомлення: ${message.messageId}');
     _logger.info('📲 Отримано повідомлення у Background:');
-    _logger.info('🔔 Заголовок: ${message.notification?.title}');
-    _logger.info('📝 Тіло: ${message.notification?.body}');
+    _logger.info('🔔 Заголовок: $title');
+    _logger.info('📝 Тіло: $body');
     _logger.info('📦 Дані: ${message.data}');
 
+    if (messageData['location'] != null) {
+      final data = RequestNotificationModel.fromFCM(messageData);
+
+      if (data.userId == FirebaseAuth.instance.currentUser?.uid) {
+        return;
+      }
+
+      await _handleRequestNearbyNotification(
+        data: data,
+        title: title,
+        body: body,
+      );
+      return;
+    }
+
+    if (title != null || body != null) {
+      _snackbarService.show(
+        PopupModel(
+          title: title != null ? translate(title) : '',
+          message: body != null ? translate(body) : '',
+          onPressed: (final BuildContext context) {
+            Navigator.of(context).pushNamed(
+              Routes.requestDetailsScreen,
+              arguments: message.from,
+            );
+          },
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleRequestNearbyNotification({
+    required final RequestNotificationModel data,
+    required final String? title,
+    required final String? body,
+  }) async {
     final Position position = await Geolocator.getCurrentPosition();
 
     final double distanceKm = Geolocator.distanceBetween(
@@ -108,14 +141,13 @@ class FcmService {
         ) /
         1000;
 
-//TODO: Add ability to set distance in profile
+    //TODO: Add ability to set distance in profile
     if (distanceKm > 100) return;
 
-    ZipSnackbar.show(
-      context,
+    _snackbarService.show(
       PopupModel(
-        title: message.notification?.title ?? '',
-        message: '${message.notification?.body ?? ''} ${translate(
+        title: title ?? '',
+        message: '${body ?? ''} ${translate(
           'request.details.distance',
           args: {
             'distance': distanceKm.toStringAsFixed(2),

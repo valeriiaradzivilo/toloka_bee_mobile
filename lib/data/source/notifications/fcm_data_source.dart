@@ -1,3 +1,4 @@
+import '../../models/e_request_update.dart';
 import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
@@ -35,5 +36,11 @@ abstract class FcmDataSource {
 
   Future<List<RequestNotificationModel>> getRequestsByIds(
     final List<String> ids,
+  );
+  Future<void> subscribeToRequestUpdates(final String requestId);
+  Future<void> unsubscribeFromRequestUpdates(final String requestId);
+  Future<void> sendRequestUpdateNotification(
+    final String requestId,
+    final ERequestUpdate requestUpdate,
   );
 }

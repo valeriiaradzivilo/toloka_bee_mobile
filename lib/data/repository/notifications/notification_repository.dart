@@ -9,6 +9,12 @@ abstract class NotificationRepository {
   Future<Either<Fail, void>> subscribeToTopics(
     final List<LocationSubscriptionModel> locationSubscription,
   );
+  Future<Either<Fail, void>> subscribeToRequestUpdates(
+    final String requestId,
+  );
+  Future<Either<Fail, void>> unsubscribeFromRequestUpdates(
+    final String requestId,
+  );
   Future<Either<Fail, int>> countVolunteersByTopic(
     final String topic,
   );

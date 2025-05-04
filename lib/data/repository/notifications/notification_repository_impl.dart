@@ -63,6 +63,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
   ) async {
     try {
       await _fcmDataSource.sendNotification(notification);
+      await _fcmDataSource.subscribeToRequestUpdates(notification.id);
       return const Right(null);
     } catch (e) {
       logger.severe(
@@ -187,6 +188,36 @@ class NotificationRepositoryImpl implements NotificationRepository {
         '❌ Error while getting requests by ids: ${e.toString()}',
       );
       return Left(Fail('Failed to get requests by ids'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> subscribeToRequestUpdates(
+    final String requestId,
+  ) async {
+    try {
+      await _fcmDataSource.subscribeToRequestUpdates(requestId);
+      return const Right(null);
+    } catch (e) {
+      logger.severe(
+        '❌ Error while subscribing to request updates: ${e.toString()}',
+      );
+      return Left(Fail('Failed to subscribe to request updates'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> unsubscribeFromRequestUpdates(
+    final String requestId,
+  ) async {
+    try {
+      await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
+      return const Right(null);
+    } catch (e) {
+      logger.severe(
+        '❌ Error while unsubscribing from request updates: ${e.toString()}',
+      );
+      return Left(Fail('Failed to unsubscribe from request updates'));
     }
   }
 }

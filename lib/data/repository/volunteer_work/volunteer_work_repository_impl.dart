@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../../common/exceptions/request_already_accepted_exception.dart';
 import '../../../common/exceptions/request_expired_exception.dart';
 import '../../models/e_request_status.dart';
+import '../../models/e_request_update.dart';
 import '../../models/volunteer_work_model.dart';
 import '../../source/notifications/fcm_data_source.dart';
 import '../../source/volunteer_work/volunteer_work_data_source.dart';
@@ -37,6 +38,8 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
         throw RequestAlreadyAcceptedException();
       }
 
+      await _fcmDataSource.subscribeToRequestUpdates(requestId);
+
       await _volunteerWorkDataSource.startWork(
         volunteerId,
         requesterId,
@@ -52,6 +55,11 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
         ),
       );
 
+      await _fcmDataSource.sendRequestUpdateNotification(
+        requestId,
+        ERequestUpdate.acceptedByVolunteer,
+      );
+
       return const Right(null);
     } catch (e) {
       return Left(Fail(e));
@@ -61,9 +69,15 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
   @override
   Future<Either<Fail<dynamic>, void>> confirmByVolunteer(
     final String workId,
+    final String requestId,
   ) async {
     try {
       await _volunteerWorkDataSource.confirmByVolunteer(workId);
+      await _fcmDataSource.sendRequestUpdateNotification(
+        requestId,
+        ERequestUpdate.confirmedByVolunteer,
+      );
+      await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
       return const Right(null);
     } catch (e) {
       return Left(Fail(e));
@@ -73,9 +87,15 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
   @override
   Future<Either<Fail<dynamic>, void>> confirmByRequester(
     final String workId,
+    final String requestId,
   ) async {
     try {
       await _volunteerWorkDataSource.confirmByRequester(workId);
+      await _fcmDataSource.sendRequestUpdateNotification(
+        requestId,
+        ERequestUpdate.confirmedByRequester,
+      );
+      await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
       return const Right(null);
     } catch (e) {
       return Left(Fail(e));

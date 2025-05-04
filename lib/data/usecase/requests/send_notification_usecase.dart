@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
-import '../models/request_notification_model.dart';
-import '../repository/notifications/notification_repository.dart';
-import 'usecase.dart';
+import '../../models/request_notification_model.dart';
+import '../../repository/notifications/notification_repository.dart';
+import '../usecase.dart';
 
 class SendNotificationUsecase
     extends UseCase<Either, RequestNotificationModel> {

@@ -8,8 +8,14 @@ abstract interface class VolunteerWorkRepository {
     final String requesterId,
     final String requestId,
   );
-  Future<Either<Fail, void>> confirmByVolunteer(final String workId);
-  Future<Either<Fail, void>> confirmByRequester(final String workId);
+  Future<Either<Fail, void>> confirmByVolunteer(
+    final String workId,
+    final String requestId,
+  );
+  Future<Either<Fail, void>> confirmByRequester(
+    final String workId,
+    final String requestId,
+  );
   Future<Either<Fail, List<VolunteerWorkModel>>> getWorksByVolunteer(
     final String volunteerId,
   );

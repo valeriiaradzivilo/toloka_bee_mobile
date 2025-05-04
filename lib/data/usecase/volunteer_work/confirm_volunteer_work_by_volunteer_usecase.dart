@@ -13,11 +13,15 @@ class ConfirmVolunteerWorkByVolunteerUsecase
   Future<Either<Fail, void>> call(
     final ConfirmVolunteerWorkParams params,
   ) =>
-      repository.confirmByVolunteer(params.workId);
+      repository.confirmByVolunteer(params.workId, params.requestId);
 }
 
 class ConfirmVolunteerWorkParams {
   final String workId;
+  final String requestId;
 
-  ConfirmVolunteerWorkParams({required this.workId});
+  ConfirmVolunteerWorkParams({
+    required this.workId,
+    required this.requestId,
+  });
 }
