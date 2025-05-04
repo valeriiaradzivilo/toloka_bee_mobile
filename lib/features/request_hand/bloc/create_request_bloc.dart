@@ -23,6 +23,7 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
             isPhysicalStrength: false,
             deadline: DateTime.now().add(const Duration(days: 7)),
             requestType: null,
+            requiredVolunteersCount: 1,
           ),
         ) {
     on<SetDeadlineEvent>(
@@ -60,6 +61,14 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
     on<SetLocationEvent>(
       (final event, final emit) => emit(
         state.copyWith(location: LatLng(event.latitude, event.longitude)),
+      ),
+    );
+
+    on<SetRequiredVolunteersCountEvent>(
+      (final event, final emit) => emit(
+        state.copyWith(
+          requiredVolunteersCount: event.requiredVolunteersCount,
+        ),
       ),
     );
 

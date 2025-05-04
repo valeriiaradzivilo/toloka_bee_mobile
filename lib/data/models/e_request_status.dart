@@ -35,4 +35,14 @@ enum ERequestStatus {
         needsMorePeople => const Color.fromARGB(255, 110, 83, 2),
         unknown => const Color(0xFF6C757D),
       };
+
+  bool get canBeHelped => switch (this) {
+        pending => true,
+        inProgress => false,
+        completed => false,
+        expired => false,
+        cancelled => false,
+        needsMorePeople => true,
+        unknown => false,
+      };
 }

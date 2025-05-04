@@ -1,13 +1,21 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../common/exceptions/request_already_accepted_exception.dart';
+import '../../../common/exceptions/request_expired_exception.dart';
+import '../../models/e_request_status.dart';
 import '../../models/volunteer_work_model.dart';
+import '../../source/notifications/fcm_data_source.dart';
 import '../../source/volunteer_work/volunteer_work_data_source.dart';
 import 'volunteer_work_repository.dart';
 
 class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
   final VolunteerWorkDataSource _volunteerWorkDataSource;
+  final FcmDataSource _fcmDataSource;
 
-  VolunteerWorkRepositoryImpl(this._volunteerWorkDataSource);
+  VolunteerWorkRepositoryImpl(
+    this._volunteerWorkDataSource,
+    this._fcmDataSource,
+  );
 
   @override
   Future<Either<Fail<dynamic>, void>> startWork(
@@ -16,10 +24,32 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
     final String requestId,
   ) async {
     try {
+      final request = await _fcmDataSource.getRequestById(requestId);
+      if (request.deadline.isBefore(DateTime.now())) {
+        throw RequestExpiredException();
+      }
+
+      final currentVolunteersForTheRequest =
+          await _volunteerWorkDataSource.getWorksByRequester(requesterId);
+
+      if (request.requiredVolunteersCount + 1 >
+          currentVolunteersForTheRequest.length) {
+        throw RequestAlreadyAcceptedException();
+      }
+
       await _volunteerWorkDataSource.startWork(
         volunteerId,
         requesterId,
         requestId,
+      );
+
+      await _fcmDataSource.updateRequest(
+        request.copyWith(
+          status: request.requiredVolunteersCount ==
+                  currentVolunteersForTheRequest.length + 1
+              ? ERequestStatus.inProgress
+              : ERequestStatus.needsMorePeople,
+        ),
       );
 
       return const Right(null);

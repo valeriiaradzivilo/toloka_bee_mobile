@@ -52,3 +52,9 @@ class SetRequestTypeEvent extends CreateRequestEvent {
 
   SetRequestTypeEvent(this.requestType);
 }
+
+class SetRequiredVolunteersCountEvent extends CreateRequestEvent {
+  final int requiredVolunteersCount;
+
+  SetRequiredVolunteersCountEvent(this.requiredVolunteersCount);
+}

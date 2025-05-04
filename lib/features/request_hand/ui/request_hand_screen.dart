@@ -230,7 +230,9 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                         double.tryParse(value);
                                     if (parsedValue == null) return;
                                     context.read<CreateRequestBloc>().add(
-                                          SetPriceEvent(parsedValue),
+                                          SetRequiredVolunteersCountEvent(
+                                            parsedValue.toInt(),
+                                          ),
                                         );
                                   },
                                 ),
@@ -267,4 +269,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
           ),
         ),
       );
+  //TODO: Pre‑conditions	• Користувач авторизований
+// • Геолокація ввімкнена
+// • На клієнті присутні базові контактні дані
 }

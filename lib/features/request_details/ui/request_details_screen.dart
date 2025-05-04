@@ -129,12 +129,31 @@ class RequestDetailsScreen extends StatelessWidget {
                         ),
                         Text(
                           state.requestNotificationModel.description,
-                          style: ZipFonts.medium.style,
+                          style: ZipFonts.medium.style.copyWith(
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         if (state.requestNotificationModel.price != null)
-                          Text(
-                            state.requestNotificationModel.price.toString(),
-                            style: ZipFonts.medium.style,
+                          Row(
+                            spacing: 20,
+                            children: [
+                              Tooltip(
+                                message: translate(
+                                  'request.details.price_hint',
+                                ),
+                                triggerMode: TooltipTriggerMode.tap,
+                                child: const Icon(
+                                  Icons.info_outline,
+                                  color: ZipColor.primary,
+                                ),
+                              ),
+                              Text(
+                                '${translate(
+                                  'request.details.price',
+                                )} : ${state.requestNotificationModel.price}',
+                                style: ZipFonts.medium.style,
+                              ),
+                            ],
                           ),
                         Text(
                           translate(
@@ -161,39 +180,75 @@ class RequestDetailsScreen extends StatelessWidget {
                                   state.requestNotificationModel.status.text,
                             },
                           ),
-                          style: ZipFonts.small.style,
+                          style: ZipFonts.small.style.copyWith(
+                            color: state.requestNotificationModel.status.color,
+                          ),
                         ),
-                        if (!state.isCurrentUsersRequest) ...[
+                        if (!state.isCurrentUsersRequest &&
+                            state.requestNotificationModel.status
+                                .canBeHelped) ...[
                           Center(
-                            child: ElevatedButton(
+                            child: ElevatedButton.icon(
                               onPressed: () {
                                 context
                                     .read<RequestDetailsBloc>()
                                     .add(const AcceptRequest());
                                 Navigator.of(context).pop();
                               },
-                              child: Text(
-                                translate('request.details.help'),
+                              label: Text(
+                                translate(
+                                  'request.details.help',
+                                  args: {
+                                    'user':
+                                        '${state.user.name} ${state.user.surname}',
+                                  },
+                                ),
                               ),
-                            ),
-                          ),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () => _showReportDialog(
-                                context,
-                                state.user.id,
-                                state.requestNotificationModel.id,
-                                context.read<RequestDetailsBloc>(),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: ZipColor.onErrorContainer,
-                              ),
-                              child: Text(
-                                translate('request.details.report'),
+                              icon: const Icon(
+                                Icons.check,
+                                color: ZipColor.onPrimary,
                               ),
                             ),
                           ),
                         ],
+                        if (true)
+                          Center(
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                context.read<RequestDetailsBloc>().add(
+                                      const ConfirmRequestIsCompletedVolunteerEvent(),
+                                    );
+                                Navigator.of(context).pop();
+                              },
+                              label: Text(
+                                translate('request.details.confirm_done'),
+                              ),
+                              icon: const Icon(
+                                Icons.done_all,
+                                color: ZipColor.onPrimary,
+                              ),
+                            ),
+                          ),
+                        Center(
+                          child: ElevatedButton.icon(
+                            onPressed: () => _showReportDialog(
+                              context,
+                              state.user.id,
+                              state.requestNotificationModel.id,
+                              context.read<RequestDetailsBloc>(),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: ZipColor.onErrorContainer,
+                            ),
+                            label: Text(
+                              translate('request.details.report'),
+                            ),
+                            icon: const Icon(
+                              Icons.report,
+                              color: ZipColor.onError,
+                            ),
+                          ),
+                        ),
                         if (state.isCurrentUsersRequest)
                           Center(
                             child: ElevatedButton(

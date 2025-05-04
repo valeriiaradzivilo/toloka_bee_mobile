@@ -1,77 +1,134 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common/routing/routes.dart';
+import '../../../../common/theme/zip_color.dart';
 import '../../../../common/theme/zip_fonts.dart';
 import '../../../../data/models/request_notification_model.dart';
 
 class RequestTile extends StatelessWidget {
-  const RequestTile({super.key, required this.request, this.distance});
+  const RequestTile({
+    super.key,
+    required this.request,
+    this.distance,
+    this.showStatus = true,
+    this.width = double.infinity,
+    this.maxDescriptionLines = 3,
+  });
   final RequestNotificationModel request;
   final String? distance;
+  final bool showStatus;
+  final double width;
+  final int maxDescriptionLines;
 
   @override
-  Widget build(final BuildContext context) => ListTile(
-        title: Text(
-          request.description,
-          style: ZipFonts.small.style.copyWith(
-            fontWeight: FontWeight.w900,
-          ),
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '\u2981 ${translate(
-                  'give.hand.deadline',
-                  args: {
-                    'date': DateFormat.yMMMMEEEEd().format(request.deadline),
-                    'days': request.deadline
-                        .difference(DateTime.now())
-                        .inDays
-                        .toString(),
-                  },
-                )}',
-                style: ZipFonts.tiny.style,
-              ),
-              if (request.price != null && request.price != 0)
-                Text(
-                  '\u2981 ${translate(
-                    'give.hand.price',
-                    args: {
-                      'price': request.price.toString(),
-                    },
-                  )}',
-                  style: ZipFonts.tiny.style,
+  Widget build(final BuildContext context) => SizedBox(
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed(
+              Routes.requestDetailsScreen,
+              arguments: request.id,
+            ),
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: ZipColor.primary,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 20,
+                    children: [
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              request.description,
+                              style: ZipFonts.small.style.copyWith(
+                                fontWeight: FontWeight.w900,
+                              ),
+                              maxLines: maxDescriptionLines,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const Gap(5),
+                            Text(
+                              '\u2981 ${translate(
+                                'give.hand.deadline',
+                                args: {
+                                  'date': DateFormat.yMMMMEEEEd()
+                                      .format(request.deadline),
+                                  'days': request.deadline
+                                      .difference(DateTime.now())
+                                      .inDays
+                                      .toString(),
+                                },
+                              )}',
+                              style: ZipFonts.tiny.style,
+                              overflow: TextOverflow.clip,
+                            ),
+                            if (request.price != null && request.price != 0)
+                              Text(
+                                '\u2981 ${translate(
+                                  'give.hand.price',
+                                  args: {
+                                    'price': request.price.toString(),
+                                  },
+                                )}',
+                                style: ZipFonts.tiny.style,
+                                overflow: TextOverflow.clip,
+                              ),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.of(context).pushNamed(
+                          Routes.requestDetailsScreen,
+                          arguments: request.id,
+                        ),
+                        child: Text(
+                          translate('common.action.learn'),
+                          style: ZipFonts.tiny.style.copyWith(
+                            color: ZipColor.onPrimary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              if (request.isRemote == false && distance != null)
-                Text(
-                  '\u2981 ${translate(
-                    'give.hand.distance',
-                    args: {
-                      'distance': distance,
-                    },
-                  )}',
-                  style: ZipFonts.tiny.style,
-                ),
-            ],
+                if (showStatus)
+                  Transform.rotate(
+                    angle: 0.2,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: request.status.color,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        request.status.text,
+                        style: ZipFonts.small.style.copyWith(
+                          color: ZipColor.onPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
-        trailing: ElevatedButton(
-          onPressed: () => Navigator.of(context).pushNamed(
-            Routes.requestDetailsScreen,
-            arguments: request.id,
-          ),
-          child: Text(translate('common.action.learn')),
-        ),
-        onTap: () => Navigator.of(context).pushNamed(
-          Routes.requestDetailsScreen,
-          arguments: request.id,
         ),
       );
 }

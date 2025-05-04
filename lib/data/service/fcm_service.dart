@@ -67,6 +67,11 @@ class FcmService {
     FirebaseMessaging.onMessage.listen(_firebaseMessagingBackgroundHandler);
   }
 
+  void stopListeningToMessages() {
+    FirebaseMessaging.onMessage.listen((final _) {});
+    FirebaseMessaging.onBackgroundMessage((final _) async {});
+  }
+
   void listenToBackgroundMessages() {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }

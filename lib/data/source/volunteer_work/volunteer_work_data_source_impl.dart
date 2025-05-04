@@ -69,4 +69,16 @@ class VolunteerWorkDataSourceImpl implements VolunteerWorkDataSource {
         )
         .toList();
   }
+
+  @override
+  Future<List<VolunteerWorkModel>> getWorksByRequestId(
+    final String requestId,
+  ) async {
+    final response = await _dio.get('$_basePath/request/$requestId');
+    return (response.data as List)
+        .map(
+          (final e) => VolunteerWorkModel.fromJson(e as Map<String, dynamic>),
+        )
+        .toList();
+  }
 }

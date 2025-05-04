@@ -12,8 +12,8 @@ extension LocationConstantsPositionExtension on Position {
 
   List<String> get locationTopicList => [
         for (final double latLoc in _closeLocations(latitude))
-          for (final double longiLoc in _closeLocations(longitude))
-            '${LocationConstants.locationTopicStart}${_splitLocation(latLoc)}_${_splitLocation(longiLoc)}',
+          for (final double longLoc in _closeLocations(longitude))
+            '${LocationConstants.locationTopicStart}${_splitLocation(latLoc)}_${_splitLocation(longLoc)}',
       ];
 }
 

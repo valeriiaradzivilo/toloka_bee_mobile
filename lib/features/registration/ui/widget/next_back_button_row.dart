@@ -69,7 +69,7 @@ class NextBackButtonRow extends StatelessWidget {
                             );
 
                             Navigator.of(context)
-                                .pushReplacementNamed(Routes.mainScreen);
+                                .pushReplacementNamed(Routes.loginScreen);
                           }
                         });
                       }

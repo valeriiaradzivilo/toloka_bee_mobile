@@ -150,32 +150,6 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                   final request = widget.state.requests[index];
                   return Stack(
                     children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Visibility(
-                          visible: request.isRemote,
-                          child: Transform.rotate(
-                            angle: 0.5,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: ZipColor.onTertiaryFixed,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 4,
-                                vertical: 2,
-                              ),
-                              child: Text(
-                                translate('give.hand.remote'),
-                                style: ZipFonts.small.style.copyWith(
-                                  color: ZipColor.onTertiary,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                       RequestTile(
                         request: request,
                         distance: context
@@ -185,6 +159,37 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                               request.longitude,
                             )
                             .toStringAsFixed(2),
+                        showStatus: false,
+                        maxDescriptionLines: 5,
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Visibility(
+                          visible: request.isRemote,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Transform.rotate(
+                              angle: 0.5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: ZipColor.onTertiaryFixed,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                  vertical: 2,
+                                ),
+                                child: Text(
+                                  translate('give.hand.remote'),
+                                  style: ZipFonts.small.style.copyWith(
+                                    color: ZipColor.onTertiary,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   );

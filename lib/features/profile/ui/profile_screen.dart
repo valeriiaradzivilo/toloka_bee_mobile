@@ -162,11 +162,13 @@ class _LoadedProfile extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 200,
+                height: 250,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (final _, final index) =>
-                      _RequestTile(requests[index]),
+                  itemBuilder: (final _, final index) => RequestTile(
+                    request: requests[index],
+                    width: MediaQuery.sizeOf(context).width - 50,
+                  ),
                   itemCount: requests.length,
                 ),
               ),
@@ -237,50 +239,6 @@ class _LoadedProfile extends StatelessWidget {
       );
 }
 
-class _RequestTile extends StatelessWidget {
-  const _RequestTile(this.request);
-  final RequestNotificationModel request;
-
-  @override
-  Widget build(final BuildContext context) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          alignment: Alignment.topRight,
-          children: [
-            Container(
-              width: 300,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: ZipColor.primary,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: RequestTile(request: request),
-            ),
-            Transform.rotate(
-              angle: 0.2,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 5,
-                  vertical: 2,
-                ),
-                decoration: BoxDecoration(
-                  color: request.status.color,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  request.status.text,
-                  style: ZipFonts.small.style.copyWith(
-                    color: ZipColor.onPrimary,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-}
-
 class _VolunteerWork extends StatelessWidget {
   const _VolunteerWork(this.volunteerWorks);
   final List<RequestNotificationModel> volunteerWorks;
@@ -295,10 +253,12 @@ class _VolunteerWork extends StatelessWidget {
               style: ZipFonts.medium.style,
             ),
             SizedBox(
-              height: 200,
+              height: 250,
               child: ListView.builder(
-                itemBuilder: (final _, final index) =>
-                    _RequestTile(volunteerWorks[index]),
+                itemBuilder: (final _, final index) => RequestTile(
+                  request: volunteerWorks[index],
+                  width: MediaQuery.sizeOf(context).width - 50,
+                ),
                 itemCount: volunteerWorks.length,
                 scrollDirection: Axis.horizontal,
               ),

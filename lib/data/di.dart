@@ -115,7 +115,7 @@ Future<void> initRepository() async {
     () => ComplaintRepositoryImpl(serviceLocator()),
   );
   serviceLocator.registerLazySingleton<VolunteerWorkRepository>(
-    () => VolunteerWorkRepositoryImpl(serviceLocator()),
+    () => VolunteerWorkRepositoryImpl(serviceLocator(), serviceLocator()),
   );
 }
 

@@ -34,6 +34,8 @@ class UserBloc extends ZipBloc {
 
     addSubscription(
       _user.pairwise().listen((final users) async {
+        if (users[0].valueOrNull == users[1].valueOrNull) return;
+
         if (users[1].valueOrNull?.bannedUntil != null &&
             users[1].valueOrNull!.bannedUntil!.isAfter(DateTime.now())) {
           await logout();
@@ -42,20 +44,30 @@ class UserBloc extends ZipBloc {
           );
           return;
         }
-        if (users[0].valueOrNull?.id == users[1].valueOrNull?.id) return;
+
+        if (users[1].valueOrNull == null &&
+            FirebaseAuth.instance.currentUser != null) {
+          await logout();
+          return;
+        }
+
         if (users[1].valueOrNull case OptionalValue<UserAuthModel>(:final value)
             when value.position.toLowerCase() ==
                 EPosition.requester.name.toLowerCase()) {
           return;
         }
 
-        locator<FcmService>().listenToMessages();
-        locator<FcmService>().listenToBackgroundMessages();
+        _fcmService.listenToMessages();
+        _fcmService.listenToBackgroundMessages();
       }),
     );
 
     addSubscription(
       FirebaseAuth.instance.authStateChanges().listen((final user) {
+        if (user == null && _user.valueOrNull == null) {
+          return;
+        }
+
         if (user == null) {
           _user.add(const OptionalNull());
           return;
@@ -170,6 +182,7 @@ class UserBloc extends ZipBloc {
 
   Future<void> logout() async {
     final result = await _logoutUserUsecase.call();
+    _fcmService.stopListeningToMessages();
     result.fold(
       (final error) {},
       (final _) {

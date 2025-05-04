@@ -3,6 +3,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../common/reactive/react_widget.dart';
+import '../../../../../common/theme/zip_fonts.dart';
 import '../../../../../common/widgets/lin_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
 import '../../data/e_steps.dart';
@@ -24,6 +25,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
   bool _isEmailValid = true;
   bool _isPasswordValid = false;
   bool _isConfirmPasswordValid = false;
+  bool _termsAccepted = false;
 
   @override
   void dispose() {
@@ -71,15 +73,54 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
             _isConfirmPasswordValid = p0;
           }),
         ),
+        CheckboxListTile(
+          value: _termsAccepted,
+          onChanged: (final value) {
+            setState(() => _termsAccepted = value ?? false);
+          },
+          title: Row(
+            children: [
+              Text(translate('create.account.terms.accept')),
+              const SizedBox(width: 5),
+              GestureDetector(
+                onTap: () => showDialog(
+                  context: context,
+                  builder: (final _) => AlertDialog(
+                    title: Text(translate('create.account.terms.title')),
+                    content: SingleChildScrollView(
+                      child: Text(translate('create.account.terms.content')),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(translate('common.ok')),
+                      ),
+                    ],
+                  ),
+                ),
+                child: Text(
+                  translate('create.account.terms.read'),
+                  style: ZipFonts.medium.style.copyWith(
+                    decoration: TextDecoration.underline,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         const Spacer(),
-        NextBackButtonRow(
-          step: ESteps.addRegisterInfo,
-          areFieldsValid: _isEmailValid &&
-              _isPasswordValid &&
-              _isConfirmPasswordValid &&
-              _confirmPasswordController.text.isNotEmpty &&
-              _passwordController.text.isNotEmpty &&
-              _emailController.text.isNotEmpty,
+        Flexible(
+          child: NextBackButtonRow(
+            step: ESteps.addRegisterInfo,
+            areFieldsValid: _isEmailValid &&
+                _isPasswordValid &&
+                _isConfirmPasswordValid &&
+                _confirmPasswordController.text.isNotEmpty &&
+                _passwordController.text.isNotEmpty &&
+                _emailController.text.isNotEmpty &&
+                _termsAccepted,
+          ),
         ),
       ],
     );

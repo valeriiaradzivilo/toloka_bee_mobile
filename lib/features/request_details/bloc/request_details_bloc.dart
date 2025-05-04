@@ -6,6 +6,8 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../common/exceptions/request_already_accepted_exception.dart';
+import '../../../common/exceptions/request_expired_exception.dart';
 import '../../../data/models/request_complaint_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
@@ -99,16 +101,32 @@ class RequestDetailsBloc
 
       result.fold(
         (final failure) {
+          if (failure.failure is RequestAlreadyAcceptedException) {
+            _snackbarService.show(
+              PopupModel(
+                title: translate('request.accept.already_accepted'),
+              ),
+            );
+          } else if (failure.failure is RequestExpiredException) {
+            _snackbarService.show(
+              PopupModel(
+                title: translate('request.accept.expired'),
+                type: EPopupType.error,
+              ),
+            );
+          } else {
+            _snackbarService.show(
+              PopupModel(
+                title: translate('request.accept.error'),
+                type: EPopupType.error,
+              ),
+            );
+          }
           emit(RequestDetailsError(error: failure.toString()));
-          _snackbarService.show(
-            PopupModel(
-              title: translate('request.accept.error'),
-              type: EPopupType.error,
-            ),
-          );
         },
         (final success) {
           emit(const RequestDetailsLoading());
+
           _snackbarService.show(
             PopupModel(
               title: translate('request.accept.success'),

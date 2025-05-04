@@ -15,6 +15,7 @@ class CreateRequestState {
   final double? price;
   final LatLng location;
   final ERequestHandType? requestType;
+  final int requiredVolunteersCount;
 
   CreateRequestState({
     required this.description,
@@ -24,6 +25,7 @@ class CreateRequestState {
     this.deadline,
     this.price,
     required this.requestType,
+    required this.requiredVolunteersCount,
   });
 
   CreateRequestState copyWith({
@@ -34,6 +36,7 @@ class CreateRequestState {
     final double? price,
     final LatLng? location,
     final ERequestHandType? requestType,
+    final int? requiredVolunteersCount,
   }) =>
       CreateRequestState(
         description: description ?? this.description,
@@ -43,6 +46,8 @@ class CreateRequestState {
         price: price ?? this.price,
         location: location ?? this.location,
         requestType: requestType ?? this.requestType,
+        requiredVolunteersCount:
+            requiredVolunteersCount ?? this.requiredVolunteersCount,
       );
 
   RequestNotificationModel toRequestNotificationModel() =>
@@ -51,8 +56,8 @@ class CreateRequestState {
         userId: FirebaseAuth.instance.currentUser!.uid,
         status: ERequestStatus.pending,
         deadline: deadline ?? DateTime.now().add(const Duration(days: 7)),
-        latitude: location.latitude,
-        longitude: location.longitude,
+        latitude: isRemote ? 0 : location.latitude,
+        longitude: isRemote ? 0 : location.longitude,
         isRemote: isRemote,
         requiresPhysicalStrength: isPhysicalStrength,
         price: price?.toInt(),
@@ -62,9 +67,11 @@ class CreateRequestState {
         title: translate('request.title'),
         body: translate('request.body'),
         requestType: requestType ?? ERequestHandType.other,
+        requiredVolunteersCount: requiredVolunteersCount,
       );
 
   bool get canCreateRequest =>
       description.isNotEmpty &&
-      (isRemote || (location.latitude != 0 && location.longitude != 0));
+      (isRemote || (location.latitude != 0 && location.longitude != 0)) &&
+      requiredVolunteersCount > 0;
 }

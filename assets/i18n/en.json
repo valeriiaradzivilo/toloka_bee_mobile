@@ -76,6 +76,12 @@
             "contact": {
                 "title": "How do you want to be contacted?",
                 "subtitle": "Select your preferred method of contact"
+            },
+            "terms": {
+                "accept": "I accept the",
+                "read": "Terms of Service",
+                "title": "Terms of Service",
+                "content": "By using this application, you agree to abide by the principles of mutual respect, honesty, and safety.\n\nThis service does not store your location data on a continuous basis. Your precise geographic location is only shared with a volunteer once they have explicitly accepted your request for help. Prior to that moment, only an approximate or intentionally obfuscated location may be used to match you with potential helpers nearby.\n\nAll requests and users on the platform are subject to moderation. Administrators have the authority to review complaints submitted by users and may take action, including issuing temporary or permanent bans, in order to maintain a safe environment for everyone.\n\nIf you believe a request is fraudulent, offensive, or violates community standards, you may submit a complaint. The same applies to users who display inappropriate behavior. All complaints are reviewed manually and confidentially.\n\nBy continuing to use this application, you acknowledge that you understand these terms and agree to use the service in a responsible, ethical manner that fosters cooperation and community trust."
             }
         }
     },
@@ -201,7 +207,8 @@
         },
         "details": {
             "description": "Description",
-            "price": "Price",
+            "price": "Estimated price: {price}",
+            "price_hint": "This is an approximate price if the user asked you to buy something for them. This is not a price for your service.",
             "deadline": "Needs to be done by {date}",
             "remote": "Remote",
             "physical": "Requires physical strength",
@@ -216,9 +223,10 @@
                 "about": "About them: {about}"
             },
             "status": "Current request status is {status}",
-            "help": "Help",
+            "help": "Help {user}",
             "remove": "Remove request",
-            "report": "Report this request or user"
+            "report": "Report this request or user",
+            "confirm_done": "Mark request as done"
         },
         "delete": {
             "success": "Request deleted successfully.",
@@ -241,7 +249,9 @@
         },
         "accept": {
             "success": "Request accepted successfully. Now the request in progress is placed in your profile.",
-            "error": "Error occurred while accepting the request. Please try again later."
+            "error": "Error occurred while accepting the request. Please try again later.",
+            "already_accepted": "Sorry. A volunteer has already accepted this request. Thank you for wanting to help! Give this help to another person.",
+            "expired": "Sorry. This request has expired. Thank you for wanting to help! Give this help to another person."
         },
         "hand_type": {
             "organization_of_volunteering": "Volunteering coordination",
@@ -279,7 +289,8 @@
         },
         "cancel": "Cancel",
         "confirm": "Confirm",
-        "copied": "Copied to your clipboard !"
+        "copied": "Copied to your clipboard !",
+        "ok": "OK"
     },
     "contacts": {
         "phone": "Phone",

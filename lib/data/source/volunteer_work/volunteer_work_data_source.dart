@@ -14,4 +14,7 @@ abstract interface class VolunteerWorkDataSource {
   Future<List<VolunteerWorkModel>> getWorksByRequester(
     final String requesterId,
   );
+  Future<List<VolunteerWorkModel>> getWorksByRequestId(
+    final String requestId,
+  );
 }

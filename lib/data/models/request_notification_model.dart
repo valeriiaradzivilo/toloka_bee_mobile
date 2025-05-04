@@ -21,6 +21,7 @@ class RequestNotificationModel implements Equatable {
   final String title;
   final String body;
   final ERequestHandType requestType;
+  final int requiredVolunteersCount;
 
   RequestNotificationModel({
     required this.id,
@@ -38,6 +39,7 @@ class RequestNotificationModel implements Equatable {
     required this.title,
     required this.body,
     required this.requestType,
+    required this.requiredVolunteersCount,
   });
 
   factory RequestNotificationModel.fromFCM(final Map<String, dynamic> json) {
@@ -63,6 +65,8 @@ class RequestNotificationModel implements Equatable {
       title: '',
       body: '',
       requestType: ERequestHandType.fromJson(json['requestType'] ?? ''),
+      requiredVolunteersCount:
+          int.tryParse(json['requiredVolunteersCount']) ?? 1,
     );
   }
 
@@ -84,6 +88,7 @@ class RequestNotificationModel implements Equatable {
         title: json['title'] ?? '',
         body: json['body'] ?? '',
         requestType: ERequestHandType.fromJson(json['requestType'] ?? ''),
+        requiredVolunteersCount: json['requiredVolunteersCount'] as int? ?? 1,
       );
 
   Map<String, dynamic> toJson() => {
@@ -104,6 +109,7 @@ class RequestNotificationModel implements Equatable {
         'title': title,
         'body': body,
         'requestType': requestType.name,
+        'requiredVolunteersCount': requiredVolunteersCount,
       };
 
   RequestNotificationModel copyWith({
@@ -122,6 +128,7 @@ class RequestNotificationModel implements Equatable {
     final String? title,
     final String? body,
     final ERequestHandType? requestType,
+    final int? requiredVolunteersCount,
   }) =>
       RequestNotificationModel(
         id: id ?? this.id,
@@ -140,6 +147,8 @@ class RequestNotificationModel implements Equatable {
         title: title ?? this.title,
         body: body ?? this.body,
         requestType: requestType ?? this.requestType,
+        requiredVolunteersCount:
+            requiredVolunteersCount ?? this.requiredVolunteersCount,
       );
 
   @override
@@ -159,6 +168,7 @@ class RequestNotificationModel implements Equatable {
         title,
         body,
         requestType,
+        requiredVolunteersCount,
       ];
 
   @override

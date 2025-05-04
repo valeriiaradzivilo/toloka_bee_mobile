@@ -33,3 +33,7 @@ class ReportUserEvent extends RequestDetailsEvent {
   final String userId;
   final String message;
 }
+
+class ConfirmRequestIsCompletedVolunteerEvent extends RequestDetailsEvent {
+  const ConfirmRequestIsCompletedVolunteerEvent();
+}
