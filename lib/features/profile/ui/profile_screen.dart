@@ -18,6 +18,7 @@ import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../authentication/bloc/user_bloc.dart';
 import '../../give_hand/ui/widgets/request_tile.dart';
+import '../../registration/ui/data/e_position.dart';
 import '../bloc/profile_cubit.dart';
 import '../bloc/profile_state.dart';
 import 'profile_edit_screen.dart';
@@ -152,6 +153,13 @@ class _LoadedProfile extends StatelessWidget {
                 ),
               ),
             ),
+            if (EPosition.fromJson(user.position) case final EPosition position)
+              Text(
+                position.text,
+                style: ZipFonts.small.style.copyWith(
+                  color: ZipColor.secondary,
+                ),
+              ),
             if (requests.isNotEmpty) ...[
               const Divider(),
               Align(

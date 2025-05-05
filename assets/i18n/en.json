@@ -372,5 +372,10 @@
             "open_user_profile": "Open user profile",
             "open_request": "Open request"
         }
+    },
+    "position": {
+        "volunteer": "Volunteer",
+        "requester": "Requester",
+        "both": "Volunteer & Requester"
     }
 }

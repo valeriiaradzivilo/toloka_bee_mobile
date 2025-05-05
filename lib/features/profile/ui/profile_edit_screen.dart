@@ -66,7 +66,7 @@ class ProfileEditScreen extends StatelessWidget {
                         .map(
                           (final p) => DropdownMenuItem(
                             value: p.name.toLowerCase(),
-                            child: Text(p.text),
+                            child: Text(p.textWantToBe),
                           ),
                         )
                         .toList(),

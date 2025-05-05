@@ -76,7 +76,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                           for (final position in EPosition.values)
                             ListTile(
                               title: Text(
-                                position.text,
+                                position.textWantToBe,
                               ),
                               onTap: () => setState(() {
                                 _menuController.close();
@@ -95,7 +95,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                                     'create.account.preferred.position.title',
                                   ),
                                 )
-                              : Text(_position!.text),
+                              : Text(_position!.textWantToBe),
                           subtitle: _position == null
                               ? Text(
                                   translate(

@@ -1,5 +1,7 @@
 import 'package:flutter_translate/flutter_translate.dart';
 
+import '../../../../common/list_extension.dart';
+
 enum EPosition {
   volunteer,
   requester,
@@ -18,7 +20,23 @@ enum EPosition {
 
   String toJson() => name;
 
+  static EPosition? fromJson(final String json) =>
+      EPosition.values.firstWhereOrNull(
+        (final element) => element.name.toLowerCase() == json.toLowerCase(),
+      );
+
   String get text {
+    switch (this) {
+      case EPosition.volunteer:
+        return translate('position.volunteer');
+      case EPosition.requester:
+        return translate('position.requester');
+      case EPosition.both:
+        return translate('position.both');
+    }
+  }
+
+  String get textWantToBe {
     switch (this) {
       case EPosition.volunteer:
         return translate('create.account.preferred.position.volunteer');
