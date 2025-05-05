@@ -36,10 +36,8 @@ class MapScreenBloc extends ZipBloc {
       return;
     }
 
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
+    final permission = await Geolocator.checkPermission();
+
     final locationServiceEnabled =
         permission == LocationPermission.whileInUse ||
             permission != LocationPermission.always;
