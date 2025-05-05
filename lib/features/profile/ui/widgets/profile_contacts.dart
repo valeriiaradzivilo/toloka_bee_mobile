@@ -6,7 +6,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../common/theme/zip_color.dart';
 import '../../../../common/theme/zip_fonts.dart';
+import '../../../../common/widgets/zip_snackbar.dart';
 import '../../../../data/models/contact_info_model.dart';
+import '../../../../data/models/ui/e_popup_type.dart';
+import '../../../../data/models/ui/popup_model.dart';
 import '../../../registration/ui/widget/steps/fourth_step_create_account.dart';
 import '../../bloc/profile_cubit.dart';
 
@@ -121,7 +124,44 @@ class ProfileContacts extends StatelessWidget {
                               ),
                             ),
                             ElevatedButton.icon(
-                              onPressed: () => Navigator.pop(context, true),
+                              onPressed: () {
+                                if (preferredMethod == null) {
+                                  ZipSnackbar.show(
+                                    context,
+                                    PopupModel(
+                                      title: translate(
+                                        'contacts.preferred_method_not_selected',
+                                      ),
+                                      type: EPopupType.error,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                final contact = ContactInfoModel(
+                                  id: '',
+                                  userId: '',
+                                  preferredMethod: preferredMethod!,
+                                  phone: phone,
+                                  viber: viber,
+                                  telegram: telegram,
+                                  whatsapp: whatsapp,
+                                  email: email,
+                                );
+
+                                if (!contact.isPreferredMethodContactSet) {
+                                  ZipSnackbar.show(
+                                    context,
+                                    PopupModel(
+                                      title: translate(
+                                        'contacts.preferred_contact_not_selected',
+                                      ),
+                                      type: EPopupType.error,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                Navigator.pop(context, true);
+                              },
                               label: Text(translate('profile.contacts.save')),
                               icon: const Icon(
                                 Icons.save,

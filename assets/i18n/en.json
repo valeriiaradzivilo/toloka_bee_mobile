@@ -321,11 +321,13 @@
         "viber": "Viber",
         "preferred": "Preferred method of contact",
         "hint": "You can add more contacts later in your profile by clicking on your image on the dashboard.",
-        "contacts.whatsapp_hint": "Enter your number, a full phone number in international format. Omit any brackets, dashes, plus signs, and leading zeros when adding the phone number in international format.",
-        "contacts.viber_hint": "Enter your number which is connected to a Viber account.",
-        "contacts.telegram_hint": "Enter your Telegram username.",
-        "contacts.email_hint": "Enter your email address.",
-        "contacts.phone_hint": "Enter your phone number."
+        "whatsapp_hint": "Enter your number, a full phone number in international format. Omit any brackets, dashes, plus signs, and leading zeros when adding the phone number in international format.",
+        "viber_hint": "Enter your number which is connected to a Viber account.",
+        "telegram_hint": "Enter your Telegram username.",
+        "email_hint": "Enter your email address.",
+        "phone_hint": "Enter your phone number.",
+        "preferred_method_not_selected": "Preferred method of contact is not selected.\nPlease select it.",
+        "preferred_contact_not_selected": "Contact of your preferred method of contact is not set.\nPlease set it."
     },
     "complaints": {
         "requests": "Requests",

@@ -14,9 +14,11 @@ class NextBackButtonRow extends StatelessWidget {
     super.key,
     required this.step,
     required this.areFieldsValid,
+    this.canGoToTheNextStep,
   });
   final ESteps step;
   final bool areFieldsValid;
+  final bool Function()? canGoToTheNextStep;
 
   @override
   Widget build(final BuildContext context) {
@@ -32,15 +34,31 @@ class NextBackButtonRow extends StatelessWidget {
                 child: Text(translate('create.account.back')),
               ),
               ElevatedButton(
-                onPressed:
-                    areFieldsValid ? () => registerBloc.nextStep() : null,
+                onPressed: areFieldsValid
+                    ? () {
+                        final canGo = canGoToTheNextStep != null
+                            ? canGoToTheNextStep!()
+                            : true;
+                        if (canGo) {
+                          registerBloc.nextStep();
+                        }
+                      }
+                    : null,
                 child: Text(translate('create.account.next')),
               ),
             ],
           _ when step.nextStep != null => [
               ElevatedButton(
-                onPressed:
-                    areFieldsValid ? () => registerBloc.nextStep() : null,
+                onPressed: areFieldsValid
+                    ? () {
+                        final canGo = canGoToTheNextStep != null
+                            ? canGoToTheNextStep!()
+                            : true;
+                        if (canGo) {
+                          registerBloc.nextStep();
+                        }
+                      }
+                    : null,
                 child: Text(translate('create.account.next')),
               ),
             ],
@@ -52,26 +70,32 @@ class NextBackButtonRow extends StatelessWidget {
               ElevatedButton(
                 onPressed: areFieldsValid
                     ? () {
-                        registerBloc.register().then((final value) {
-                          if (context.mounted) {
-                            ZipSnackbar.show(
-                              context,
-                              value
-                                  ? PopupModel(
-                                      title:
-                                          translate('create.account.success'),
-                                      type: EPopupType.success,
-                                    )
-                                  : PopupModel(
-                                      title: translate('create.account.error'),
-                                      type: EPopupType.error,
-                                    ),
-                            );
+                        final canGo = canGoToTheNextStep != null
+                            ? canGoToTheNextStep!()
+                            : true;
+                        if (canGo) {
+                          registerBloc.register().then((final value) {
+                            if (context.mounted) {
+                              ZipSnackbar.show(
+                                context,
+                                value
+                                    ? PopupModel(
+                                        title:
+                                            translate('create.account.success'),
+                                        type: EPopupType.success,
+                                      )
+                                    : PopupModel(
+                                        title:
+                                            translate('create.account.error'),
+                                        type: EPopupType.error,
+                                      ),
+                              );
 
-                            Navigator.of(context)
-                                .pushReplacementNamed(Routes.loginScreen);
-                          }
-                        });
+                              Navigator.of(context)
+                                  .pushReplacementNamed(Routes.loginScreen);
+                            }
+                          });
+                        }
                       }
                     : null,
                 child: Text(translate('create.account.register')),

@@ -28,6 +28,14 @@ class ContactInfoModel with _$ContactInfoModel {
       viber != null ||
       telegram != null ||
       whatsapp != null;
+
+  bool get isPreferredMethodContactSet => switch (preferredMethod) {
+        ContactMethod.phone => phone != null && phone!.isNotEmpty,
+        ContactMethod.email => email != null && email!.isNotEmpty,
+        ContactMethod.viber => viber != null && viber!.isNotEmpty,
+        ContactMethod.telegram => telegram != null && telegram!.isNotEmpty,
+        ContactMethod.whatsapp => whatsapp != null && whatsapp!.isNotEmpty,
+      };
 }
 
 enum ContactMethod {

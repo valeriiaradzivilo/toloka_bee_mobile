@@ -119,7 +119,7 @@ class UserBloc extends ZipBloc {
         await _loginUserUsecase('test@user.com', 'Lera1234!'),
       's' when kDebugMode =>
         await _loginUserUsecase('sofiia@gmail.com', 'Lera1234!'),
-      'k' when kDebugMode =>
+      'c' when kDebugMode =>
         await _loginUserUsecase('cupatea@gmail.com', 'Lera1234!'),
       _ => await _loginUserUsecase(username, password),
     };

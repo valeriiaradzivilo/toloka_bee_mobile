@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../common/reactive/react_widget.dart';
@@ -104,7 +105,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
                     builder: (final data) => Text(
                       data.valueOrNull == null
                           ? translate('create.account.date.of.birth')
-                          : data.valueOrNull!.toString(),
+                          : DateFormat.yMMMMd().format(data.valueOrNull!),
                     ),
                   ),
                   const Icon(Icons.calendar_today),

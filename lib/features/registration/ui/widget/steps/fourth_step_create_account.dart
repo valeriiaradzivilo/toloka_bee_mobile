@@ -5,8 +5,11 @@ import 'package:gap/gap.dart';
 import '../../../../../common/theme/zip_fonts.dart';
 import '../../../../../common/widgets/lin_number_editing_field.dart';
 import '../../../../../common/widgets/lin_text_editing_field.dart';
+import '../../../../../common/widgets/zip_snackbar.dart';
 import '../../../../../data/models/contact_info_model.dart';
 import '../../../../../data/models/country.dart';
+import '../../../../../data/models/ui/e_popup_type.dart';
+import '../../../../../data/models/ui/popup_model.dart';
 import '../../data/e_steps.dart';
 import '../next_back_button_row.dart';
 import '../phone_code_dropdown.dart';
@@ -57,7 +60,6 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
   final _viberController = TextEditingController();
   final _telegramController = TextEditingController();
   final _whatsAppController = TextEditingController();
-  bool _isPreferredValid = false;
   ContactMethod? _preferredMethod;
   Country? _selectedCountry;
 
@@ -73,7 +75,6 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
   void initState() {
     super.initState();
     _preferredMethod = widget.preferredMethod;
-    _isPreferredValid = _preferredMethod != null;
     _emailController.text = widget.email ?? '';
     _viberController.text = widget.viber ?? '';
     _telegramController.text = widget.telegram ?? '';
@@ -134,7 +135,6 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                         _menuController.close();
                         setState(() {
                           _preferredMethod = m;
-                          _isPreferredValid = true;
                         });
                       },
                     ),
@@ -255,7 +255,47 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
               if (widget.showNextBackButton)
                 NextBackButtonRow(
                   step: ESteps.addContactInfo,
-                  areFieldsValid: _isPreferredValid,
+                  areFieldsValid: true,
+                  canGoToTheNextStep: () {
+                    if (_preferredMethod == null) {
+                      ZipSnackbar.show(
+                        context,
+                        PopupModel(
+                          title: translate(
+                            'contacts.preferred_method_not_selected',
+                          ),
+                          type: EPopupType.error,
+                        ),
+                      );
+                      return false;
+                    }
+
+                    final contactInfoModel = ContactInfoModel(
+                      id: '',
+                      userId: '',
+                      phone: _phoneController.text,
+                      viber: _viberController.text,
+                      telegram: _telegramController.text,
+                      whatsapp: _whatsAppController.text,
+                      email: _emailController.text,
+                      preferredMethod: _preferredMethod!,
+                    );
+
+                    if (!contactInfoModel.isPreferredMethodContactSet) {
+                      ZipSnackbar.show(
+                        context,
+                        PopupModel(
+                          title: translate(
+                            'contacts.preferred_contact_not_selected',
+                          ),
+                          type: EPopupType.error,
+                        ),
+                      );
+                      return false;
+                    }
+
+                    return true;
+                  },
                 ),
             ],
           ),
