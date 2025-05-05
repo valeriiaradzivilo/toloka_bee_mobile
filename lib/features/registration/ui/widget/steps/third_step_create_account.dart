@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../common/reactive/react_widget.dart';
 import '../../../../../common/theme/zip_fonts.dart';
-import '../../../../../common/widgets/lin_text_editing_field.dart';
+import '../../../../../common/widgets/app_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
 import '../../data/e_position.dart';
 import '../../data/e_steps.dart';
@@ -54,7 +54,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
               Text(translate('create.account.about.subtitle')),
               ReactWidget(
                 stream: context.read<RegisterBloc>().aboutMeStream,
-                builder: (final about) => LinTextField(
+                builder: (final about) => AppTextField(
                   controller: _aboutMeController..text = about,
                   label: translate('create.account.about.title'),
                   onChanged: (final p0) {

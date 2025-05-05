@@ -4,8 +4,8 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/theme/zip_fonts.dart';
-import '../../../common/widgets/lin_number_editing_field.dart';
-import '../../../common/widgets/lin_text_editing_field.dart';
+import '../../../common/widgets/app_number_editing_field.dart';
+import '../../../common/widgets/app_text_editing_field.dart';
 import '../../../data/models/e_request_hand_type.dart';
 import '../../authentication/bloc/user_bloc.dart';
 import '../bloc/create_request_bloc.dart';
@@ -106,7 +106,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                       );
                                 },
                               ),
-                              LinTextField(
+                              AppTextField(
                                 controller: _descriptionController,
                                 label: translate('request.hand.description'),
                                 onChanged: (final p0) {
@@ -212,7 +212,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                     ),
                                   ),
                                   Expanded(
-                                    child: LinNumberEditingField(
+                                    child: AppNumberEditingField(
                                       controller: _priceController,
                                       label:
                                           translate('request.hand.price.label'),

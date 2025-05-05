@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../common/reactive/react_widget.dart';
-import '../../../../../common/widgets/lin_text_editing_field.dart';
+import '../../../../../common/widgets/app_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
 import '../../data/e_steps.dart';
 import '../next_back_button_row.dart';
@@ -53,7 +53,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
                   icon: const Icon(Icons.add_a_photo),
                 ),
         ),
-        LinTextField(
+        AppTextField(
           initialValue: registerBloc.nameStream.value,
           controller: _nameController,
           label: translate('create.account.name'),
@@ -64,7 +64,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
           }),
           maxLines: 1,
         ),
-        LinTextField(
+        AppTextField(
           initialValue: registerBloc.surnameStream.value,
           controller: _surnameController,
           label: translate('create.account.surname'),

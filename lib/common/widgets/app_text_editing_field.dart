@@ -9,15 +9,14 @@ enum TextFieldOption {
   undefined,
   email,
   password,
-
   name;
 
   double? get maxFieldWidth =>
       switch (this) { name => 500, email => 700, password => 700, _ => null };
 }
 
-class LinTextField extends StatefulWidget {
-  const LinTextField({
+class AppTextField extends StatefulWidget {
+  const AppTextField({
     super.key,
     required this.controller,
     this.initialValue,
@@ -42,10 +41,10 @@ class LinTextField extends StatefulWidget {
   final int? maxSymbols;
 
   @override
-  State<LinTextField> createState() => _LinTextFieldState();
+  State<AppTextField> createState() => _AppTextFieldState();
 }
 
-class _LinTextFieldState extends State<LinTextField> {
+class _AppTextFieldState extends State<AppTextField> {
   bool obscureText = true;
   String? errorText;
   String? _validate(final String? value, final BuildContext context) {

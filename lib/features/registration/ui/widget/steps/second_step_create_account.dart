@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../common/reactive/react_widget.dart';
 import '../../../../../common/theme/zip_fonts.dart';
-import '../../../../../common/widgets/lin_text_editing_field.dart';
+import '../../../../../common/widgets/app_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
 import '../../data/e_steps.dart';
 import '../next_back_button_row.dart';
@@ -45,7 +45,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
         const Spacer(),
         ReactWidget(
           stream: registerBloc.emailStream,
-          builder: (final email) => LinTextField(
+          builder: (final email) => AppTextField(
             controller: _emailController..text = email,
             label: translate('create.account.email'),
             option: TextFieldOption.email,
@@ -55,7 +55,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
             }),
           ),
         ),
-        LinTextField(
+        AppTextField(
           controller: _passwordController,
           label: translate('create.account.password'),
           option: TextFieldOption.password,
@@ -64,7 +64,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
             _isPasswordValid = p0;
           }),
         ),
-        LinTextField(
+        AppTextField(
           controller: _confirmPasswordController,
           label: translate('create.account.confirm.password'),
           option: TextFieldOption.password,

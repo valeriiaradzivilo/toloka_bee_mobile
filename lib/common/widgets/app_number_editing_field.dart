@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-class LinNumberEditingField extends StatefulWidget {
-  const LinNumberEditingField({
+class AppNumberEditingField extends StatefulWidget {
+  const AppNumberEditingField({
     super.key,
     this.label,
     required this.controller,
@@ -20,10 +20,10 @@ class LinNumberEditingField extends StatefulWidget {
   final Function(String)? onChanged;
 
   @override
-  State<LinNumberEditingField> createState() => _LinNumberEditingFieldState();
+  State<AppNumberEditingField> createState() => _AppNumberEditingFieldState();
 }
 
-class _LinNumberEditingFieldState extends State<LinNumberEditingField> {
+class _AppNumberEditingFieldState extends State<AppNumberEditingField> {
   @override
   Widget build(final BuildContext context) => TextFormField(
         controller: widget.controller,

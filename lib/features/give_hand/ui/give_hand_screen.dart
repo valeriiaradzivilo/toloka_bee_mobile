@@ -4,7 +4,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
-import '../../../common/widgets/lin_number_editing_field.dart';
+import '../../../common/widgets/app_number_editing_field.dart';
 import '../bloc/give_hand_bloc.dart';
 import '../bloc/give_hand_event.dart';
 import '../bloc/give_hand_state.dart';
@@ -83,7 +83,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                         ),
                         SizedBox(
                           width: 40,
-                          child: LinNumberEditingField(
+                          child: AppNumberEditingField(
                             maxValue: 1000,
                             minValue: 1,
                             controller: _controller

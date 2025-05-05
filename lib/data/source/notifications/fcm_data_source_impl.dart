@@ -147,6 +147,8 @@ class FcmDataSourceImpl implements FcmDataSource {
       'Authorization': 'Bearer $accessToken',
     };
 
+    //TODO: Дороби personalized на беці
+
     final response = await _dio.post(
       '$_basePathRequest/get-personalized',
       options: Options(headers: headers),

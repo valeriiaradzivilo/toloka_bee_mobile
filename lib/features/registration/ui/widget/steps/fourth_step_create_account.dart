@@ -3,8 +3,8 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../../common/theme/zip_fonts.dart';
-import '../../../../../common/widgets/lin_number_editing_field.dart';
-import '../../../../../common/widgets/lin_text_editing_field.dart';
+import '../../../../../common/widgets/app_number_editing_field.dart';
+import '../../../../../common/widgets/app_text_editing_field.dart';
 import '../../../../../common/widgets/zip_snackbar.dart';
 import '../../../../../data/models/contact_info_model.dart';
 import '../../../../../data/models/country.dart';
@@ -190,7 +190,7 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                   ),
                   const Gap(12),
                   Expanded(
-                    child: LinNumberEditingField(
+                    child: AppNumberEditingField(
                       controller: _phoneController,
                       label: translate('contacts.phone'),
                       onChanged: (final value) {
@@ -325,7 +325,7 @@ class _ContactRow extends StatelessWidget {
           Icon(icon, color: Theme.of(context).colorScheme.primary),
           const Gap(12),
           Expanded(
-            child: LinTextField(
+            child: AppTextField(
               controller: controller,
               option: option,
               label: method.text,
