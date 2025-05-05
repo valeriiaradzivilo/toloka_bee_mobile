@@ -83,10 +83,4 @@ class LoadedCreateRequestState extends CreateRequestState {
         requestType: requestType ?? ERequestHandType.other,
         requiredVolunteersCount: requiredVolunteersCount,
       );
-
-  bool get canCreateRequest =>
-      userHasContactInfo &&
-      description.isNotEmpty &&
-      (isRemote || (location.latitude != 0 && location.longitude != 0)) &&
-      requiredVolunteersCount > 0;
 }

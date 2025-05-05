@@ -41,6 +41,9 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
             requestType: null,
             requiredVolunteersCount: 1,
             userHasContactInfo: userHasContactInfo,
+            deadline: DateTime.now().add(
+              const Duration(days: 7),
+            ),
           ),
         );
       },

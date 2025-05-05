@@ -301,7 +301,13 @@ class _RequestHandModalState extends State<RequestHandModal> {
                               ),
                               Center(
                                 child: ElevatedButton(
-                                  onPressed: state.canCreateRequest
+                                  onPressed: _descriptionController
+                                              .text.isNotEmpty &&
+                                          (state.isRemote ||
+                                              (state.location.latitude != 0 &&
+                                                  state.location.longitude !=
+                                                      0)) &&
+                                          state.requiredVolunteersCount > 0
                                       ? () {
                                           context.read<CreateRequestBloc>().add(
                                                 SendRequestEvent(context),

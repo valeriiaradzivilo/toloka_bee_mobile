@@ -588,8 +588,7 @@ class __ReportDialogState extends State<_ReportDialog> {
           ),
         ],
       );
-  //TODO: Add notification for requester that request was accepted
-//TODO: Add subscription to request updates for requester
+
 //TODO: Implement ability to confirm request completion by requester and volunteer
 //TODO: Add a list for completed or in progress requests for volunteers
 }
