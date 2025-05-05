@@ -32,7 +32,6 @@ class MapScreenBloc extends ZipBloc {
   Future<void> _init() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled, don't continue
       return;
     }
 

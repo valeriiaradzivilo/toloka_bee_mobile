@@ -385,7 +385,6 @@ class RequestDetailsScreen extends StatelessWidget {
                           Center(
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                // dialog to confirm
                                 showDialog(
                                   context: context,
                                   builder: (final context) => AlertDialog(
@@ -590,5 +589,4 @@ class __ReportDialogState extends State<_ReportDialog> {
       );
 
 //TODO: Implement ability to confirm request completion by requester and volunteer
-//TODO: Add a list for completed or in progress requests for volunteers
 }

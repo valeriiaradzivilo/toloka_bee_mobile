@@ -51,8 +51,7 @@ class _LoginScreenState extends State<_LoginScreen> {
       (final value) {
         setState(() => loggingInProgress = false);
 
-        if (context.mounted && value) {
-          // ignore: use_build_context_synchronously
+        if (context.mounted && value && mounted) {
           Navigator.of(context).pushReplacementNamed(
             Routes.mainScreen,
           );

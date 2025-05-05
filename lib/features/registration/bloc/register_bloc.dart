@@ -41,6 +41,25 @@ class RegisterBloc extends ZipBloc {
   ValueStream<String> get telegramStream => _telegramController.stream;
   ValueStream<String> get whatsAppStream => _whatsAppController.stream;
 
+  set name(final String value) => _nameController.add(value);
+  set surname(final String value) => _surnameController.add(value);
+  set username(final String value) => _usernameController.add(value);
+  set password(final String value) => _passwordController.add(value);
+  set email(final String value) => _emailController.add(value);
+  set dateOfBirth(final DateTime value) =>
+      _dateOfBirthController.add(OptionalValue(value));
+  set aboutMe(final String value) => _aboutMeController.add(value);
+  set position(final EPosition? value) => _position = value;
+  set preferredContactMethod(final ContactMethod value) =>
+      _preferredMethodController.add(value);
+  set contactPhone(final String value) => _phoneController.add(value);
+  set contactEmail(final String value) => _emailContactController.add(value);
+  set contactViber(final String value) => _viberController.add(value);
+  set contactTelegram(final String value) => _telegramController.add(value);
+  set contactWhatsApp(final String value) => _whatsAppController.add(value);
+
+  EPosition? get currentPosition => _position;
+
   Future<bool> register() async {
     final base64Image = base64Encode(_photoController.value.bytes);
     final user = UserAuthModel(
@@ -51,7 +70,7 @@ class RegisterBloc extends ZipBloc {
       name: _nameController.value,
       surname: _surnameController.value,
       birthDate: _dateOfBirthController.value.valueOrNull!.toIso8601String(),
-      position: position!.name.toLowerCase(),
+      position: currentPosition!.name.toLowerCase(),
       about: _aboutMeController.value,
       photo: base64Image,
       photoFormat: _photoController.value.contentType,
@@ -81,13 +100,6 @@ class RegisterBloc extends ZipBloc {
     return result.isRight();
   }
 
-  void setName(final String v) => _nameController.add(v);
-  void setSurname(final String v) => _surnameController.add(v);
-  void setUsername(final String v) => _usernameController.add(v);
-  void setPassword(final String v) => _passwordController.add(v);
-  void setEmail(final String v) => _emailController.add(v);
-  void setDateOfBirth(final DateTime dt) =>
-      _dateOfBirthController.add(OptionalValue(dt));
   void pickImage() async {
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.camera);
@@ -99,22 +111,6 @@ class RegisterBloc extends ZipBloc {
     final contentType = lookupMimeType(image.name) ?? '';
     _photoController.add((bytes: bytes, contentType: contentType));
   }
-
-  void setAboutMe(final String v) => _aboutMeController.add(v);
-  // ignore: use_setters_to_change_properties
-  void setPosition(final EPosition p) {
-    _position = p;
-  }
-
-  EPosition? get position => _position;
-
-  void setPreferredContactMethod(final ContactMethod m) =>
-      _preferredMethodController.add(m);
-  void setContactPhone(final String v) => _phoneController.add(v);
-  void setContactEmail(final String v) => _emailContactController.add(v);
-  void setContactViber(final String v) => _viberController.add(v);
-  void setContactTelegram(final String v) => _telegramController.add(v);
-  void setContactWhatsApp(final String v) => _whatsAppController.add(v);
 
   void nextStep() {
     final next = _stepController.value.nextStep;

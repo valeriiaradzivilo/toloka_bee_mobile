@@ -29,7 +29,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
   void initState() {
     _isAboutMeValid =
         context.read<RegisterBloc>().aboutMeStream.value.isNotEmpty;
-    _position = context.read<RegisterBloc>().position;
+    _position = context.read<RegisterBloc>().currentPosition;
     super.initState();
   }
 
@@ -58,7 +58,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                   controller: _aboutMeController..text = about,
                   label: translate('create.account.about.title'),
                   onChanged: (final p0) {
-                    context.read<RegisterBloc>().setAboutMe(p0);
+                    context.read<RegisterBloc>().aboutMe = p0;
                     if (_isAboutMeValid != p0.isNotEmpty) {
                       setState(() => _isAboutMeValid = p0.isNotEmpty);
                     }
@@ -80,9 +80,8 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                               ),
                               onTap: () => setState(() {
                                 _menuController.close();
-                                context
-                                    .read<RegisterBloc>()
-                                    .setPosition(position);
+                                context.read<RegisterBloc>().position =
+                                    position;
                                 _position = position;
                               }),
                             ),

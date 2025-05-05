@@ -49,7 +49,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
             controller: _emailController..text = email,
             label: translate('create.account.email'),
             option: TextFieldOption.email,
-            onChanged: (final p0) => registerBloc.setEmail(p0),
+            onChanged: (final p0) => registerBloc.email = p0,
             onValidate: (final p0) => setState(() {
               _isEmailValid = p0;
             }),
@@ -59,7 +59,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
           controller: _passwordController,
           label: translate('create.account.password'),
           option: TextFieldOption.password,
-          onChanged: (final p0) => registerBloc.setPassword(p0),
+          onChanged: (final p0) => registerBloc.password = p0,
           onValidate: (final p0) => setState(() {
             _isPasswordValid = p0;
           }),

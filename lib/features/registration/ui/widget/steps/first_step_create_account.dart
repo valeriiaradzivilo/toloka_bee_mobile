@@ -57,7 +57,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
           controller: _nameController,
           label: translate('create.account.name'),
           option: TextFieldOption.name,
-          onChanged: (final p0) => registerBloc.setName(p0),
+          onChanged: (final p0) => registerBloc.name = p0,
           onValidate: (final p0) => setState(() {
             _isValidName = p0;
           }),
@@ -68,7 +68,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
           controller: _surnameController,
           label: translate('create.account.surname'),
           option: TextFieldOption.name,
-          onChanged: (final p0) => registerBloc.setSurname(p0),
+          onChanged: (final p0) => registerBloc.surname = p0,
           onValidate: (final p0) => setState(() {
             _isValidSurname = p0;
           }),
@@ -94,7 +94,7 @@ class _FirstStepCreateAccountState extends State<FirstStepCreateAccount> {
                 if (dateOfBirth == null) {
                   return;
                 }
-                registerBloc.setDateOfBirth(dateOfBirth);
+                registerBloc.dateOfBirth = dateOfBirth;
               },
               child: Row(
                 spacing: 20,
