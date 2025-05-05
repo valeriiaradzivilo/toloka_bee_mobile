@@ -63,9 +63,14 @@ class _RequestHandModalState extends State<RequestHandModal> {
                       );
                     case LoadedCreateRequestState(:final userHasContactInfo)
                         when !userHasContactInfo:
-                      return Center(
-                        child: Text(
-                          translate('request.hand.no_contact_info'),
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Text(
+                            translate('request.hand.no_contact_info'),
+                            style: ZipFonts.big.error,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       );
                     case final LoadedCreateRequestState state:

@@ -66,39 +66,64 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
                   maxSymbols: 250,
                 ),
               ),
-              MenuAnchor(
-                controller: _menuController,
-                menuChildren: [
-                  for (final position in EPosition.values)
-                    ListTile(
-                      title: Text(
-                        position.text,
+              Flexible(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: MenuAnchor(
+                        controller: _menuController,
+                        menuChildren: [
+                          for (final position in EPosition.values)
+                            ListTile(
+                              title: Text(
+                                position.text,
+                              ),
+                              onTap: () => setState(() {
+                                _menuController.close();
+                                context
+                                    .read<RegisterBloc>()
+                                    .setPosition(position);
+                                _position = position;
+                              }),
+                            ),
+                        ],
+                        builder:
+                            (final context, final controller, final child) =>
+                                ListTile(
+                          title: _position == null
+                              ? Text(
+                                  translate(
+                                    'create.account.preferred.position.title',
+                                  ),
+                                )
+                              : Text(_position!.text),
+                          subtitle: _position == null
+                              ? Text(
+                                  translate(
+                                    'create.account.preferred.position.subtitle',
+                                  ),
+                                )
+                              : null,
+                          trailing: const Icon(Icons.arrow_drop_down),
+                          onTap: () => controller.isOpen
+                              ? controller.close()
+                              : controller.open(),
+                        ),
                       ),
-                      onTap: () => setState(() {
-                        _menuController.close();
-                        context.read<RegisterBloc>().setPosition(position);
-                        _position = position;
-                      }),
                     ),
-                ],
-                builder: (final context, final controller, final child) =>
-                    ListTile(
-                  title: _position == null
-                      ? Text(
-                          translate('create.account.preferred.position.title'),
-                        )
-                      : Text(_position!.text),
-                  subtitle: _position == null
-                      ? Text(
-                          translate(
-                            'create.account.preferred.position.subtitle',
-                          ),
-                        )
-                      : null,
-                  trailing: const Icon(Icons.arrow_drop_down),
-                  onTap: () => controller.isOpen
-                      ? controller.close()
-                      : controller.open(),
+                    Tooltip(
+                      message: translate(
+                        'create.account.preferred.position.tooltip',
+                      ),
+                      triggerMode: TooltipTriggerMode.tap,
+                      showDuration: const Duration(seconds: 5),
+                      child: const Icon(
+                        Icons.info_outline,
+                        size: 30,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               NextBackButtonRow(

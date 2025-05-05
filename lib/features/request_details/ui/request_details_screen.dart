@@ -219,8 +219,8 @@ class RequestDetailsScreen extends StatelessWidget {
                           style: ZipFonts.small.style,
                         ),
                         if (!state.isCurrentUsersRequest &&
-                            state.requestNotificationModel.status
-                                .canBeHelped) ...[
+                            state.requestNotificationModel.status.canBeHelped &&
+                            !state.isCurrentUserVolunteerForRequest) ...[
                           Center(
                             child: ElevatedButton.icon(
                               onPressed: () {

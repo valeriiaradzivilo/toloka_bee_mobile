@@ -58,10 +58,10 @@ class RegisterBloc extends ZipBloc {
     );
     final result = await _registerUserUsecase(user);
 
-    await result.fold((final _) {}, (final registeredUser) async {
+    await result.fold((final _) async {}, (final registeredUser) async {
       final contact = ContactInfoModel(
         id: const Uuid().v4(),
-        userId: registeredUser.id,
+        userId: registeredUser,
         preferredMethod: _preferredMethodController.value!,
         phone: _phoneController.value.isEmpty ? null : _phoneController.value,
         email: _emailContactController.value.isEmpty

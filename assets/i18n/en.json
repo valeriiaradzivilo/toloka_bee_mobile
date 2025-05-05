@@ -64,7 +64,8 @@
                     "subtitle": "Select what applies to you the best",
                     "volunteer": "I want to be Volunteer",
                     "requester": "I need help",
-                    "both": "I want to be both"
+                    "both": "I want to be both",
+                    "tooltip": "Volunteer will receive a notification if any request appears within the set radius. Requester can help as well but they will not receive any notifications.\nYou can change this later in your profile.\nThis will help us to show you the most relevant information."
                 }
             },
             "about": {

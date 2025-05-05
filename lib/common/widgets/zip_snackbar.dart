@@ -42,6 +42,13 @@ class ZipSnackbar {
     );
 
     overlayState.insert(entry);
+
+    entry.addListener(() {
+      if (entry.opaque) {
+        entry.remove();
+        _entries.remove(entry);
+      }
+    });
     _entries.add(entry);
 
     Future.delayed(
