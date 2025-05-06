@@ -51,91 +51,105 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
   }
 
   @override
-  Widget build(final BuildContext context) => Column(
-        children: [
-          Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: [
-              if (!widget.state.onlyRemote)
-                Wrap(
-                  spacing: 5,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Text(
-                      '${translate('give.hand.radius')}: ',
-                      style: ZipFonts.small.style,
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            if (widget.state.radius - 1 < 1) {
-                              return;
-                            }
-
-                            context.read<GiveHandBloc>().add(
-                                  ChangeRadiusEvent(widget.state.radius - 1),
-                                );
-                          },
-                          icon: const Icon(Icons.remove_circle_outline),
-                        ),
-                        SizedBox(
-                          width: 40,
-                          child: AppNumberEditingField(
-                            maxValue: 1000,
-                            minValue: 1,
-                            controller: _controller
-                              ..text = widget.state.radius.toString(),
-                            onChanged: (final p0) {
-                              final parsed = int.tryParse(p0);
-
-                              if (parsed != null) {
-                                context.read<GiveHandBloc>().add(
-                                      ChangeRadiusEvent(parsed),
-                                    );
-                              }
-                            },
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            if (widget.state.radius + 1 > 1000) {
-                              return;
-                            }
-
-                            context.read<GiveHandBloc>().add(
-                                  ChangeRadiusEvent(widget.state.radius + 1),
-                                );
-                          },
-                          icon: const Icon(Icons.add_circle_outline),
-                        ),
-                        Text(
-                          'km',
-                          style: ZipFonts.small.style,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              CheckboxListTile(
-                value: widget.state.onlyRemote,
-                contentPadding: const EdgeInsets.all(0),
-                onChanged: (final value) {
-                  context.read<GiveHandBloc>().add(
-                        ChangeOnlyRemoteEvent(value ?? false),
-                      );
-                },
-                title: Text(
-                  translate('give.hand.only_remote'),
-                  style: ZipFonts.small.style,
-                ),
+  Widget build(final BuildContext context) => SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(
+              translate('give.hand.title'),
+              style: ZipFonts.big.style,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 5),
+            Text(
+              translate('give.hand.subtitle'),
+              style: ZipFonts.tiny.style.copyWith(
+                color: ZipColor.inverseSurface,
               ),
-            ],
-          ),
-          Expanded(
-            child: Visibility(
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(height: 15),
+            Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                if (!widget.state.onlyRemote)
+                  Wrap(
+                    spacing: 5,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        '${translate('give.hand.radius')}: ',
+                        style: ZipFonts.small.style,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              if (widget.state.radius - 1 < 1) {
+                                return;
+                              }
+
+                              context.read<GiveHandBloc>().add(
+                                    ChangeRadiusEvent(widget.state.radius - 1),
+                                  );
+                            },
+                            icon: const Icon(Icons.remove_circle_outline),
+                          ),
+                          SizedBox(
+                            width: 40,
+                            child: AppNumberEditingField(
+                              maxValue: 1000,
+                              minValue: 1,
+                              controller: _controller
+                                ..text = widget.state.radius.toString(),
+                              onChanged: (final p0) {
+                                final parsed = int.tryParse(p0);
+
+                                if (parsed != null) {
+                                  context.read<GiveHandBloc>().add(
+                                        ChangeRadiusEvent(parsed),
+                                      );
+                                }
+                              },
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (widget.state.radius + 1 > 1000) {
+                                return;
+                              }
+
+                              context.read<GiveHandBloc>().add(
+                                    ChangeRadiusEvent(widget.state.radius + 1),
+                                  );
+                            },
+                            icon: const Icon(Icons.add_circle_outline),
+                          ),
+                          Text(
+                            'km',
+                            style: ZipFonts.small.style,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                CheckboxListTile(
+                  value: widget.state.onlyRemote,
+                  contentPadding: const EdgeInsets.all(0),
+                  onChanged: (final value) {
+                    context.read<GiveHandBloc>().add(
+                          ChangeOnlyRemoteEvent(value ?? false),
+                        );
+                  },
+                  title: Text(
+                    translate('give.hand.only_remote'),
+                    style: ZipFonts.small.style,
+                  ),
+                ),
+              ],
+            ),
+            Visibility(
               visible: widget.state.requests.isNotEmpty,
               replacement: Center(
                 child: Text(
@@ -145,6 +159,8 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                 ),
               ),
               child: ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: widget.state.requests.length,
                 itemBuilder: (final context, final index) {
                   final request = widget.state.requests[index];
@@ -199,7 +215,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                         const Divider(),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
 }

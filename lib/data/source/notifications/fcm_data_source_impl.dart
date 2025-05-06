@@ -6,14 +6,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../common/constants/location_constants.dart';
-import '../../di.dart';
 import '../../models/accept_request_model.dart';
 import '../../models/e_request_status.dart';
 import '../../models/e_request_update.dart';
 import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
-import '../authentication/auth_data_source.dart';
 import 'fcm_data_source.dart';
 
 class FcmDataSourceImpl implements FcmDataSource {
@@ -59,17 +57,6 @@ class FcmDataSourceImpl implements FcmDataSource {
     final postUrl =
         'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
 
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     final location = LatLng(notification.latitude, notification.longitude);
 
     final notificationData = notification.toJson();
@@ -110,14 +97,12 @@ class FcmDataSourceImpl implements FcmDataSource {
 
     final response = await _dio.post(
       postUrl,
-      options: Options(headers: headers),
       data: payload,
     );
 
     if (response.statusCode == 200) {
       final result = await _dio.post(
         '$_basePathRequest/save',
-        options: Options(headers: headers),
         data: notificationData,
       );
       if (result.statusCode != 200) {
@@ -136,22 +121,10 @@ class FcmDataSourceImpl implements FcmDataSource {
   Future<List<RequestNotificationModel>> getAllRequests(
     final GetRequestsModel location,
   ) async {
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     //TODO: Дороби personalized на беці
 
     final response = await _dio.post(
       '$_basePathRequest/get-personalized',
-      options: Options(headers: headers),
       data: location.toJson(),
     );
 
@@ -173,20 +146,8 @@ class FcmDataSourceImpl implements FcmDataSource {
   Future<int> countVolunteersByTopic(
     final String topic,
   ) async {
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     final response = await _dio.get(
       '$_basePathSubscription/count/$topic',
-      options: Options(headers: headers),
     );
 
     if (response.statusCode == 200) {
@@ -208,20 +169,8 @@ class FcmDataSourceImpl implements FcmDataSource {
   Future<void> updateRequest(
     final RequestNotificationModel notification,
   ) async {
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     final response = await _dio.post(
       '$_basePathRequest/update',
-      options: Options(headers: headers),
       data: notification.toJson(),
     );
 
@@ -236,20 +185,8 @@ class FcmDataSourceImpl implements FcmDataSource {
   Future<RequestNotificationModel> getRequestById(
     final String id,
   ) async {
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     final response = await _dio.get(
       '$_basePathRequest/get/$id',
-      options: Options(headers: headers),
     );
 
     if (response.statusCode == 200) {
@@ -265,17 +202,6 @@ class FcmDataSourceImpl implements FcmDataSource {
   Future<void> acceptRequest(
     final String id,
   ) async {
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     final response = await _dio.post(
       '$_basePathRequest/accept',
       data: AcceptRequestModel(
@@ -283,7 +209,6 @@ class FcmDataSourceImpl implements FcmDataSource {
         volunteerId: FirebaseAuth.instance.currentUser!.uid,
         status: ERequestStatus.inProgress.name.toLowerCase(),
       ).toJson(),
-      options: Options(headers: headers),
     );
 
     if (response.statusCode != 200) {
@@ -295,20 +220,8 @@ class FcmDataSourceImpl implements FcmDataSource {
 
   @override
   Future<void> deleteRequest(final String id) async {
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     final response = await _dio.delete(
       '$_basePathRequest/delete/$id',
-      options: Options(headers: headers),
     );
 
     if (response.statusCode != 200) {
@@ -323,62 +236,37 @@ class FcmDataSourceImpl implements FcmDataSource {
   @override
   Future<List<RequestNotificationModel>> getAllRequestsByUserId(
     final String userId,
-  ) async {
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
+  ) async =>
+      _dio
+          .get(
+        '$_basePathRequest/get-by-user/$userId',
+      )
+          .then((final response) {
+        if (response.statusCode == 200) {
+          final result = (response.data as List)
+              .map((final e) => RequestNotificationModel.fromJson(e))
+              .toList();
 
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
+          if (userId == FirebaseAuth.instance.currentUser?.uid) {
+            result.sort(
+              (final a, final b) => a.status.compareTo(b.status),
+            );
+          }
 
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
-    return _dio
-        .get(
-      '$_basePathRequest/get-by-user/$userId',
-      options: Options(headers: headers),
-    )
-        .then((final response) {
-      if (response.statusCode == 200) {
-        final result = (response.data as List)
-            .map((final e) => RequestNotificationModel.fromJson(e))
-            .toList();
-
-        if (userId == FirebaseAuth.instance.currentUser?.uid) {
-          result.sort(
-            (final a, final b) => a.status.compareTo(b.status),
+          return result;
+        } else {
+          throw Exception(
+            'Failed to get all requests by user id: ${response.statusCode}',
           );
         }
-
-        return result;
-      } else {
-        throw Exception(
-          'Failed to get all requests by user id: ${response.statusCode}',
-        );
-      }
-    });
-  }
+      });
 
   @override
   Future<List<RequestNotificationModel>> getRequestsByIds(
     final List<String> ids,
   ) async {
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     final response = await _dio.post(
       '$_basePathRequest/get-by-ids',
-      options: Options(headers: headers),
       data: jsonEncode(ids),
     );
 
@@ -411,17 +299,6 @@ class FcmDataSourceImpl implements FcmDataSource {
     final postUrl =
         'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
 
-    final accessToken = await serviceLocator<AuthDataSource>().getAccessToken();
-
-    if (accessToken.isEmpty) {
-      throw Exception('Access token is null');
-    }
-
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
     final title = requestUpdate.text;
 
     final payload = {
@@ -448,7 +325,6 @@ class FcmDataSourceImpl implements FcmDataSource {
 
     await _dio.post(
       postUrl,
-      options: Options(headers: headers),
       data: payload,
     );
   }

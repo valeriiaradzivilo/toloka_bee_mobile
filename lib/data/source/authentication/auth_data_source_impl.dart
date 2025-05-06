@@ -76,11 +76,6 @@ class AuthDataSourceImpl implements AuthDataSource {
     final response = await _dio.post(
       '$_basePath/register',
       data: jsonEncode(data),
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
     );
 
     if (response.statusCode == 200) {
@@ -106,11 +101,6 @@ class AuthDataSourceImpl implements AuthDataSource {
       data: {
         'id': user.uid,
       },
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
     );
 
     return idToken.data as String? ?? '';
@@ -118,20 +108,15 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<UserAuthModel> getCurrentUserData({final String? idToken}) async {
-    if (idToken == null && FirebaseAuth.instance.currentUser == null) {
+    if (idToken == null && _auth.currentUser == null) {
       throw Exception('User is not logged in');
     }
 
     final response = await _dio.post(
       '$_basePath/login',
       data: {
-        'id': idToken ?? FirebaseAuth.instance.currentUser?.uid,
+        'id': idToken ?? _auth.currentUser?.uid,
       },
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
     );
 
     if (response.statusCode == 200) {
@@ -148,11 +133,6 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       final response = await _dio.get(
         '/admin/is-admin/$userId',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
       );
 
       if (response.statusCode == 200) {
@@ -188,11 +168,6 @@ class AuthDataSourceImpl implements AuthDataSource {
     final response = await _dio.put(
       '$_basePath/update',
       data: (data),
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
     );
 
     if (response.statusCode != 200) {
@@ -202,7 +177,7 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<void> deleteUser(final String userId) async {
-    if (userId != FirebaseAuth.instance.currentUser?.uid) {
+    if (userId != _auth.currentUser?.uid) {
       throw Exception('You can only delete your own account');
     }
 
@@ -211,11 +186,6 @@ class AuthDataSourceImpl implements AuthDataSource {
 
     final response = await _dio.delete(
       '$_basePath/delete/$userId',
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
     );
 
     if (response.statusCode != 200) {

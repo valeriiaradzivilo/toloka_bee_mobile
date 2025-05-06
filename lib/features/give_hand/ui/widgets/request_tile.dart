@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../../common/routing/routes.dart';
 import '../../../../common/theme/zip_color.dart';
 import '../../../../common/theme/zip_fonts.dart';
+import '../../../../data/models/e_request_hand_type.dart';
 import '../../../../data/models/request_notification_model.dart';
 
 class RequestTile extends StatelessWidget {
@@ -62,6 +63,17 @@ class RequestTile extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             const Gap(5),
+                            if (request.requestType != ERequestHandType.other)
+                              Text(
+                                '\u2981 ${translate(
+                                  'give.hand.type',
+                                  args: {
+                                    'type': request.requestType.text,
+                                  },
+                                )}',
+                                style: ZipFonts.tiny.style,
+                                overflow: TextOverflow.clip,
+                              ),
                             Text(
                               '\u2981 ${translate(
                                 'give.hand.deadline',
@@ -88,19 +100,40 @@ class RequestTile extends StatelessWidget {
                                 style: ZipFonts.tiny.style,
                                 overflow: TextOverflow.clip,
                               ),
+                            if (distance != null)
+                              Text(
+                                '\u2981 ${translate(
+                                  'give.hand.distance',
+                                  args: {
+                                    'distance': distance,
+                                  },
+                                )}',
+                                style: ZipFonts.tiny.style,
+                                overflow: TextOverflow.clip,
+                              ),
                           ],
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () => Navigator.of(context).pushNamed(
-                          Routes.requestDetailsScreen,
-                          arguments: request.id,
-                        ),
-                        child: Text(
-                          translate('common.action.learn'),
-                          style: ZipFonts.tiny.style.copyWith(
+                      SizedBox(
+                        width: 120,
+                        child: ElevatedButton.icon(
+                          onPressed: () => Navigator.of(context).pushNamed(
+                            Routes.requestDetailsScreen,
+                            arguments: request.id,
+                          ),
+                          label: Text(
+                            translate('common.action.learn'),
+                            style: ZipFonts.tiny.style.copyWith(
+                              color: ZipColor.onPrimary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          icon: const Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 15,
                             color: ZipColor.onPrimary,
                           ),
+                          iconAlignment: IconAlignment.end,
                         ),
                       ),
                     ],

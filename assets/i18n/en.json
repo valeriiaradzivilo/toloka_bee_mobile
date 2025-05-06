@@ -235,7 +235,8 @@
             "contacts": "Contacts",
             "contacts_hint": "You can contact the user directly by clicking on their contact method. If you have any questions, please ask them directly.\nHold contact for a second to copy it.",
             "no_contacts": "No contacts available...",
-            "volunteers": "Volunteers"
+            "volunteers": "Volunteers",
+            "volunteers_needed": "Volunteers on the task: {present} / {need}"
         },
         "delete": {
             "success": "Request deleted successfully.",
@@ -295,7 +296,10 @@
             "search": "Search",
             "only_remote": "Show only remote requests",
             "remote": "Remote",
-            "distance": "Distance {distance} km"
+            "distance": "Distance {distance} km",
+            "title": "Active Requests",
+            "subtitle": "Personalized list of requests for you. Requests are sorted by your volunteering history.\nClick on the request to see the details of any request.",
+            "type": "Type of request: {type}"
         }
     },
     "common": {

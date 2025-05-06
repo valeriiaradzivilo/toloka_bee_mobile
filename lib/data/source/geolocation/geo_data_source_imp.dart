@@ -18,7 +18,6 @@ class GeoDataSourceImp implements GeoDataSource {
     try {
       final response = await _dio.post(
         '$basePath/update-location',
-        options: Options(headers: {'Content-Type': 'application/json'}),
         data: jsonEncode(location.toJson()),
       );
 

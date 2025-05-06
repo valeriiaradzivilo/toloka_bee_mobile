@@ -8,6 +8,7 @@ import '../../../common/list_extension.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../data/models/contact_info_model.dart';
+import '../../../data/models/e_request_hand_type.dart';
 import '../../../data/models/ui/e_predefined_report_message.dart';
 import '../../profile/ui/widgets/profile_contacts.dart';
 import '../bloc/request_details_bloc.dart';
@@ -185,6 +186,18 @@ class RequestDetailsScreen extends StatelessWidget {
                             fontWeight: FontWeight.w900,
                           ),
                         ),
+                        if (state.requestNotificationModel.requestType !=
+                            ERequestHandType.other)
+                          Text(
+                            translate(
+                              'give.hand.type',
+                              args: {
+                                'type': state
+                                    .requestNotificationModel.requestType.text,
+                              },
+                            ),
+                            style: ZipFonts.small.style,
+                          ),
                         if (state.requestNotificationModel.price != null)
                           Row(
                             spacing: 20,
@@ -312,6 +325,21 @@ class RequestDetailsScreen extends StatelessWidget {
                                 color: ZipColor.onError,
                               ),
                             ),
+                          ),
+                        if (state.requestNotificationModel
+                                .requiredVolunteersCount >
+                            1)
+                          Text(
+                            translate(
+                              'request.details.volunteers_needed',
+                              args: {
+                                'present': state.volunteers.length.toString(),
+                                'need': state.requestNotificationModel
+                                    .requiredVolunteersCount
+                                    .toString(),
+                              },
+                            ),
+                            style: ZipFonts.small.style,
                           ),
                         if (state.isCurrentUsersRequest)
                           Text(

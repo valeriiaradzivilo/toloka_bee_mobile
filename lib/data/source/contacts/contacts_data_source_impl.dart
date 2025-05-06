@@ -15,7 +15,6 @@ class ContactsDataSourceImpl implements ContactsDataSource {
     final response = await _dio.post(
       '$_basePath/save',
       data: jsonEncode(info.toJson()),
-      options: Options(headers: {'Content-Type': 'application/json'}),
     );
     if (response.statusCode == 200) {
       return ContactInfoModel.fromJson(response.data);
@@ -31,7 +30,6 @@ class ContactsDataSourceImpl implements ContactsDataSource {
     final response = await _dio.post(
       '$_basePath/update',
       data: jsonEncode(info.toJson()),
-      options: Options(headers: {'Content-Type': 'application/json'}),
     );
     if (response.statusCode != 200) {
       throw Exception(
@@ -44,7 +42,6 @@ class ContactsDataSourceImpl implements ContactsDataSource {
   Future<ContactInfoModel> getContactById(final String id) async {
     final response = await _dio.get(
       '$_basePath/get/$id',
-      options: Options(headers: {'Content-Type': 'application/json'}),
     );
     if (response.statusCode == 200) {
       return ContactInfoModel.fromJson(response.data);
@@ -59,11 +56,9 @@ class ContactsDataSourceImpl implements ContactsDataSource {
   Future<ContactInfoModel?> getContactByUserId(final String userId) async {
     final response = await _dio.get(
       '$_basePath/get-by-user/$userId',
-      options: Options(headers: {'Content-Type': 'application/json'}),
     );
     if (response.statusCode == 200 && response.data != null) {
       if (response.data is String) return null;
-
       return ContactInfoModel.fromJson(response.data);
     } else if (response.statusCode == 404) {
       return null;
@@ -78,7 +73,6 @@ class ContactsDataSourceImpl implements ContactsDataSource {
   Future<void> deleteContactById(final String id) async {
     final response = await _dio.delete(
       '$_basePath/delete/$id',
-      options: Options(headers: {'Content-Type': 'application/json'}),
     );
     if (response.statusCode != 200) {
       throw Exception(

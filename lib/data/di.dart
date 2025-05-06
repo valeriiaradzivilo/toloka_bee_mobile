@@ -58,6 +58,7 @@ import 'usecase/volunteer_work/confirm_volunteer_work_by_volunteer_usecase.dart'
 import 'usecase/volunteer_work/get_volunteer_work_by_request_id_usecase.dart';
 import 'usecase/volunteer_work/get_volunteer_work_by_user_id.dart';
 import 'usecase/volunteer_work/start_volunteer_work_usecase.dart';
+import 'zip_way_api_interceptor.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
@@ -69,20 +70,24 @@ Future<void> init() async {
 }
 
 Future<void> initDatasources() async {
-  // final backendUrl =  'http://10.0.2.2:8080'; ///Android Emulator
-  final backendUrl = 'http://192.168.0.102:8080';
+  ///Android Emulator
+  final backendUrl = 'http://10.0.2.2:8080';
+
+  // final backendUrl = 'http://192.168.0.102:8080';
   final dio = Dio(
     BaseOptions(
       baseUrl: backendUrl,
-      sendTimeout: const Duration(seconds: 40),
-      receiveTimeout: const Duration(seconds: 40),
-      connectTimeout: const Duration(seconds: 40),
+      sendTimeout: const Duration(seconds: 20),
+      receiveTimeout: const Duration(seconds: 20),
+      connectTimeout: const Duration(seconds: 20),
     ),
   );
   serviceLocator
-      .registerLazySingleton<GeoDataSource>(() => GeoDataSourceImp(dio));
-  serviceLocator
       .registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(dio));
+  dio.interceptors.add(ZipWayApiInterceptor());
+
+  serviceLocator
+      .registerLazySingleton<GeoDataSource>(() => GeoDataSourceImp(dio));
   serviceLocator
       .registerLazySingleton<FcmDataSource>(() => FcmDataSourceImpl(dio));
   serviceLocator
