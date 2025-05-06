@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../../common/list_extension.dart';
 import '../../../../data/models/country.dart';
@@ -76,23 +77,87 @@ class PhoneCodeDropdownState extends State<PhoneCodeDropdown> {
         builder: (final ctx, final snap) {
           if (!snap.hasData) return const CircularProgressIndicator();
           final items = snap.data!;
-          return DropdownButton<Country>(
-            hint: const Text('+...'),
-            value: _selected,
-            items: items
-                .map(
-                  (final c) => DropdownMenuItem(
-                    value: c,
-                    child: Text('${c.emojiFlag} ${c.dialCode}'),
-                  ),
-                )
-                .toList(),
-            onChanged: (final c) {
-              if (c != null) {
-                setState(() => _selected = c);
-                widget.onChanged(c);
-              }
-            },
+          return SizedBox(
+            width: 111,
+            child: GestureDetector(
+              onTap: () async {
+                final selected = await showModalBottomSheet<Country>(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (final context) {
+                    String query = '';
+                    List<Country> filtered = items;
+                    return StatefulBuilder(
+                      builder: (final context, final setModalState) => Padding(
+                        padding: MediaQuery.of(context).viewInsets,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  labelText: translate('contacts.phone_search'),
+                                  prefixIcon: const Icon(Icons.search),
+                                ),
+                                onChanged: (final val) {
+                                  setModalState(() {
+                                    query = val;
+                                    filtered = items
+                                        .where(
+                                          (final c) =>
+                                              c.name.toLowerCase().contains(
+                                                    query.toLowerCase(),
+                                                  ) ||
+                                              c.dialCode.contains(query),
+                                        )
+                                        .toList();
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                itemCount: filtered.length,
+                                itemBuilder: (final context, final index) {
+                                  final c = filtered[index];
+                                  return ListTile(
+                                    leading: Text(c.emojiFlag),
+                                    title: Text('${c.name} (${c.dialCode})'),
+                                    onTap: () => Navigator.pop(context, c),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+                if (selected != null) {
+                  setState(() => _selected = selected);
+                  widget.onChanged(selected);
+                }
+              },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: translate('contacts.phone_code'),
+                  border: const OutlineInputBorder(),
+                ),
+                child: Row(
+                  children: [
+                    if (_selected != null)
+                      Text('${_selected!.emojiFlag} ${_selected!.dialCode}')
+                    else
+                      const Text('+...'),
+                    const Spacer(),
+                    const Icon(Icons.arrow_drop_down),
+                  ],
+                ),
+              ),
+            ),
           );
         },
       );

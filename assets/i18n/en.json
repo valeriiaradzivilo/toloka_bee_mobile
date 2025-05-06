@@ -315,6 +315,8 @@
     },
     "contacts": {
         "phone": "Phone",
+        "phone_code": "Country code",
+        "phone_search": "Search by country or phone code",
         "email": "Email",
         "telegram": "Telegram",
         "whatsapp": "WhatsApp",
