@@ -8,7 +8,9 @@ abstract class AuthDataSource {
 
   Future<String> register(final UserAuthModel user);
 
-  Future<String> getAccessToken();
+  Future<String> getFirebaseMessagingAccessToken();
+
+  Future<String> getUserIdToken();
 
   Future<UserAuthModel> getCurrentUserData();
 

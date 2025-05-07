@@ -16,19 +16,36 @@ class ZipWayApiInterceptor extends Interceptor {
       final noAuthPaths = '/auth';
       final requiresAccessToken = !options.path.contains(noAuthPaths);
 
-      if (requiresAccessToken) {
-        final authDataSource = serviceLocator<AuthDataSource>();
-        final token = await authDataSource.getAccessToken();
+      final authDataSource = serviceLocator<AuthDataSource>();
 
-        if (token.isNotEmpty) {
-          options.headers['Authorization'] = 'Bearer $token';
+      if (requiresAccessToken) {
+        if (options.path.contains('fcm.googleapis.com')) {
+          final token = await authDataSource.getFirebaseMessagingAccessToken();
+
+          if (token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+            options.headers['Content-Type'] = 'application/json';
+          } else {
+            logger.warning('Access token is empty');
+          }
         } else {
-          logger.warning('Access token is empty');
+          final idToken = await authDataSource.getUserIdToken();
+
+          if (idToken.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $idToken';
+            options.headers['Content-Type'] = 'application/json';
+          } else {
+            logger.warning('Access token is empty');
+          }
         }
       }
     } catch (e) {
       logger.warning('Failed to get access token: $e');
     }
+
+    // logger.info('→ ${options.method} ${options.baseUrl}${options.path}');
+    // logger.info('   Headers: ${options.headers}');
+    // handler.next(options);
 
     super.onRequest(options, handler);
   }

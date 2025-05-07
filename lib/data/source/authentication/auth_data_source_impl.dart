@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:http/http.dart' as http;
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../../common/exceptions/user_blocked_exception.dart';
@@ -89,21 +92,22 @@ class AuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<String> getAccessToken() async {
-    final User? user = _auth.currentUser;
+  Future<String> getFirebaseMessagingAccessToken() async {
+    final jsonString =
+        await rootBundle.loadString('assets/serviceAccount.json');
+    final Map<String, dynamic> serviceJson = json.decode(jsonString);
 
-    if (user == null) {
-      throw Exception('User is not logged in');
-    }
+    final credentials = ServiceAccountCredentials.fromJson(serviceJson);
 
-    final idToken = await _dio.post(
-      '$_basePath/access-token',
-      data: {
-        'id': user.uid,
-      },
+    final client = http.Client();
+    final accessCredentials = await obtainAccessCredentialsViaServiceAccount(
+      credentials,
+      ['https://www.googleapis.com/auth/firebase.messaging'],
+      client,
     );
 
-    return idToken.data as String? ?? '';
+    client.close();
+    return accessCredentials.accessToken.data;
   }
 
   @override
@@ -190,6 +194,20 @@ class AuthDataSourceImpl implements AuthDataSource {
 
     if (response.statusCode != 200) {
       throw Exception('Failed to delete user: ${response.statusCode}');
+    }
+  }
+
+  //TODO: якщо запитувач не підтверджує виконання запиту, то запит запускається повторно;
+  //TODO: якщо волонтера не знайдено, або ніхто не прийняв запит до кінця дедлайну, система циклічно перевіряє: «Час вийшов?». У разі перевищення терміну запит отримує статус «Expired» та надсилається відповідне сповіщення автору;
+
+  //TODO: Якщо мало функцій - легко додати скидання паролю
+  @override
+  Future<String> getUserIdToken() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      return await user.getIdToken() ?? '';
+    } else {
+      throw Exception('User is not logged in');
     }
   }
 }
