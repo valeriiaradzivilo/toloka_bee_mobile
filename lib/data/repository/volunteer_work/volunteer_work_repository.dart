@@ -25,4 +25,7 @@ abstract interface class VolunteerWorkRepository {
   Future<Either<Fail, List<VolunteerWorkModel>>> getWorksByRequestId(
     final String requestId,
   );
+  Future<Either<Fail, void>> cancelHelping(
+    final String id,
+  );
 }

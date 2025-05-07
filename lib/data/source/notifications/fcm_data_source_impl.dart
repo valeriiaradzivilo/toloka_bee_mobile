@@ -345,4 +345,20 @@ class FcmDataSourceImpl implements FcmDataSource {
       );
     }
   }
+
+  @override
+  Future<void> cancelRequest(final String id) async {
+    final response = await _dio.post(
+      '$_basePathRequest/update/$id',
+      data: {
+        'status': ERequestStatus.cancelled.name.toLowerCase(),
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        'Failed to update request: ${response.statusCode}',
+      );
+    }
+  }
 }

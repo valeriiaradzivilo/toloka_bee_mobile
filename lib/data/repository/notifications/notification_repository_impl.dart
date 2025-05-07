@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:simple_logger/simple_logger.dart';
 
+import '../../../common/constants/request_constants.dart';
 import '../../../common/exceptions/request_limit_reached_for_today.dart';
+import '../../models/e_request_update.dart';
 import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
@@ -10,6 +12,7 @@ import 'notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
   final FcmDataSource _fcmDataSource;
+
   final logger = SimpleLogger();
 
   NotificationRepositoryImpl(this._fcmDataSource);
@@ -65,7 +68,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
     try {
       if (await _fcmDataSource
               .getCountOfTodayRequestsByUserId(notification.userId) >=
-          5) {
+          RequestConstants.requestLimitForTheDay) {
         return Left(Fail(RequestLimitReachedForToday()));
       }
       await _fcmDataSource.sendNotification(notification);
@@ -224,6 +227,24 @@ class NotificationRepositoryImpl implements NotificationRepository {
         '❌ Error while unsubscribing from request updates: ${e.toString()}',
       );
       return Left(Fail('Failed to unsubscribe from request updates'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> cancelRequest(final String id) async {
+    try {
+      await _fcmDataSource.cancelRequest(id);
+      await _fcmDataSource.sendRequestUpdateNotification(
+        id,
+        ERequestUpdate.canceledByRequester,
+      );
+      await _fcmDataSource.unsubscribeFromRequestUpdates(id);
+      return const Right(null);
+    } catch (e) {
+      logger.severe(
+        '❌ Error while canceling request: ${e.toString()}',
+      );
+      return Left(Fail('Failed to cancel request'));
     }
   }
 }

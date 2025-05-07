@@ -20,7 +20,8 @@ import '../../../data/usecase/complaints/report_request_usecase.dart';
 import '../../../data/usecase/complaints/report_user_usecase.dart';
 import '../../../data/usecase/contacts/get_contacts_by_user_id_usecase.dart';
 import '../../../data/usecase/get_notification_by_id_usecase.dart';
-import '../../../data/usecase/requests/delete_request_usecase.dart';
+import '../../../data/usecase/requests/cancel_helping_usecase.dart';
+import '../../../data/usecase/requests/cancel_request_usecase.dart';
 import '../../../data/usecase/user_management/get_user_by_id_usecase.dart';
 import '../../../data/usecase/volunteer_work/confirm_volunteer_work_by_requester_usecase.dart';
 import '../../../data/usecase/volunteer_work/confirm_volunteer_work_by_volunteer_usecase.dart';
@@ -34,7 +35,8 @@ class RequestDetailsBloc
   RequestDetailsBloc(final GetIt locator)
       : _getNotificationByIdUsecase = locator<GetNotificationByIdUsecase>(),
         _getUserByIdUsecase = locator<GetUserByIdUsecase>(),
-        _deleteRequestUsecase = locator<DeleteRequestUsecase>(),
+        _cancelHelpingUsecase = locator<CancelHelpingUsecase>(),
+        _cancelRequestUsecase = locator<CancelRequestUsecase>(),
         _snackbarService = locator<SnackbarService>(),
         _reportRequestUsecase = locator<ReportRequestUsecase>(),
         _reportUserUsecase = locator<ReportUserUsecase>(),
@@ -49,7 +51,6 @@ class RequestDetailsBloc
         super(const RequestDetailsLoading()) {
     on<FetchRequestDetails>(_onFetchRequestDetails);
     on<AcceptRequest>(_onAcceptRequest);
-    on<RemoveRequest>(_onRemoveRequest);
     on<ReportRequestEvent>(_onReportRequest);
     on<ReportUserEvent>(_onReportUser);
     on<ConfirmRequestIsCompletedVolunteerEvent>(
@@ -58,6 +59,8 @@ class RequestDetailsBloc
     on<ConfirmRequestIsCompletedRequesterEvent>(
       _confirmRequestIsCompletedRequester,
     );
+    on<CancelHelpingEvent>(_onCancelHelping);
+    on<CancelRequestEvent>(_onCancelRequest);
   }
 
   Future<void> _onFetchRequestDetails(
@@ -202,17 +205,17 @@ class RequestDetailsBloc
     }
   }
 
-  Future<void> _onRemoveRequest(
-    final RemoveRequest event,
+  Future<void> _onCancelHelping(
+    final CancelHelpingEvent event,
     final Emitter<RequestDetailsState> emit,
   ) async {
     emit(const RequestDetailsLoading());
-    final result = await _deleteRequestUsecase(event.requestId);
+    final result = await _cancelHelpingUsecase(event.workId);
     await result.fold(
       (final failure) async {
         _snackbarService.show(
           PopupModel(
-            title: translate('request.delete.error'),
+            title: translate('request.cancel_error'),
             type: EPopupType.error,
           ),
         );
@@ -220,7 +223,33 @@ class RequestDetailsBloc
       (final success) async {
         _snackbarService.show(
           PopupModel(
-            title: translate('request.delete.success'),
+            title: translate('request.cancel_success'),
+            type: EPopupType.success,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _onCancelRequest(
+    final CancelRequestEvent event,
+    final Emitter<RequestDetailsState> emit,
+  ) async {
+    emit(const RequestDetailsLoading());
+    final result = await _cancelRequestUsecase(event.requestId);
+    await result.fold(
+      (final failure) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.cancel_error'),
+            type: EPopupType.error,
+          ),
+        );
+      },
+      (final success) async {
+        _snackbarService.show(
+          PopupModel(
+            title: translate('request.cancel_success'),
             type: EPopupType.success,
           ),
         );
@@ -359,7 +388,6 @@ class RequestDetailsBloc
   final GetUserByIdUsecase _getUserByIdUsecase;
   final GetContactByUserIdUsecase _getContactByUserIdUsecase;
   final GetNotificationByIdUsecase _getNotificationByIdUsecase;
-  final DeleteRequestUsecase _deleteRequestUsecase;
   final ReportRequestUsecase _reportRequestUsecase;
   final ReportUserUsecase _reportUserUsecase;
   final StartVolunteerWorkUsecase _startVolunteerWorkUsecase;
@@ -368,6 +396,8 @@ class RequestDetailsBloc
       _confirmVolunteerWorkByRequesterUsecase;
   final ConfirmVolunteerWorkByVolunteerUsecase
       _confirmVolunteerWorkByVolunteerUsecase;
+  final CancelHelpingUsecase _cancelHelpingUsecase;
+  final CancelRequestUsecase _cancelRequestUsecase;
 
   final SnackbarService _snackbarService;
 }

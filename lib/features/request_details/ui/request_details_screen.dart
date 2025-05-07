@@ -346,118 +346,165 @@ class RequestDetailsScreen extends StatelessWidget {
                             '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname}').join(', ')}',
                             style: ZipFonts.small.style,
                           ),
-                        if (state.isCurrentUserVolunteerForRequest ||
-                            state.isCurrentUsersRequest)
-                          Center(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                context.read<RequestDetailsBloc>().add(
-                                      state.isCurrentUserVolunteerForRequest
-                                          ? ConfirmRequestIsCompletedVolunteerEvent(
-                                              requestId: state
-                                                  .requestNotificationModel.id,
-                                              workId: state.volunteerWorks
-                                                  .firstWhereOrNull(
-                                                    (final e) =>
-                                                        e.volunteerId ==
-                                                        FirebaseAuth.instance
-                                                            .currentUser?.uid,
-                                                  )
-                                                  ?.id,
-                                            )
-                                          : ConfirmRequestIsCompletedRequesterEvent(
-                                              requestId: state
-                                                  .requestNotificationModel.id,
-                                              workId: state.volunteerWorks
-                                                  .firstWhereOrNull(
-                                                    (final e) =>
-                                                        e.volunteerId ==
-                                                        FirebaseAuth.instance
-                                                            .currentUser?.uid,
-                                                  )
-                                                  ?.id,
+                        if (state.isCurrentUsersRequest ||
+                            state.isCurrentUserVolunteerForRequest)
+                          Row(
+                            spacing: 20,
+                            children: [
+                              Flexible(
+                                child: Center(
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (final context) => AlertDialog(
+                                          title: Text(
+                                            translate(
+                                              state.isCurrentUsersRequest
+                                                  ? 'request.details.cancel'
+                                                  : 'request.details.cancel_volunteer',
                                             ),
-                                    );
-                                Navigator.of(context).pop();
-                              },
-                              label: Text(
-                                translate('request.details.confirm_done'),
+                                            style: ZipFonts.medium.style,
+                                          ),
+                                          content: Text(
+                                            translate(
+                                              state.isCurrentUsersRequest
+                                                  ? 'request.details.cancel_confirm'
+                                                  : 'request.details.cancel_volunteer_confirm',
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              child: Text(
+                                                translate('common.cancel'),
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                context
+                                                    .read<RequestDetailsBloc>()
+                                                    .add(
+                                                      state.isCurrentUsersRequest
+                                                          ? CancelRequestEvent(
+                                                              state
+                                                                  .requestNotificationModel
+                                                                  .id,
+                                                            )
+                                                          : CancelHelpingEvent(
+                                                              state
+                                                                  .volunteerWorks
+                                                                  .firstWhere(
+                                                                    (final e) =>
+                                                                        e.volunteerId ==
+                                                                        FirebaseAuth
+                                                                            .instance
+                                                                            .currentUser
+                                                                            ?.uid,
+                                                                  )
+                                                                  .id,
+                                                            ),
+                                                    );
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                translate('common.delete'),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: ZipColor.errorContainer,
+                                    ),
+                                    label: Text(
+                                      translate(
+                                        state.isCurrentUsersRequest
+                                            ? 'request.details.cancel'
+                                            : 'request.details.cancel_volunteer',
+                                      ),
+                                      style: ZipFonts.small.style.copyWith(
+                                        color: ZipColor.onErrorContainer,
+                                      ),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.delete_forever_rounded,
+                                      color: ZipColor.onErrorContainer,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              icon: const Icon(
-                                Icons.done_all,
-                                color: ZipColor.onPrimary,
+                              Flexible(
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    context.read<RequestDetailsBloc>().add(
+                                          state.isCurrentUserVolunteerForRequest
+                                              ? ConfirmRequestIsCompletedVolunteerEvent(
+                                                  requestId: state
+                                                      .requestNotificationModel
+                                                      .id,
+                                                  workId: state.volunteerWorks
+                                                      .firstWhereOrNull(
+                                                        (final e) =>
+                                                            e.volunteerId ==
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser
+                                                                ?.uid,
+                                                      )
+                                                      ?.id,
+                                                )
+                                              : ConfirmRequestIsCompletedRequesterEvent(
+                                                  requestId: state
+                                                      .requestNotificationModel
+                                                      .id,
+                                                  workId: state.volunteerWorks
+                                                      .firstWhereOrNull(
+                                                        (final e) =>
+                                                            e.volunteerId ==
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser
+                                                                ?.uid,
+                                                      )
+                                                      ?.id,
+                                                ),
+                                        );
+                                    Navigator.of(context).pop();
+                                  },
+                                  label: Text(
+                                    translate('request.details.confirm_done'),
+                                    style: ZipFonts.small.style.copyWith(
+                                      color: ZipColor.onPrimary,
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.done_all,
+                                    color: ZipColor.onPrimary,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        Center(
-                          child: ElevatedButton.icon(
-                            onPressed: () => _showReportDialog(
-                              context,
-                              state.requester.id,
-                              state.requestNotificationModel.id,
-                              context.read<RequestDetailsBloc>(),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: ZipColor.onErrorContainer,
-                            ),
-                            label: Text(
-                              translate('request.details.report'),
-                            ),
-                            icon: const Icon(
-                              Icons.report,
-                              color: ZipColor.onError,
-                            ),
-                          ),
-                        ),
-                        if (state.isCurrentUsersRequest)
+                        if (!state.isCurrentUsersRequest)
                           Center(
                             child: ElevatedButton.icon(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (final context) => AlertDialog(
-                                    title: Text(
-                                      translate('request.details.remove'),
-                                      style: ZipFonts.big.style,
-                                    ),
-                                    content: Text(
-                                      translate(
-                                        'request.details.remove_confirm',
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                        child: Text(
-                                          translate('common.cancel'),
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          context
-                                              .read<RequestDetailsBloc>()
-                                              .add(
-                                                RemoveRequest(
-                                                  state.requestNotificationModel
-                                                      .id,
-                                                ),
-                                              );
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text(
-                                          translate('common.delete'),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
+                              onPressed: () => _showReportDialog(
+                                context,
+                                state.requester.id,
+                                state.requestNotificationModel.id,
+                                context.read<RequestDetailsBloc>(),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ZipColor.onErrorContainer,
+                              ),
                               label: Text(
-                                translate('request.details.remove'),
+                                translate('request.details.report'),
                               ),
                               icon: const Icon(
-                                Icons.delete_forever_rounded,
+                                Icons.report,
                                 color: ZipColor.onError,
                               ),
                             ),
@@ -617,5 +664,5 @@ class __ReportDialogState extends State<_ReportDialog> {
       );
 
 //TODO: Implement ability to confirm request completion by requester and volunteer
-//TODO: Додай можливість скасувати запит, якщо він вже був прийнятий, то реквестер має вказати причину скасування
+//TODO: Додай можливість скасувати запит, якщо він вже був прийнятий, то requester має вказати причину скасування
 }

@@ -81,4 +81,11 @@ class VolunteerWorkDataSourceImpl implements VolunteerWorkDataSource {
         )
         .toList();
   }
+
+  @override
+  Future<void> cancelHelping(final String workId) async {
+    await _dio.delete(
+      '$_basePath/cancel/$workId',
+    );
+  }
 }

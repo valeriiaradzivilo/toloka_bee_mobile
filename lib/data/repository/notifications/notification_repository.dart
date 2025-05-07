@@ -42,4 +42,7 @@ abstract class NotificationRepository {
   Future<Either<Fail, List<RequestNotificationModel>>> getRequestsByIds(
     final List<String> ids,
   );
+  Future<Either<Fail, void>> cancelRequest(
+    final String id,
+  );
 }

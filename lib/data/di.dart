@@ -40,6 +40,8 @@ import 'usecase/contacts/update_contacts_usecase.dart';
 import 'usecase/get_notification_by_id_usecase.dart';
 import 'usecase/get_volunteers_by_location_usecase.dart';
 import 'usecase/requests/accept_request_usecase.dart';
+import 'usecase/requests/cancel_helping_usecase.dart';
+import 'usecase/requests/cancel_request_usecase.dart';
 import 'usecase/requests/delete_request_usecase.dart';
 import 'usecase/requests/get_all_requests_usecase.dart';
 import 'usecase/requests/get_requests_by_ids_usecase.dart';
@@ -218,5 +220,11 @@ Future<void> initUseCases() async {
   );
   serviceLocator.registerLazySingleton<GetRequestsByIdsUsecase>(
     () => GetRequestsByIdsUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<CancelRequestUsecase>(
+    () => CancelRequestUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<CancelHelpingUsecase>(
+    () => CancelHelpingUsecase(serviceLocator()),
   );
 }

@@ -140,4 +140,22 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
       return Left(Fail(e));
     }
   }
+
+  @override
+  Future<Either<Fail<dynamic>, void>> cancelHelping(
+    final String id,
+  ) async {
+    try {
+      await _volunteerWorkDataSource.cancelHelping(id);
+      await _fcmDataSource.sendRequestUpdateNotification(
+        id,
+        ERequestUpdate.canceledByVolunteer,
+      );
+      await _fcmDataSource.unsubscribeFromRequestUpdates(id);
+
+      return const Right(null);
+    } catch (e) {
+      return Left(Fail(e));
+    }
+  }
 }

@@ -45,4 +45,5 @@ abstract class FcmDataSource {
   );
 
   Future<int> getCountOfTodayRequestsByUserId(final String userId);
+  Future<void> cancelRequest(final String id);
 }

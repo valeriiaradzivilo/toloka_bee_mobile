@@ -11,11 +11,6 @@ class AcceptRequest extends RequestDetailsEvent {
   const AcceptRequest();
 }
 
-class RemoveRequest extends RequestDetailsEvent {
-  const RemoveRequest(this.requestId);
-  final String requestId;
-}
-
 class ReportRequestEvent extends RequestDetailsEvent {
   const ReportRequestEvent({
     required this.requestId,
@@ -50,4 +45,14 @@ class ConfirmRequestIsCompletedRequesterEvent extends RequestDetailsEvent {
     required this.workId,
     required this.requestId,
   });
+}
+
+class CancelHelpingEvent extends RequestDetailsEvent {
+  const CancelHelpingEvent(this.workId);
+  final String workId;
+}
+
+class CancelRequestEvent extends RequestDetailsEvent {
+  const CancelRequestEvent(this.requestId);
+  final String requestId;
 }
