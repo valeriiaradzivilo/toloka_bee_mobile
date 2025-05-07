@@ -4,6 +4,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../common/exceptions/request_limit_reached_for_today.dart';
 import '../../../common/widgets/zip_snackbar.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
@@ -105,6 +106,17 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
       );
       result.fold(
         (final failure) {
+          if (failure is RequestLimitReachedForToday) {
+            ZipSnackbar.show(
+              event.context,
+              PopupModel(
+                title: translate('request.limit_reached'),
+                message: translate('request.limit_reached_message'),
+                type: EPopupType.error,
+              ),
+            );
+            return;
+          }
           ZipSnackbar.show(
             event.context,
             PopupModel(

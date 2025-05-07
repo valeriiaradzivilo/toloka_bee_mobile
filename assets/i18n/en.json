@@ -207,6 +207,8 @@
             "thanks": "Thank you for sharing your request with us. We will notify you when somebody accepts your request. Active requests can be found in the profile.",
             "error": "Error occurred while creating a request. Please try again later."
         },
+        "limit_reached": "You have reached the limit of active requests.",
+        "limit_reached_message": "You can have only 5 active requests at the same time. Please remove some of them to create a new one or wait until tomorrow.",
         "details": {
             "description": "Description",
             "price": "Estimated price: {price}",

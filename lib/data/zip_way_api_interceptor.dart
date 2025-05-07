@@ -43,10 +43,6 @@ class ZipWayApiInterceptor extends Interceptor {
       logger.warning('Failed to get access token: $e');
     }
 
-    // logger.info('→ ${options.method} ${options.baseUrl}${options.path}');
-    // logger.info('   Headers: ${options.headers}');
-    // handler.next(options);
-
     super.onRequest(options, handler);
   }
 }

@@ -328,4 +328,21 @@ class FcmDataSourceImpl implements FcmDataSource {
       data: payload,
     );
   }
+
+  @override
+  Future<int> getCountOfTodayRequestsByUserId(
+    final String userId,
+  ) async {
+    final response = await _dio.get(
+      '$_basePathRequest/count-by-user-today/$userId',
+    );
+
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      throw Exception(
+        'Failed to get count of today requests by user id: ${response.statusCode}',
+      );
+    }
+  }
 }

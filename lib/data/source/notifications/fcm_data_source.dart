@@ -43,4 +43,6 @@ abstract class FcmDataSource {
     final String requestId,
     final ERequestUpdate requestUpdate,
   );
+
+  Future<int> getCountOfTodayRequestsByUserId(final String userId);
 }

@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:simple_logger/simple_logger.dart';
 
+import '../../../common/exceptions/request_limit_reached_for_today.dart';
 import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
@@ -62,6 +63,11 @@ class NotificationRepositoryImpl implements NotificationRepository {
     final RequestNotificationModel notification,
   ) async {
     try {
+      if (await _fcmDataSource
+              .getCountOfTodayRequestsByUserId(notification.userId) >=
+          5) {
+        return Left(Fail(RequestLimitReachedForToday()));
+      }
       await _fcmDataSource.sendNotification(notification);
       await _fcmDataSource.subscribeToRequestUpdates(notification.id);
       return const Right(null);
