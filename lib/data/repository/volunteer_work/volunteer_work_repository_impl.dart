@@ -86,13 +86,15 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
   }
 
   @override
-  Future<Either<Fail<dynamic>, void>> confirmByRequester(
-    final String workId,
+  Future<Either<Fail, void>> confirmByRequester(
+    final List<String> workIds,
     final String requestId,
   ) async {
     try {
       await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
-      await _volunteerWorkDataSource.confirmByRequester(workId);
+      for (final workId in workIds) {
+        await _volunteerWorkDataSource.confirmByRequester(workId);
+      }
       await _fcmDataSource.sendRequestUpdateNotification(
         requestId,
         ERequestUpdate.confirmedByRequester,

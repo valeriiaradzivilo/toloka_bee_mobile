@@ -207,6 +207,9 @@ class NotificationRepositoryImpl implements NotificationRepository {
   ) async {
     try {
       await _fcmDataSource.subscribeToRequestUpdates(requestId);
+      logger.info(
+        'Subscribed to request updates for requestId: $requestId',
+      );
       return const Right(null);
     } catch (e) {
       logger.severe(

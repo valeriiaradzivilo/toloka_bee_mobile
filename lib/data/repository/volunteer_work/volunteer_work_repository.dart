@@ -13,7 +13,7 @@ abstract interface class VolunteerWorkRepository {
     final String requestId,
   );
   Future<Either<Fail, void>> confirmByRequester(
-    final String workId,
+    final List<String> workIds,
     final String requestId,
   );
   Future<Either<Fail, List<VolunteerWorkModel>>> getWorksByVolunteer(

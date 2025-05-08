@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/list_extension.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
 import '../../../data/models/e_request_hand_type.dart';
@@ -352,25 +350,12 @@ class _ControlRequestCompletionRow extends StatelessWidget {
                           state.isCurrentUserVolunteerForRequest
                               ? ConfirmRequestIsCompletedVolunteerEvent(
                                   requestId: state.requestNotificationModel.id,
-                                  workId: state.volunteerWorks
-                                      .firstWhereOrNull(
-                                        (final e) =>
-                                            e.volunteerId ==
-                                            FirebaseAuth
-                                                .instance.currentUser?.uid,
-                                      )
-                                      ?.id,
+                                  workId:
+                                      state.volunteerWorkModelCurrentUser!.id,
                                 )
                               : ConfirmRequestIsCompletedRequesterEvent(
                                   requestId: state.requestNotificationModel.id,
-                                  workId: state.volunteerWorks
-                                      .firstWhereOrNull(
-                                        (final e) =>
-                                            e.volunteerId ==
-                                            FirebaseAuth
-                                                .instance.currentUser?.uid,
-                                      )
-                                      ?.id,
+                                  workIds: state.allWorksIds,
                                 ),
                         );
                     Navigator.of(context).pop();
@@ -389,6 +374,16 @@ class _ControlRequestCompletionRow extends StatelessWidget {
               ),
             ],
           ),
+          if (state.isCurrentUsersRequest &&
+              !state.requestNotificationModel.status.canBeHelped)
+            ElevatedButton.icon(
+              onPressed: () {},
+              label: Text(translate('request.details.repeat')),
+              icon: const Icon(
+                Icons.repeat_one,
+                color: ZipColor.onPrimary,
+              ),
+            ),
         ],
       );
 

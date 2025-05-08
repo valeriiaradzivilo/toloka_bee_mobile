@@ -9,6 +9,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../../common/exceptions/request_already_accepted_exception.dart';
 import '../../../common/exceptions/request_expired_exception.dart';
+import '../../../common/list_extension.dart';
 import '../../../data/models/request_complaint_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
@@ -136,13 +137,14 @@ class RequestDetailsBloc
                 image: base64Decode(userAuthModel.photo),
                 isCurrentUsersRequest:
                     userAuthModel.id == FirebaseAuth.instance.currentUser?.uid,
-                isCurrentUserVolunteerForRequest: volunteersList.any(
-                  (final volunteer) =>
-                      volunteer.id == FirebaseAuth.instance.currentUser?.uid,
-                ),
                 volunteerWorks: volunteerWorksResult,
                 volunteers: volunteersList,
                 requesterContactInfo: contactsResult,
+                volunteerWorkModelCurrentUser:
+                    volunteerWorksResult.firstWhereOrNull(
+                  (final e) =>
+                      e.volunteerId == FirebaseAuth.instance.currentUser?.uid,
+                ),
               ),
             );
           },
@@ -363,10 +365,11 @@ class RequestDetailsBloc
     final Emitter<RequestDetailsState> emit,
   ) async {
     emit(const RequestDetailsLoading());
-    if (event.workId == null) return;
+    if (event.workIds.isEmpty) return;
+
     final result = await _confirmVolunteerWorkByRequesterUsecase(
-      ConfirmVolunteerWorkParams(
-        workId: event.workId!,
+      ConfirmWorkByRequesterParams(
+        workIds: event.workIds,
         requestId: event.requestId,
       ),
     );

@@ -20,23 +20,29 @@ final class RequestDetailsLoaded extends RequestDetailsState {
     required this.requester,
     required this.image,
     required this.isCurrentUsersRequest,
-    required this.isCurrentUserVolunteerForRequest,
     required this.volunteers,
     required this.volunteerWorks,
     required this.requesterContactInfo,
+    required this.volunteerWorkModelCurrentUser,
   });
   final RequestNotificationModel requestNotificationModel;
   final List<VolunteerWorkModel> volunteerWorks;
+  final VolunteerWorkModel? volunteerWorkModelCurrentUser;
   final List<UserAuthModel> volunteers;
   final double distance;
   final UserAuthModel requester;
   final ContactInfoModel? requesterContactInfo;
   final Uint8List image;
   final bool isCurrentUsersRequest;
-  final bool isCurrentUserVolunteerForRequest;
+
+  bool get isCurrentUserVolunteerForRequest =>
+      volunteerWorkModelCurrentUser != null;
 
   bool get areVolunteersPresent =>
       volunteers.isNotEmpty && volunteerWorks.isNotEmpty;
+
+  List<String> get allWorksIds =>
+      volunteerWorks.map((final e) => e.id).toList();
 }
 
 final class RequestDetailsError extends RequestDetailsState {

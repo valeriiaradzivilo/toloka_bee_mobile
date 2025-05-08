@@ -39,10 +39,10 @@ class ConfirmRequestIsCompletedVolunteerEvent extends RequestDetailsEvent {
 }
 
 class ConfirmRequestIsCompletedRequesterEvent extends RequestDetailsEvent {
-  final String? workId;
+  final List<String> workIds;
   final String requestId;
   const ConfirmRequestIsCompletedRequesterEvent({
-    required this.workId,
+    required this.workIds,
     required this.requestId,
   });
 }
