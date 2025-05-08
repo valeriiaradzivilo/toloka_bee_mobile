@@ -172,7 +172,12 @@
     "request": {
         "hand": {
             "title": "What help do you need?",
-            "description": "Describe the service that you need",
+            "type": {
+                "title": "What type of help do you need?",
+                "description": "Select the type of help you need. This will help volunteers to find your request.",
+                "label": "Type of help"
+            },
+            "description": "Describe the service that you need *",
             "no_contact_info": "No contact information available.\nPlease add at least one contact to help the ones who help you...",
             "remote": {
                 "title": "Can be done remotely",
@@ -196,11 +201,6 @@
                 "title": "How many volunteers do you need?",
                 "description": "Select how many volunteers do you need to complete this task.\nDefault value - 1.\nMaximum value - 5.",
                 "label": "Volunteers"
-            },
-            "type": {
-                "title": "What type of help do you need?",
-                "description": "Select the type of help you need. This will help volunteers to find your request.",
-                "label": "Type of help"
             },
             "submit": "Create request",
             "success": "Request created successfully.",
@@ -244,7 +244,8 @@
             "contacts_hint": "You can contact the user directly by clicking on their contact method. If you have any questions, please ask them directly.\nHold contact for a second to copy it.",
             "no_contacts": "No contacts available...",
             "volunteers": "Volunteers",
-            "volunteers_needed": "Volunteers on the task: {present} / {need}"
+            "volunteers_needed": "Volunteers on the task: {present} / {need}",
+            "cancel_reason": "Reason for canceling"
         },
         "delete": {
             "success": "Request deleted successfully.",

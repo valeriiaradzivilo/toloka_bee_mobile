@@ -7,13 +7,13 @@ import 'package:intl/intl.dart';
 import '../../../common/list_extension.dart';
 import '../../../common/theme/zip_color.dart';
 import '../../../common/theme/zip_fonts.dart';
-import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/e_request_hand_type.dart';
-import '../../../data/models/ui/e_predefined_report_message.dart';
-import '../../profile/ui/widgets/profile_contacts.dart';
 import '../bloc/request_details_bloc.dart';
 import '../bloc/request_details_event.dart';
 import '../bloc/request_details_state.dart';
+import 'widgets/cancel_request_helping_button.dart';
+import 'widgets/report.dart';
+import 'widgets/see_contacts_button.dart';
 
 class RequestDetailsScreen extends StatelessWidget {
   const RequestDetailsScreen({
@@ -268,64 +268,12 @@ class RequestDetailsScreen extends StatelessWidget {
                         if (state.isCurrentUserVolunteerForRequest &&
                             state.requesterContactInfo != null)
                           Center(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (final context) => AlertDialog(
-                                    title: Text(
-                                      translate('request.details.contacts'),
-                                      style: ZipFonts.big.style,
-                                    ),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      spacing: 10,
-                                      children: [
-                                        Text(
-                                          translate(
-                                            'request.details.contacts_hint',
-                                          ),
-                                          style: ZipFonts.small.style,
-                                        ),
-                                        ContactDataText(
-                                          method: ContactMethod.phone,
-                                          value:
-                                              state.requesterContactInfo!.phone,
-                                        ),
-                                        ContactDataText(
-                                          method: ContactMethod.viber,
-                                          value:
-                                              state.requesterContactInfo!.viber,
-                                        ),
-                                        ContactDataText(
-                                          method: ContactMethod.telegram,
-                                          value: state
-                                              .requesterContactInfo!.telegram,
-                                        ),
-                                        ContactDataText(
-                                          method: ContactMethod.whatsapp,
-                                          value: state
-                                              .requesterContactInfo!.whatsapp,
-                                        ),
-                                        ContactDataText(
-                                          method: ContactMethod.email,
-                                          value:
-                                              state.requesterContactInfo!.email,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                              label: Text(
-                                translate('request.details.see_contacts'),
-                              ),
-                              icon: const Icon(
-                                Icons.phone,
-                                color: ZipColor.onError,
-                              ),
-                            ),
+                            child:
+                                SeeContactsButton(state.requesterContactInfo!),
                           ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         if (state.requestNotificationModel
                                 .requiredVolunteersCount >
                             1)
@@ -341,157 +289,13 @@ class RequestDetailsScreen extends StatelessWidget {
                             ),
                             style: ZipFonts.small.style,
                           ),
-                        if (state.isCurrentUsersRequest)
-                          Text(
-                            '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname}').join(', ')}',
-                            style: ZipFonts.small.style,
-                          ),
                         if (state.isCurrentUsersRequest ||
                             state.isCurrentUserVolunteerForRequest)
-                          Row(
-                            spacing: 20,
-                            children: [
-                              Flexible(
-                                child: Center(
-                                  child: ElevatedButton.icon(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (final context) => AlertDialog(
-                                          title: Text(
-                                            translate(
-                                              state.isCurrentUsersRequest
-                                                  ? 'request.details.cancel'
-                                                  : 'request.details.cancel_volunteer',
-                                            ),
-                                            style: ZipFonts.medium.style,
-                                          ),
-                                          content: Text(
-                                            translate(
-                                              state.isCurrentUsersRequest
-                                                  ? 'request.details.cancel_confirm'
-                                                  : 'request.details.cancel_volunteer_confirm',
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context).pop(),
-                                              child: Text(
-                                                translate('common.cancel'),
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                context
-                                                    .read<RequestDetailsBloc>()
-                                                    .add(
-                                                      state.isCurrentUsersRequest
-                                                          ? CancelRequestEvent(
-                                                              state
-                                                                  .requestNotificationModel
-                                                                  .id,
-                                                            )
-                                                          : CancelHelpingEvent(
-                                                              state
-                                                                  .volunteerWorks
-                                                                  .firstWhere(
-                                                                    (final e) =>
-                                                                        e.volunteerId ==
-                                                                        FirebaseAuth
-                                                                            .instance
-                                                                            .currentUser
-                                                                            ?.uid,
-                                                                  )
-                                                                  .id,
-                                                            ),
-                                                    );
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                translate('common.delete'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: ZipColor.errorContainer,
-                                    ),
-                                    label: Text(
-                                      translate(
-                                        state.isCurrentUsersRequest
-                                            ? 'request.details.cancel'
-                                            : 'request.details.cancel_volunteer',
-                                      ),
-                                      style: ZipFonts.small.style.copyWith(
-                                        color: ZipColor.onErrorContainer,
-                                      ),
-                                    ),
-                                    icon: const Icon(
-                                      Icons.delete_forever_rounded,
-                                      color: ZipColor.onErrorContainer,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Flexible(
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    context.read<RequestDetailsBloc>().add(
-                                          state.isCurrentUserVolunteerForRequest
-                                              ? ConfirmRequestIsCompletedVolunteerEvent(
-                                                  requestId: state
-                                                      .requestNotificationModel
-                                                      .id,
-                                                  workId: state.volunteerWorks
-                                                      .firstWhereOrNull(
-                                                        (final e) =>
-                                                            e.volunteerId ==
-                                                            FirebaseAuth
-                                                                .instance
-                                                                .currentUser
-                                                                ?.uid,
-                                                      )
-                                                      ?.id,
-                                                )
-                                              : ConfirmRequestIsCompletedRequesterEvent(
-                                                  requestId: state
-                                                      .requestNotificationModel
-                                                      .id,
-                                                  workId: state.volunteerWorks
-                                                      .firstWhereOrNull(
-                                                        (final e) =>
-                                                            e.volunteerId ==
-                                                            FirebaseAuth
-                                                                .instance
-                                                                .currentUser
-                                                                ?.uid,
-                                                      )
-                                                      ?.id,
-                                                ),
-                                        );
-                                    Navigator.of(context).pop();
-                                  },
-                                  label: Text(
-                                    translate('request.details.confirm_done'),
-                                    style: ZipFonts.small.style.copyWith(
-                                      color: ZipColor.onPrimary,
-                                    ),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.done_all,
-                                    color: ZipColor.onPrimary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          _ControlRequestCompletionRow(state),
                         if (!state.isCurrentUsersRequest)
                           Center(
                             child: ElevatedButton.icon(
-                              onPressed: () => _showReportDialog(
+                              onPressed: () => showReportDialog(
                                 context,
                                 state.requester.id,
                                 state.requestNotificationModel.id,
@@ -519,150 +323,70 @@ class RequestDetailsScreen extends StatelessWidget {
       );
 }
 
-enum _EReportTarget { request, user }
-
-Future<void> _showReportDialog(
-  final BuildContext context,
-  final String userId,
-  final String requestId,
-  final RequestDetailsBloc requestDetailsBloc,
-) async {
-  await showDialog(
-    context: context,
-    builder: (final context) => BlocProvider.value(
-      value: requestDetailsBloc,
-      child: _ReportDialog(
-        userId: userId,
-        requestId: requestId,
-      ),
-    ),
-  );
-}
-
-class _ReportDialog extends StatefulWidget {
-  const _ReportDialog({
-    required this.userId,
-    required this.requestId,
-  });
-  final String userId;
-  final String requestId;
+class _ControlRequestCompletionRow extends StatelessWidget {
+  const _ControlRequestCompletionRow(this.state);
+  final RequestDetailsLoaded state;
 
   @override
-  State<_ReportDialog> createState() => __ReportDialogState();
-}
-
-class __ReportDialogState extends State<_ReportDialog> {
-  _EReportTarget? selectedTarget;
-  EPredefinedReportMessage? selectedReason;
-  final TextEditingController additionalInfoController =
-      TextEditingController();
-
-  @override
-  void dispose() {
-    additionalInfoController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(final BuildContext context) => AlertDialog(
-        title: Text(
-          translate('report.dialog.title'),
-          style: ZipFonts.big.style,
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+  Widget build(final BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 20,
+        children: [
+          if (state.isCurrentUsersRequest)
+            Text(
+              '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname}').join(', ')}',
+              style: ZipFonts.small.style,
+            ),
+          Row(
+            spacing: 20,
             children: [
-              DropdownButtonFormField<_EReportTarget>(
-                decoration: InputDecoration(
-                  labelText: translate('report.dialog.select_target'),
-                ),
-                items: _EReportTarget.values
-                    .map(
-                      (final target) => DropdownMenuItem(
-                        value: target,
-                        child: Text(
-                          switch (target) {
-                            _EReportTarget.request =>
-                              translate('report.dialog.target_request'),
-                            _EReportTarget.user =>
-                              translate('report.dialog.target_user'),
-                          },
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (final value) => selectedTarget = value,
+              Flexible(
+                child: CancelRequestHelpingButton(state),
               ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<EPredefinedReportMessage>(
-                decoration: InputDecoration(
-                  labelText: translate('report.dialog.select_reason'),
+              Flexible(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    context.read<RequestDetailsBloc>().add(
+                          state.isCurrentUserVolunteerForRequest
+                              ? ConfirmRequestIsCompletedVolunteerEvent(
+                                  requestId: state.requestNotificationModel.id,
+                                  workId: state.volunteerWorks
+                                      .firstWhereOrNull(
+                                        (final e) =>
+                                            e.volunteerId ==
+                                            FirebaseAuth
+                                                .instance.currentUser?.uid,
+                                      )
+                                      ?.id,
+                                )
+                              : ConfirmRequestIsCompletedRequesterEvent(
+                                  requestId: state.requestNotificationModel.id,
+                                  workId: state.volunteerWorks
+                                      .firstWhereOrNull(
+                                        (final e) =>
+                                            e.volunteerId ==
+                                            FirebaseAuth
+                                                .instance.currentUser?.uid,
+                                      )
+                                      ?.id,
+                                ),
+                        );
+                    Navigator.of(context).pop();
+                  },
+                  label: Text(
+                    translate('request.details.confirm_done'),
+                    style: ZipFonts.small.style.copyWith(
+                      color: ZipColor.onPrimary,
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.done_all,
+                    color: ZipColor.onPrimary,
+                  ),
                 ),
-                items: EPredefinedReportMessage.values
-                    .map(
-                      (final reason) => DropdownMenuItem(
-                        value: reason,
-                        child: Text(reason.text),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (final value) => selectedReason = value,
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: additionalInfoController,
-                decoration: InputDecoration(
-                  labelText: translate('report.dialog.additional_info'),
-                ),
-                maxLines: 3,
-                maxLength: 100,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                translate('report.dialog.only_one_report'),
-                style: ZipFonts.small.error,
-                textAlign: TextAlign.center,
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(translate('common.cancel')),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (selectedTarget != null && selectedReason != null) {
-                switch (selectedTarget) {
-                  case _EReportTarget.request:
-                    context.read<RequestDetailsBloc>().add(
-                          ReportRequestEvent(
-                            requestId: widget.requestId,
-                            message:
-                                '${selectedReason!.text}  :  ${additionalInfoController.text}',
-                          ),
-                        );
-                  case _EReportTarget.user:
-                    context.read<RequestDetailsBloc>().add(
-                          ReportUserEvent(
-                            userId: widget.userId,
-                            message:
-                                '${selectedReason!.text}  :  ${additionalInfoController.text}',
-                          ),
-                        );
-                  case null:
-                    break;
-                }
-                Navigator.of(context).pop();
-              }
-            },
-            child: Text(translate('report.dialog.send')),
-          ),
         ],
       );
-
-//TODO: Implement ability to confirm request completion by requester and volunteer
-//TODO: Додай можливість скасувати запит, якщо він вже був прийнятий, то requester має вказати причину скасування
 }

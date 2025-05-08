@@ -34,6 +34,9 @@ final class RequestDetailsLoaded extends RequestDetailsState {
   final Uint8List image;
   final bool isCurrentUsersRequest;
   final bool isCurrentUserVolunteerForRequest;
+
+  bool get areVolunteersPresent =>
+      volunteers.isNotEmpty && volunteerWorks.isNotEmpty;
 }
 
 final class RequestDetailsError extends RequestDetailsState {

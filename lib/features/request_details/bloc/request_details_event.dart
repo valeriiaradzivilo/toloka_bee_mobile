@@ -53,6 +53,10 @@ class CancelHelpingEvent extends RequestDetailsEvent {
 }
 
 class CancelRequestEvent extends RequestDetailsEvent {
-  const CancelRequestEvent(this.requestId);
+  const CancelRequestEvent({
+    required this.requestId,
+    required this.reason,
+  });
   final String requestId;
+  final String reason;
 }
