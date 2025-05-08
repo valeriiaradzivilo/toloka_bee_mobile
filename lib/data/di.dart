@@ -23,8 +23,8 @@ import 'source/contacts/contacts_data_source.dart';
 import 'source/contacts/contacts_data_source_impl.dart';
 import 'source/geolocation/geo_data_source.dart';
 import 'source/geolocation/geo_data_source_imp.dart';
-import 'source/notifications/fcm_data_source.dart';
-import 'source/notifications/fcm_data_source_impl.dart';
+import 'source/notifications/notifications_data_source.dart';
+import 'source/notifications/notifications_data_source_impl.dart';
 import 'source/users/user_data_source.dart';
 import 'source/users/user_data_source_impl.dart';
 import 'source/volunteer_work/volunteer_work_data_source.dart';
@@ -90,8 +90,9 @@ Future<void> initDatasources() async {
 
   serviceLocator
       .registerLazySingleton<GeoDataSource>(() => GeoDataSourceImp(dio));
-  serviceLocator
-      .registerLazySingleton<FcmDataSource>(() => FcmDataSourceImpl(dio));
+  serviceLocator.registerLazySingleton<NotificationsDataSource>(
+    () => NotificationsDataSourceImpl(dio),
+  );
   serviceLocator
       .registerLazySingleton<UserDataSource>(() => UserDataSourceImpl(dio));
   serviceLocator.registerLazySingleton<ContactsDataSource>(

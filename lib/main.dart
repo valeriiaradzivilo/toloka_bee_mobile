@@ -18,13 +18,15 @@ Future<void> main() async {
   await AppInitializer.initialize();
   GetIt.instance<FcmService>().listenToMessages();
   GetIt.instance<FcmService>().listenToBackgroundMessages();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const App());
 }
 
 class AppInitializer {
   static Future<void> initialize() async {
     _preserveSplash();
-    await _initFirebase();
     await _initLocalization();
     await _initDependencies();
     await _initDateFormatting();
@@ -34,12 +36,6 @@ class AppInitializer {
   static void _preserveSplash() {
     FlutterNativeSplash.preserve(
       widgetsBinding: WidgetsFlutterBinding.ensureInitialized(),
-    );
-  }
-
-  static Future<void> _initFirebase() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
     );
   }
 

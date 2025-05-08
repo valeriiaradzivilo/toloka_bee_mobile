@@ -7,11 +7,12 @@ import '../../models/e_request_update.dart';
 import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
-import '../../source/notifications/fcm_data_source.dart';
+import '../../source/notifications/notifications_data_source.dart';
+import '../../usecase/requests/cancel_request_usecase.dart';
 import 'notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
-  final FcmDataSource _fcmDataSource;
+  final NotificationsDataSource _fcmDataSource;
 
   final logger = SimpleLogger();
 
@@ -231,14 +232,18 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<Either<Fail, void>> cancelRequest(final String id) async {
+  Future<Either<Fail, void>> cancelRequest(
+    final CancelRequestUsecaseParams params,
+  ) async {
     try {
-      await _fcmDataSource.cancelRequest(id);
+      await _fcmDataSource.cancelRequest(params.requestId);
+
+      await _fcmDataSource.unsubscribeFromRequestUpdates(params.requestId);
       await _fcmDataSource.sendRequestUpdateNotification(
-        id,
+        params.requestId,
         ERequestUpdate.canceledByRequester,
+        additionalData: params.reason,
       );
-      await _fcmDataSource.unsubscribeFromRequestUpdates(id);
       return const Right(null);
     } catch (e) {
       logger.severe(

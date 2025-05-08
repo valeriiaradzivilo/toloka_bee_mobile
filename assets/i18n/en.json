@@ -256,7 +256,7 @@
         "status": {
             "pending": "Pending",
             "completed": "Completed",
-            "canceled": "Canceled",
+            "cancelled": "Cancelled",
             "needs_more_people": "Needs more people",
             "in_progress": "In progress",
             "expired": "Expired",

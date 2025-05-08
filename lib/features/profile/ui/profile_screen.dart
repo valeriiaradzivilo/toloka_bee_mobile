@@ -18,21 +18,53 @@ import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../authentication/bloc/user_bloc.dart';
 import '../../give_hand/ui/widgets/request_tile.dart';
+import '../../main_app/main_app.dart';
 import '../../registration/ui/data/e_position.dart';
 import '../bloc/profile_cubit.dart';
 import '../bloc/profile_state.dart';
 import 'profile_edit_screen.dart';
 import 'widgets/profile_contacts.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
+  final _profileCubit = ProfileCubit(GetIt.I);
+
+  @override
+  void initState() {
+    super.initState();
+    _profileCubit.loadUser(
+      context.read<UserBloc>().userStream.value.valueOrNull!,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    MainApp.routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    MainApp.routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    _profileCubit.loadUser(
+      context.read<UserBloc>().userStream.value.valueOrNull!,
+    );
+  }
+
+  @override
   Widget build(final BuildContext context) => Provider(
-        create: (final _) => ProfileCubit(GetIt.I)
-          ..loadUser(
-            context.read<UserBloc>().userStream.value.valueOrNull!,
-          ),
+        create: (final _) => _profileCubit,
         dispose: (final context, final value) => value.close(),
         child: Scaffold(
           appBar: AppBar(),

@@ -16,6 +16,8 @@ class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   static final navigatorKey = GlobalKey<NavigatorState>();
+  static final RouteObserver<ModalRoute<void>> routeObserver =
+      RouteObserver<ModalRoute<void>>();
 
   @override
   Widget build(final BuildContext context) {
@@ -42,6 +44,7 @@ class MainApp extends StatelessWidget {
         initialRoute: Routes.mainScreen,
         onGenerateRoute: RouteGenerator.generate,
         debugShowCheckedModeBanner: false,
+        navigatorObservers: [routeObserver],
         builder: (final context, final child) => MainWrapperWidget(child),
       ),
     );

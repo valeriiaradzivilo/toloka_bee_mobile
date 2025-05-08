@@ -22,7 +22,7 @@ enum ERequestStatus {
       };
 
   static ERequestStatus fromJson(final String json) => values.firstWhere(
-        (final element) => element.name == json,
+        (final element) => element.name.toLowerCase() == json.toLowerCase(),
         orElse: () => ERequestStatus.unknown,
       );
 

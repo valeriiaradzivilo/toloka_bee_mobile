@@ -62,7 +62,9 @@ class MapScreenBloc extends ZipBloc {
     final volunteers = await _getVolunteersByLocationUsecase(
       getCurrentPosition.locationTopic,
     );
-    volunteers.fold((final _) {}, (final markersCount) {
+    volunteers.fold((final _) {
+      _volunteerMarkers.add([]);
+    }, (final markersCount) {
       debugPrint(
         'MAPBLOC Markers count: $markersCount',
       );

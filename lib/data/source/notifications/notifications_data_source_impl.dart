@@ -12,12 +12,12 @@ import '../../models/e_request_update.dart';
 import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
-import 'fcm_data_source.dart';
+import 'notifications_data_source.dart';
 
-class FcmDataSourceImpl implements FcmDataSource {
+class NotificationsDataSourceImpl implements NotificationsDataSource {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-  FcmDataSourceImpl(this._dio);
+  NotificationsDataSourceImpl(this._dio);
   final Dio _dio;
 
   final String _basePathRequest = '/request';
@@ -294,8 +294,9 @@ class FcmDataSourceImpl implements FcmDataSource {
   @override
   Future<void> sendRequestUpdateNotification(
     final String requestId,
-    final ERequestUpdate requestUpdate,
-  ) async {
+    final ERequestUpdate requestUpdate, {
+    final String? additionalData,
+  }) async {
     final postUrl =
         'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
 
@@ -306,7 +307,7 @@ class FcmDataSourceImpl implements FcmDataSource {
         'topic': requestId,
         'notification': {
           'title': title,
-          'body': '',
+          'body': additionalData ?? '',
         },
         'android': {
           'priority': 'high',
@@ -348,9 +349,10 @@ class FcmDataSourceImpl implements FcmDataSource {
 
   @override
   Future<void> cancelRequest(final String id) async {
-    final response = await _dio.post(
-      '$_basePathRequest/update/$id',
+    final response = await _dio.put(
+      '$_basePathRequest/update-status',
       data: {
+        'requestId': id,
         'status': ERequestStatus.cancelled.name.toLowerCase(),
       },
     );

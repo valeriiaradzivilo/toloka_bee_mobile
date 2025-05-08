@@ -150,7 +150,4 @@ class __ReportDialogState extends State<_ReportDialog> {
           ),
         ],
       );
-
-//TODO: Implement ability to confirm request completion by requester and volunteer
-//TODO: Додай можливість скасувати запит, якщо він вже був прийнятий, то requester має вказати причину скасування
 }

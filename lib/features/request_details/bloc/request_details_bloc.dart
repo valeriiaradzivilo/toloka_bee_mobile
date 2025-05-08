@@ -215,7 +215,7 @@ class RequestDetailsBloc
       (final failure) async {
         _snackbarService.show(
           PopupModel(
-            title: translate('request.cancel_error'),
+            title: translate('request.details.cancel_error'),
             type: EPopupType.error,
           ),
         );
@@ -223,7 +223,7 @@ class RequestDetailsBloc
       (final success) async {
         _snackbarService.show(
           PopupModel(
-            title: translate('request.cancel_success'),
+            title: translate('request.details.cancel_success'),
             type: EPopupType.success,
           ),
         );
@@ -236,12 +236,17 @@ class RequestDetailsBloc
     final Emitter<RequestDetailsState> emit,
   ) async {
     emit(const RequestDetailsLoading());
-    final result = await _cancelRequestUsecase(event.requestId);
+    final result = await _cancelRequestUsecase(
+      CancelRequestUsecaseParams(
+        requestId: event.requestId,
+        reason: event.reason,
+      ),
+    );
     await result.fold(
       (final failure) async {
         _snackbarService.show(
           PopupModel(
-            title: translate('request.cancel_error'),
+            title: translate('request.details.cancel_error'),
             type: EPopupType.error,
           ),
         );
@@ -249,7 +254,7 @@ class RequestDetailsBloc
       (final success) async {
         _snackbarService.show(
           PopupModel(
-            title: translate('request.cancel_success'),
+            title: translate('request.details.cancel_success'),
             type: EPopupType.success,
           ),
         );

@@ -3,7 +3,7 @@ import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
 
-abstract class FcmDataSource {
+abstract class NotificationsDataSource {
   Future<String> getFcmToken();
 
   Future<void> subscribeToTopic(
@@ -41,8 +41,9 @@ abstract class FcmDataSource {
   Future<void> unsubscribeFromRequestUpdates(final String requestId);
   Future<void> sendRequestUpdateNotification(
     final String requestId,
-    final ERequestUpdate requestUpdate,
-  );
+    final ERequestUpdate requestUpdate, {
+    final String? additionalData,
+  });
 
   Future<int> getCountOfTodayRequestsByUserId(final String userId);
   Future<void> cancelRequest(final String id);

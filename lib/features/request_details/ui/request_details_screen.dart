@@ -55,11 +55,13 @@ class RequestDetailsScreen extends StatelessWidget {
                         if (state.isCurrentUsersRequest)
                           Center(
                             child: Container(
+                              width: MediaQuery.sizeOf(context).width,
                               decoration: BoxDecoration(
                                 color: ZipColor.secondaryContainer,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               padding: const EdgeInsets.all(8),
+                              alignment: Alignment.center,
                               child: Text(
                                 translate('request.details.your_request'),
                                 style: ZipFonts.big.style.copyWith(
@@ -332,7 +334,7 @@ class _ControlRequestCompletionRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 20,
         children: [
-          if (state.isCurrentUsersRequest)
+          if (state.isCurrentUsersRequest && state.volunteers.isNotEmpty)
             Text(
               '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname}').join(', ')}',
               style: ZipFonts.small.style,
@@ -375,7 +377,7 @@ class _ControlRequestCompletionRow extends StatelessWidget {
                   },
                   label: Text(
                     translate('request.details.confirm_done'),
-                    style: ZipFonts.small.style.copyWith(
+                    style: ZipFonts.tiny.style.copyWith(
                       color: ZipColor.onPrimary,
                     ),
                   ),
@@ -389,4 +391,7 @@ class _ControlRequestCompletionRow extends StatelessWidget {
           ),
         ],
       );
+
+  //TODO: Implement ability to confirm request completion by requester and volunteer
+//TODO: Додай можливість скасувати запит, якщо він вже був прийнятий, то requester має вказати причину скасування
 }

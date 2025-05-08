@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import '../../models/get_requests_model.dart';
 import '../../models/location_subscription_model.dart';
 import '../../models/request_notification_model.dart';
+import '../../usecase/requests/cancel_request_usecase.dart';
 
 abstract class NotificationRepository {
   Future<Either<Fail, String>> getFcmToken();
@@ -43,6 +44,6 @@ abstract class NotificationRepository {
     final List<String> ids,
   );
   Future<Either<Fail, void>> cancelRequest(
-    final String id,
+    final CancelRequestUsecaseParams id,
   );
 }

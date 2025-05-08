@@ -5,13 +5,13 @@ import '../../../common/exceptions/request_expired_exception.dart';
 import '../../models/e_request_status.dart';
 import '../../models/e_request_update.dart';
 import '../../models/volunteer_work_model.dart';
-import '../../source/notifications/fcm_data_source.dart';
+import '../../source/notifications/notifications_data_source.dart';
 import '../../source/volunteer_work/volunteer_work_data_source.dart';
 import 'volunteer_work_repository.dart';
 
 class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
   final VolunteerWorkDataSource _volunteerWorkDataSource;
-  final FcmDataSource _fcmDataSource;
+  final NotificationsDataSource _fcmDataSource;
 
   VolunteerWorkRepositoryImpl(
     this._volunteerWorkDataSource,

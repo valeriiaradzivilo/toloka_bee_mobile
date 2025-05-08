@@ -114,7 +114,7 @@ class FcmService {
       _snackbarService.show(
         PopupModel(
           title: title != null ? translate(title) : '',
-          message: body != null ? translate(body) : '',
+          message: body,
           onPressed: (final BuildContext context) {
             Navigator.of(context).pushNamed(
               Routes.requestDetailsScreen,
