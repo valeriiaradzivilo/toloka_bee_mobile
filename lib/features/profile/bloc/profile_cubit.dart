@@ -16,7 +16,7 @@ import '../../../data/usecase/requests/get_requests_by_ids_usecase.dart';
 import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
 import '../../../data/usecase/user_management/delete_user_usecase.dart';
 import '../../../data/usecase/user_management/update_user_usecase.dart';
-import '../../../data/usecase/volunteer_work/get_volunteer_work_by_user_id.dart';
+import '../../../data/usecase/volunteer_work/get_volunteer_work_by_user_id_usecase.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {

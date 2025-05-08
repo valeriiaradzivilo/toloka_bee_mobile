@@ -40,10 +40,10 @@ class NotificationRepositoryImpl implements NotificationRepository {
         for (final location in locationSubscription) location.topic: location,
       };
 
-      for (final subscription in _subscribedTopics.entries) {
+      for (final subscription in _subscribedLocationTopics.entries) {
         if (locationToSubscribe[subscription.key] == null) {
           await _fcmDataSource.unsubscribeFromTopic(subscription.value);
-          _subscribedTopics.remove(subscription.key);
+          _subscribedLocationTopics.remove(subscription.key);
           logger.info('Unsubscribed from topic: ${subscription.key}');
         } else {
           locationToSubscribe.remove(subscription.key);
@@ -52,7 +52,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
 
       for (final subscription in locationToSubscribe.entries) {
         await _fcmDataSource.subscribeToTopic(subscription.value);
-        _subscribedTopics[subscription.key] = subscription.value;
+        _subscribedLocationTopics[subscription.key] = subscription.value;
         logger.info('Subscribed to topic: ${subscription.key}');
       }
 
@@ -83,7 +83,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
     }
   }
 
-  final Map<String, LocationSubscriptionModel> _subscribedTopics = {};
+  final Map<String, LocationSubscriptionModel> _subscribedLocationTopics = {};
 
   @override
   Future<Either<Fail, List<RequestNotificationModel>>> getAllRequests(

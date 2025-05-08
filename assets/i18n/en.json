@@ -294,6 +294,10 @@
                 "completed": "Requester marked the request as completed. Thank you for your help!",
                 "canceled": "Requester canceled the request. Sorry, but you cannot help them anymore."
             }
+        },
+        "confirm": {
+            "success": "Request marked as completed successfully.",
+            "error": "Error occurred while marking the request as completed. Please try again later."
         }
     },
     "give": {

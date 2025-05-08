@@ -31,7 +31,7 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
       }
 
       final currentVolunteersForTheRequest =
-          await _volunteerWorkDataSource.getWorksByRequester(requesterId);
+          await _volunteerWorkDataSource.getWorksByRequestId(requestId);
 
       if (currentVolunteersForTheRequest.length + 1 >
           request.requiredVolunteersCount) {
@@ -72,12 +72,13 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
     final String requestId,
   ) async {
     try {
+      await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
       await _volunteerWorkDataSource.confirmByVolunteer(workId);
       await _fcmDataSource.sendRequestUpdateNotification(
         requestId,
         ERequestUpdate.confirmedByVolunteer,
       );
-      await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
+
       return const Right(null);
     } catch (e) {
       return Left(Fail(e));
@@ -90,12 +91,13 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
     final String requestId,
   ) async {
     try {
+      await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
       await _volunteerWorkDataSource.confirmByRequester(workId);
       await _fcmDataSource.sendRequestUpdateNotification(
         requestId,
         ERequestUpdate.confirmedByRequester,
       );
-      await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
+
       return const Right(null);
     } catch (e) {
       return Left(Fail(e));

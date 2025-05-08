@@ -47,7 +47,8 @@ import 'usecase/requests/get_all_requests_usecase.dart';
 import 'usecase/requests/get_requests_by_ids_usecase.dart';
 import 'usecase/requests/get_requests_by_user_id_usecase.dart';
 import 'usecase/requests/send_notification_usecase.dart';
-import 'usecase/subscribe_to_topic_usecase.dart';
+import 'usecase/subscriptions/subscribe_to_location_topics_usecase.dart';
+import 'usecase/subscriptions/subscribe_to_request_id_usecase.dart';
 import 'usecase/user_management/delete_user_usecase.dart';
 import 'usecase/user_management/get_current_user_data_usecase.dart';
 import 'usecase/user_management/get_user_by_id_usecase.dart';
@@ -58,7 +59,7 @@ import 'usecase/user_management/update_user_usecase.dart';
 import 'usecase/volunteer_work/confirm_volunteer_work_by_requester_usecase.dart';
 import 'usecase/volunteer_work/confirm_volunteer_work_by_volunteer_usecase.dart';
 import 'usecase/volunteer_work/get_volunteer_work_by_request_id_usecase.dart';
-import 'usecase/volunteer_work/get_volunteer_work_by_user_id.dart';
+import 'usecase/volunteer_work/get_volunteer_work_by_user_id_usecase.dart';
 import 'usecase/volunteer_work/start_volunteer_work_usecase.dart';
 import 'zip_way_api_interceptor.dart';
 
@@ -159,8 +160,11 @@ Future<void> initUseCases() async {
   serviceLocator.registerLazySingleton<RegisterUserUsecase>(
     () => RegisterUserUsecase(serviceLocator()),
   );
-  serviceLocator.registerLazySingleton<SubscribeToTopicUsecase>(
-    () => SubscribeToTopicUsecase(serviceLocator()),
+  serviceLocator.registerLazySingleton<SubscribeToLocationTopicsUsecase>(
+    () => SubscribeToLocationTopicsUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<SubscribeToRequestIdUsecase>(
+    () => SubscribeToRequestIdUsecase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton<UpdateUserUsecase>(
     () => UpdateUserUsecase(serviceLocator()),

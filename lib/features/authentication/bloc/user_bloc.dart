@@ -16,18 +16,25 @@ import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../../data/service/fcm_service.dart';
-import '../../../data/usecase/subscribe_to_topic_usecase.dart';
+import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
+import '../../../data/usecase/subscriptions/subscribe_to_location_topics_usecase.dart';
+import '../../../data/usecase/subscriptions/subscribe_to_request_id_usecase.dart';
 import '../../../data/usecase/user_management/get_current_user_data_usecase.dart';
 import '../../../data/usecase/user_management/login_user_usecase.dart';
 import '../../../data/usecase/user_management/logout_user_usecase.dart';
+import '../../../data/usecase/volunteer_work/get_volunteer_work_by_user_id_usecase.dart';
 import '../../registration/ui/data/e_position.dart';
 
 class UserBloc extends ZipBloc {
   UserBloc(final GetIt locator)
       : _loginUserUsecase = locator<LoginUserUsecase>(),
         _getCurrentUserDataUsecase = locator<GetCurrentUserDataUsecase>(),
+        _getRequestsByUserIdUsecase = locator<GetRequestsByUserIdUsecase>(),
+        _getVolunteerWorksByUserIdUsecase =
+            locator<GetVolunteerWorksByUserIdUsecase>(),
         _logoutUserUsecase = locator<LogoutUserUsecase>(),
-        _subscribeToTopicUsecase = locator<SubscribeToTopicUsecase>(),
+        _subscribeToTopicUsecase = locator<SubscribeToLocationTopicsUsecase>(),
+        _subscribeToRequestIdUsecase = locator<SubscribeToRequestIdUsecase>(),
         _fcmService = locator<FcmService>() {
     _initAuth();
     _initLocationControl();
@@ -50,6 +57,34 @@ class UserBloc extends ZipBloc {
           await logout();
           return;
         }
+
+        final requestsResult = await _getRequestsByUserIdUsecase.call(
+          users[1].valueOrNull?.id ?? '',
+        );
+
+        requestsResult.fold((final _) {}, (final requests) {
+          for (final request in requests) {
+            if (request.status.canBeHelped &&
+                request.deadline.isAfter(DateTime.now()) &&
+                !_subscribedToTopics.contains(request.id)) {
+              _subscribeToRequestIdUsecase.call(request.id);
+            }
+          }
+        });
+
+        final volunteerWorksResult =
+            await _getVolunteerWorksByUserIdUsecase.call(
+          users[1].valueOrNull?.id ?? '',
+        );
+
+        volunteerWorksResult.fold((final _) {}, (final volunteerWorks) {
+          for (final volunteerWork in volunteerWorks) {
+            if (!volunteerWork.requesterConfirmed &&
+                !_subscribedToTopics.contains(volunteerWork.requestId)) {
+              _subscribeToRequestIdUsecase.call(volunteerWork.requestId);
+            }
+          }
+        });
       }),
     );
 
@@ -83,22 +118,10 @@ class UserBloc extends ZipBloc {
     );
   }
 
-  final BehaviorSubject<Optional<UserAuthModel>> _user =
-      BehaviorSubject<Optional<UserAuthModel>>.seeded(const OptionalNull());
-  final BehaviorSubject<PopupModel> _popupController =
-      BehaviorSubject<PopupModel>();
-
   ValueStream<Optional<UserAuthModel>> get userStream => _user.stream;
   Stream<bool> get isAuthenticated =>
       userStream.map((final user) => user is OptionalValue);
   ValueStream<PopupModel> get authPopupStream => _popupController.stream;
-
-  final LoginUserUsecase _loginUserUsecase;
-  final GetCurrentUserDataUsecase _getCurrentUserDataUsecase;
-  final LogoutUserUsecase _logoutUserUsecase;
-  final SubscribeToTopicUsecase _subscribeToTopicUsecase;
-
-  final FcmService _fcmService;
 
   final locationStream = Geolocator.getPositionStream();
   bool isFirstRun = true;
@@ -241,6 +264,22 @@ class UserBloc extends ZipBloc {
       );
     }
   }
+
+  final LoginUserUsecase _loginUserUsecase;
+  final GetCurrentUserDataUsecase _getCurrentUserDataUsecase;
+  final GetRequestsByUserIdUsecase _getRequestsByUserIdUsecase;
+  final GetVolunteerWorksByUserIdUsecase _getVolunteerWorksByUserIdUsecase;
+  final SubscribeToRequestIdUsecase _subscribeToRequestIdUsecase;
+  final LogoutUserUsecase _logoutUserUsecase;
+  final SubscribeToLocationTopicsUsecase _subscribeToTopicUsecase;
+
+  final FcmService _fcmService;
+
+  final BehaviorSubject<Optional<UserAuthModel>> _user =
+      BehaviorSubject<Optional<UserAuthModel>>.seeded(const OptionalNull());
+  final BehaviorSubject<PopupModel> _popupController =
+      BehaviorSubject<PopupModel>();
+  final List<String> _subscribedToTopics = [];
 
   @override
   Future<void> dispose() async {

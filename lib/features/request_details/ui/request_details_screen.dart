@@ -392,6 +392,5 @@ class _ControlRequestCompletionRow extends StatelessWidget {
         ],
       );
 
-  //TODO: Implement ability to confirm request completion by requester and volunteer
-//TODO: Додай можливість скасувати запит, якщо він вже був прийнятий, то requester має вказати причину скасування
+  //TODO: If the volunteer confirms the request is done, then the requester cannot cancel the request but can remove the volunteer from the request and set status to pending
 }
