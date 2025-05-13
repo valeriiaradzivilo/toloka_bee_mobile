@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../common/routing/routes.dart';
-import '../../../common/theme/zip_fonts.dart';
+import '../../../common/theme/toloka_fonts.dart';
 import '../../../data/models/request_complaints_group_model.dart';
 import '../../../data/models/user_complaints_group_model.dart';
 import 'bloc/complaints_admin_bloc.dart';
@@ -40,7 +40,7 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
               children: [
                 Text(
                   translate('complaints.title'),
-                  style: ZipFonts.big.style.copyWith(
+                  style: TolokaFonts.big.style.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
@@ -132,18 +132,18 @@ class _UserComplaintCardState extends State<_UserComplaintCard> {
                       },
                       child: Text(
                         'ID: ${widget.group.reportedUserId}',
-                        style: ZipFonts.small.style.copyWith(
+                        style: TolokaFonts.small.style.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Text(
                       '${translate('complaints.count')}${widget.group.totalComplaints}',
-                      style: ZipFonts.small.style,
+                      style: TolokaFonts.small.style,
                     ),
                     Text(
                       translate('complaints.comments'),
-                      style: ZipFonts.small.style.copyWith(
+                      style: TolokaFonts.small.style.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -326,18 +326,18 @@ class _RequestComplaintCardState extends State<_RequestComplaintCard> {
                       },
                       child: Text(
                         'ID: ${widget.group.requestId}',
-                        style: ZipFonts.small.style.copyWith(
+                        style: TolokaFonts.small.style.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Text(
                       '${translate('complaints.count')}${widget.group.totalComplaints}',
-                      style: ZipFonts.small.style,
+                      style: TolokaFonts.small.style,
                     ),
                     Text(
                       translate('complaints.comments'),
-                      style: ZipFonts.small.style.copyWith(
+                      style: TolokaFonts.small.style.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),

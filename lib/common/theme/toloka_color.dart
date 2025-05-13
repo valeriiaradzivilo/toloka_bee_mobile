@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-class ZipColor {
+class TolokaColor {
   static const primary = Color(0xff006a60);
   static const onPrimary = Color(0xffffffff);
   static const primaryContainer = Color(0xff48d6c3);
@@ -47,10 +47,10 @@ class ZipColor {
   static const surfaceContainerHigh = Color(0xffe3eae7);
   static const surfaceContainerHighest = Color(0xffdde4e1);
 
-  static Color get randomZipColor =>
+  static Color get randomTolokaColor =>
       _randColors.elementAt(Random().nextInt(_randColors.length));
 
-  static final Color userRandomColor = randomZipColor;
+  static final Color userRandomColor = randomTolokaColor;
 
   static final List<Color> _randColors = [
     primary,

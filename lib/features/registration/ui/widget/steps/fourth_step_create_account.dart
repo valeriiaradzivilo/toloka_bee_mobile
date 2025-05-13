@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../common/theme/zip_fonts.dart';
+import '../../../../../common/theme/toloka_fonts.dart';
 import '../../../../../common/widgets/app_number_editing_field.dart';
 import '../../../../../common/widgets/app_text_editing_field.dart';
-import '../../../../../common/widgets/zip_snackbar.dart';
+import '../../../../../common/widgets/toloka_snackbar.dart';
 import '../../../../../data/models/contact_info_model.dart';
 import '../../../../../data/models/country.dart';
 import '../../../../../data/models/ui/e_popup_type.dart';
@@ -112,7 +112,7 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                   Flexible(
                     child: Text(
                       translate('create.account.contact.title'),
-                      style: ZipFonts.medium.style.copyWith(color: primary),
+                      style: TolokaFonts.medium.style.copyWith(color: primary),
                     ),
                   ),
                 ],
@@ -120,7 +120,7 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
               const Gap(4),
               Text(
                 translate('create.account.contact.subtitle'),
-                style: ZipFonts.small.style.copyWith(color: Colors.black54),
+                style: TolokaFonts.small.style.copyWith(color: Colors.black54),
               ),
               const Gap(24),
               MenuAnchor(
@@ -164,7 +164,7 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                             _preferredMethod == null
                                 ? translate('contacts.preferred')
                                 : _preferredMethod!.text,
-                            style: ZipFonts.medium.style,
+                            style: TolokaFonts.medium.style,
                           ),
                         ),
                         Icon(
@@ -247,7 +247,8 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
               Center(
                 child: Text(
                   translate('contacts.hint'),
-                  style: ZipFonts.small.style.copyWith(color: Colors.black54),
+                  style:
+                      TolokaFonts.small.style.copyWith(color: Colors.black54),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -258,7 +259,7 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                   areFieldsValid: true,
                   canGoToTheNextStep: () {
                     if (_preferredMethod == null) {
-                      ZipSnackbar.show(
+                      TolokaSnackbar.show(
                         context,
                         PopupModel(
                           title: translate(
@@ -282,7 +283,7 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                     );
 
                     if (!contactInfoModel.isPreferredMethodContactSet) {
-                      ZipSnackbar.show(
+                      TolokaSnackbar.show(
                         context,
                         PopupModel(
                           title: translate(

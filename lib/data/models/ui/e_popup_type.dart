@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-import '../../../common/theme/zip_color.dart';
+import '../../../common/theme/toloka_color.dart';
 
 enum EPopupType {
   none,
@@ -28,7 +28,7 @@ enum EPopupType {
         EPopupType.warning => const Color(0xFFFFC700),
         EPopupType.error => const Color(0xFFFF3B30),
         EPopupType.question => const Color(0xFF007AFF),
-        EPopupType.helpNeeded => ZipColor.onPrimaryFixed,
+        EPopupType.helpNeeded => TolokaColor.onPrimaryFixed,
         _ => const Color(0xFF007AFF),
       };
 

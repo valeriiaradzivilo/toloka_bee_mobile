@@ -4,8 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common/routing/routes.dart';
-import '../../../../common/theme/zip_color.dart';
-import '../../../../common/theme/zip_fonts.dart';
+import '../../../../common/theme/toloka_color.dart';
+import '../../../../common/theme/toloka_fonts.dart';
 import '../../../../data/models/e_request_hand_type.dart';
 import '../../../../data/models/request_notification_model.dart';
 
@@ -40,7 +40,7 @@ class RequestTile extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: ZipColor.primary,
+                      color: TolokaColor.primary,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -56,7 +56,7 @@ class RequestTile extends StatelessWidget {
                           children: [
                             Text(
                               request.description,
-                              style: ZipFonts.small.style.copyWith(
+                              style: TolokaFonts.small.style.copyWith(
                                 fontWeight: FontWeight.w900,
                               ),
                               maxLines: maxDescriptionLines,
@@ -71,7 +71,7 @@ class RequestTile extends StatelessWidget {
                                     'type': request.requestType.text,
                                   },
                                 )}',
-                                style: ZipFonts.tiny.style,
+                                style: TolokaFonts.tiny.style,
                                 overflow: TextOverflow.clip,
                               ),
                             Text(
@@ -86,7 +86,7 @@ class RequestTile extends StatelessWidget {
                                       .toString(),
                                 },
                               )}',
-                              style: ZipFonts.tiny.style,
+                              style: TolokaFonts.tiny.style,
                               overflow: TextOverflow.clip,
                             ),
                             if (request.price != null && request.price != 0)
@@ -97,7 +97,7 @@ class RequestTile extends StatelessWidget {
                                     'price': request.price.toString(),
                                   },
                                 )}',
-                                style: ZipFonts.tiny.style,
+                                style: TolokaFonts.tiny.style,
                                 overflow: TextOverflow.clip,
                               ),
                             if (distance != null)
@@ -108,7 +108,7 @@ class RequestTile extends StatelessWidget {
                                     'distance': distance,
                                   },
                                 )}',
-                                style: ZipFonts.tiny.style,
+                                style: TolokaFonts.tiny.style,
                                 overflow: TextOverflow.clip,
                               ),
                           ],
@@ -123,15 +123,15 @@ class RequestTile extends StatelessWidget {
                           ),
                           label: Text(
                             translate('common.action.learn'),
-                            style: ZipFonts.tiny.style.copyWith(
-                              color: ZipColor.onPrimary,
+                            style: TolokaFonts.tiny.style.copyWith(
+                              color: TolokaColor.onPrimary,
                             ),
                             textAlign: TextAlign.center,
                           ),
                           icon: const Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 15,
-                            color: ZipColor.onPrimary,
+                            color: TolokaColor.onPrimary,
                           ),
                           iconAlignment: IconAlignment.end,
                         ),
@@ -153,8 +153,8 @@ class RequestTile extends StatelessWidget {
                       ),
                       child: Text(
                         request.status.text,
-                        style: ZipFonts.small.style.copyWith(
-                          color: ZipColor.onPrimary,
+                        style: TolokaFonts.small.style.copyWith(
+                          color: TolokaColor.onPrimary,
                         ),
                       ),
                     ),

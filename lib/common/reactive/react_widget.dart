@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-import '../theme/zip_fonts.dart';
+import '../theme/toloka_fonts.dart';
 
 class ReactWidget<T> extends StatelessWidget {
   const ReactWidget({
@@ -27,7 +27,7 @@ class ReactWidget<T> extends StatelessWidget {
             return Center(
               child: Text(
                 translate('oops.error.occurred'),
-                style: ZipFonts.small.error,
+                style: TolokaFonts.small.error,
               ),
             );
           } else {
@@ -66,7 +66,7 @@ class ReactWidget2<T, A> extends StatelessWidget {
             return Center(
               child: Text(
                 translate('oops.error.occurred'),
-                style: ZipFonts.small.error,
+                style: TolokaFonts.small.error,
               ),
             );
           } else {
@@ -108,7 +108,7 @@ class ReactWidget3<T, A, B> extends StatelessWidget {
             return Center(
               child: Text(
                 translate('oops.error.occurred'),
-                style: ZipFonts.small.error,
+                style: TolokaFonts.small.error,
               ),
             );
           } else {

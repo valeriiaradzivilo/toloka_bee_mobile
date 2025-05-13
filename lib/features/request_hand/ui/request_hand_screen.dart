@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/theme/zip_fonts.dart';
+import '../../../common/theme/toloka_fonts.dart';
 import '../../../common/widgets/app_number_editing_field.dart';
 import '../../../common/widgets/app_text_editing_field.dart';
 import '../../../data/models/e_request_hand_type.dart';
@@ -68,7 +68,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                         child: Center(
                           child: Text(
                             translate('request.hand.no_contact_info'),
-                            style: ZipFonts.big.error,
+                            style: TolokaFonts.big.error,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -83,7 +83,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                             children: [
                               Text(
                                 translate('request.hand.title'),
-                                style: ZipFonts.big.style,
+                                style: TolokaFonts.big.style,
                               ),
                               DropdownButtonFormField<ERequestHandType>(
                                 value: _selectedType,
@@ -186,7 +186,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                             ),
                                           },
                                         ),
-                                        style: ZipFonts.small.style.copyWith(
+                                        style: TolokaFonts.small.style.copyWith(
                                           fontWeight: FontWeight.w900,
                                           fontSize: 14,
                                         ),
@@ -277,7 +277,7 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                         Text(
                                           state.requiredVolunteersCount
                                               .toString(),
-                                          style: ZipFonts.medium.style,
+                                          style: TolokaFonts.medium.style,
                                         ),
                                         IconButton(
                                           onPressed: () {

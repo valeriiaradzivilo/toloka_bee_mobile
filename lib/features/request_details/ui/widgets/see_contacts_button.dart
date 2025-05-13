@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-import '../../../../common/theme/zip_color.dart';
-import '../../../../common/theme/zip_fonts.dart';
+import '../../../../common/theme/toloka_color.dart';
+import '../../../../common/theme/toloka_fonts.dart';
 import '../../../../data/models/contact_info_model.dart';
 import '../../../profile/ui/widgets/profile_contacts.dart';
 
@@ -18,7 +18,7 @@ class SeeContactsButton extends StatelessWidget {
             builder: (final context) => AlertDialog(
               title: Text(
                 translate('request.details.contacts'),
-                style: ZipFonts.big.style,
+                style: TolokaFonts.big.style,
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -28,7 +28,7 @@ class SeeContactsButton extends StatelessWidget {
                     translate(
                       'request.details.contacts_hint',
                     ),
-                    style: ZipFonts.small.style,
+                    style: TolokaFonts.small.style,
                   ),
                   ContactDataText(
                     method: ContactMethod.phone,
@@ -60,7 +60,7 @@ class SeeContactsButton extends StatelessWidget {
         ),
         icon: const Icon(
           Icons.phone,
-          color: ZipColor.onPrimary,
+          color: TolokaColor.onPrimary,
         ),
       );
 }

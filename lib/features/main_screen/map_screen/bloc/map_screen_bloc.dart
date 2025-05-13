@@ -10,13 +10,13 @@ import 'package:latlong2/latlong.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../../../../common/bloc/zip_bloc.dart';
+import '../../../../common/bloc/toloka_bloc.dart';
 import '../../../../common/constants/location_constants.dart';
-import '../../../../common/theme/zip_color.dart';
+import '../../../../common/theme/toloka_color.dart';
 import '../../../../data/usecase/get_volunteers_by_location_usecase.dart';
 import '../data/location_service_state.dart';
 
-class MapScreenBloc extends ZipBloc {
+class MapScreenBloc extends TolokaBloc {
   MapScreenBloc(final GetIt locator, final BuildContext context)
       : _getVolunteersByLocationUsecase =
             locator<GetVolunteersByLocationUsecase>(),
@@ -84,7 +84,7 @@ class MapScreenBloc extends ZipBloc {
             ),
             child: Icon(
               Icons.volunteer_activism,
-              color: ZipColor.randomZipColor,
+              color: TolokaColor.randomTolokaColor,
               size: 30,
             ),
           ),

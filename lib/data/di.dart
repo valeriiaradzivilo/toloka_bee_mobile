@@ -29,6 +29,7 @@ import 'source/users/user_data_source.dart';
 import 'source/users/user_data_source_impl.dart';
 import 'source/volunteer_work/volunteer_work_data_source.dart';
 import 'source/volunteer_work/volunteer_work_data_source_impl.dart';
+import 'toloka_way_api_interceptor.dart';
 import 'usecase/complaints/get_request_complaints_grouped_usecase.dart';
 import 'usecase/complaints/get_user_complaints_grouped_usecase.dart';
 import 'usecase/complaints/report_request_usecase.dart';
@@ -61,7 +62,6 @@ import 'usecase/volunteer_work/confirm_volunteer_work_by_volunteer_usecase.dart'
 import 'usecase/volunteer_work/get_volunteer_work_by_request_id_usecase.dart';
 import 'usecase/volunteer_work/get_volunteer_work_by_user_id_usecase.dart';
 import 'usecase/volunteer_work/start_volunteer_work_usecase.dart';
-import 'zip_way_api_interceptor.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
@@ -87,7 +87,7 @@ Future<void> initDatasources() async {
   );
   serviceLocator
       .registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(dio));
-  dio.interceptors.add(ZipWayApiInterceptor());
+  dio.interceptors.add(TolokaWayApiInterceptor());
 
   serviceLocator
       .registerLazySingleton<GeoDataSource>(() => GeoDataSourceImp(dio));

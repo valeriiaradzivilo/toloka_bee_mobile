@@ -3,7 +3,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../common/reactive/react_widget.dart';
-import '../../../../../common/theme/zip_fonts.dart';
+import '../../../../../common/theme/toloka_fonts.dart';
 import '../../../../../common/widgets/app_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
 import '../../data/e_steps.dart';
@@ -100,7 +100,7 @@ class _SecondStepCreateAccountState extends State<SecondStepCreateAccount> {
                 ),
                 child: Text(
                   translate('create.account.terms.read'),
-                  style: ZipFonts.medium.style.copyWith(
+                  style: TolokaFonts.medium.style.copyWith(
                     decoration: TextDecoration.underline,
                     color: Colors.blue,
                   ),

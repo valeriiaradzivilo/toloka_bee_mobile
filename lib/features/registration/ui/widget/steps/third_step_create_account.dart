@@ -3,7 +3,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../common/reactive/react_widget.dart';
-import '../../../../../common/theme/zip_fonts.dart';
+import '../../../../../common/theme/toloka_fonts.dart';
 import '../../../../../common/widgets/app_text_editing_field.dart';
 import '../../../bloc/register_bloc.dart';
 import '../../data/e_position.dart';
@@ -49,7 +49,7 @@ class _ThirdStepCreateAccountState extends State<ThirdStepCreateAccount> {
             children: [
               Text(
                 translate('create.account.about.title'),
-                style: ZipFonts.medium.style,
+                style: TolokaFonts.medium.style,
               ),
               Text(translate('create.account.about.subtitle')),
               ReactWidget(

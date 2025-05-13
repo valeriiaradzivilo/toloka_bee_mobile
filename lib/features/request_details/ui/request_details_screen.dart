@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 
-import '../../../common/theme/zip_color.dart';
-import '../../../common/theme/zip_fonts.dart';
+import '../../../common/theme/toloka_color.dart';
+import '../../../common/theme/toloka_fonts.dart';
 import '../../../data/models/e_request_hand_type.dart';
 import '../bloc/request_details_bloc.dart';
 import '../bloc/request_details_event.dart';
@@ -32,12 +32,12 @@ class RequestDetailsScreen extends StatelessWidget {
                     children: [
                       Text(
                         translate('common.error.title'),
-                        style: ZipFonts.medium.error,
+                        style: TolokaFonts.medium.error,
                       ),
                       const SizedBox(height: 20),
                       Text(
                         translate('common.error.message'),
-                        style: ZipFonts.small.error,
+                        style: TolokaFonts.small.error,
                       ),
                     ],
                   ),
@@ -55,15 +55,15 @@ class RequestDetailsScreen extends StatelessWidget {
                             child: Container(
                               width: MediaQuery.sizeOf(context).width,
                               decoration: BoxDecoration(
-                                color: ZipColor.secondaryContainer,
+                                color: TolokaColor.secondaryContainer,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               padding: const EdgeInsets.all(8),
                               alignment: Alignment.center,
                               child: Text(
                                 translate('request.details.your_request'),
-                                style: ZipFonts.big.style.copyWith(
-                                  color: ZipColor.secondary,
+                                style: TolokaFonts.big.style.copyWith(
+                                  color: TolokaColor.secondary,
                                 ),
                               ),
                             ),
@@ -100,7 +100,7 @@ class RequestDetailsScreen extends StatelessWidget {
                                           'surname': state.requester.surname,
                                         },
                                       ),
-                                      style: ZipFonts.big.style.copyWith(
+                                      style: TolokaFonts.big.style.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -113,22 +113,23 @@ class RequestDetailsScreen extends StatelessWidget {
                                           'about': state.requester.about,
                                         },
                                       ),
-                                      style: ZipFonts.medium.style,
+                                      style: TolokaFonts.medium.style,
                                     ),
                                   ),
                                   if (state.requestNotificationModel
                                       .requiresPhysicalStrength)
                                     DecoratedBox(
                                       decoration: BoxDecoration(
-                                        color: ZipColor.onPrimaryFixed,
+                                        color: TolokaColor.onPrimaryFixed,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           translate('request.details.physical'),
-                                          style: ZipFonts.medium.style.copyWith(
-                                            color: ZipColor.onTertiary,
+                                          style:
+                                              TolokaFonts.medium.style.copyWith(
+                                            color: TolokaColor.onTertiary,
                                           ),
                                         ),
                                       ),
@@ -136,15 +137,16 @@ class RequestDetailsScreen extends StatelessWidget {
                                   if (state.requestNotificationModel.isRemote)
                                     DecoratedBox(
                                       decoration: BoxDecoration(
-                                        color: ZipColor.onTertiaryFixed,
+                                        color: TolokaColor.onTertiaryFixed,
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           translate('request.details.remote'),
-                                          style: ZipFonts.medium.style.copyWith(
-                                            color: ZipColor.onTertiary,
+                                          style:
+                                              TolokaFonts.medium.style.copyWith(
+                                            color: TolokaColor.onTertiary,
                                           ),
                                         ),
                                       ),
@@ -158,7 +160,7 @@ class RequestDetailsScreen extends StatelessWidget {
                                               state.distance.toStringAsFixed(2),
                                         },
                                       ),
-                                      style: ZipFonts.medium.style,
+                                      style: TolokaFonts.medium.style,
                                     ),
                                   Text(
                                     translate(
@@ -169,7 +171,7 @@ class RequestDetailsScreen extends StatelessWidget {
                                             .toLowerCase(),
                                       },
                                     ),
-                                    style: ZipFonts.small.style.copyWith(
+                                    style: TolokaFonts.small.style.copyWith(
                                       color: state.requestNotificationModel
                                           .status.color,
                                       fontWeight: FontWeight.bold,
@@ -182,7 +184,7 @@ class RequestDetailsScreen extends StatelessWidget {
                         ),
                         Text(
                           state.requestNotificationModel.description,
-                          style: ZipFonts.medium.style.copyWith(
+                          style: TolokaFonts.medium.style.copyWith(
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -196,7 +198,7 @@ class RequestDetailsScreen extends StatelessWidget {
                                     .requestNotificationModel.requestType.text,
                               },
                             ),
-                            style: ZipFonts.small.style,
+                            style: TolokaFonts.small.style,
                           ),
                         if (state.requestNotificationModel.price != null)
                           Row(
@@ -209,14 +211,14 @@ class RequestDetailsScreen extends StatelessWidget {
                                 triggerMode: TooltipTriggerMode.tap,
                                 child: const Icon(
                                   Icons.info_outline,
-                                  color: ZipColor.primary,
+                                  color: TolokaColor.primary,
                                 ),
                               ),
                               Text(
                                 '${translate(
                                   'request.details.price',
                                 )} : ${state.requestNotificationModel.price}',
-                                style: ZipFonts.medium.style,
+                                style: TolokaFonts.medium.style,
                               ),
                             ],
                           ),
@@ -229,7 +231,7 @@ class RequestDetailsScreen extends StatelessWidget {
                               ),
                             },
                           ),
-                          style: ZipFonts.small.style,
+                          style: TolokaFonts.small.style,
                         ),
                         if (!state.isCurrentUsersRequest &&
                             state.requestNotificationModel.status.canBeHelped &&
@@ -253,7 +255,7 @@ class RequestDetailsScreen extends StatelessWidget {
                               ),
                               icon: const Icon(
                                 Icons.volunteer_activism_rounded,
-                                color: ZipColor.onPrimary,
+                                color: TolokaColor.onPrimary,
                               ),
                             ),
                           ),
@@ -261,7 +263,7 @@ class RequestDetailsScreen extends StatelessWidget {
                         if (state.requesterContactInfo == null)
                           Text(
                             translate('request.details.no_contacts'),
-                            style: ZipFonts.medium.style.copyWith(
+                            style: TolokaFonts.medium.style.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -287,7 +289,7 @@ class RequestDetailsScreen extends StatelessWidget {
                                     .toString(),
                               },
                             ),
-                            style: ZipFonts.small.style,
+                            style: TolokaFonts.small.style,
                           ),
                         if (state.isCurrentUsersRequest ||
                             state.isCurrentUserVolunteerForRequest)
@@ -302,14 +304,14 @@ class RequestDetailsScreen extends StatelessWidget {
                                 context.read<RequestDetailsBloc>(),
                               ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: ZipColor.onErrorContainer,
+                                backgroundColor: TolokaColor.onErrorContainer,
                               ),
                               label: Text(
                                 translate('request.details.report'),
                               ),
                               icon: const Icon(
                                 Icons.report,
-                                color: ZipColor.onError,
+                                color: TolokaColor.onError,
                               ),
                             ),
                           ),
@@ -335,7 +337,7 @@ class _ControlRequestCompletionRow extends StatelessWidget {
           if (state.isCurrentUsersRequest && state.volunteers.isNotEmpty)
             Text(
               '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname}').join(', ')}',
-              style: ZipFonts.small.style,
+              style: TolokaFonts.small.style,
             ),
           Row(
             spacing: 20,
@@ -362,13 +364,13 @@ class _ControlRequestCompletionRow extends StatelessWidget {
                   },
                   label: Text(
                     translate('request.details.confirm_done'),
-                    style: ZipFonts.tiny.style.copyWith(
-                      color: ZipColor.onPrimary,
+                    style: TolokaFonts.tiny.style.copyWith(
+                      color: TolokaColor.onPrimary,
                     ),
                   ),
                   icon: const Icon(
                     Icons.done_all,
-                    color: ZipColor.onPrimary,
+                    color: TolokaColor.onPrimary,
                   ),
                 ),
               ),
@@ -381,7 +383,7 @@ class _ControlRequestCompletionRow extends StatelessWidget {
               label: Text(translate('request.details.repeat')),
               icon: const Icon(
                 Icons.repeat_one,
-                color: ZipColor.onPrimary,
+                color: TolokaColor.onPrimary,
               ),
             ),
         ],

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/ui/popup_model.dart';
 import '../../features/main_app/main_app.dart';
-import '../theme/zip_fonts.dart';
+import '../theme/toloka_fonts.dart';
 
-class ZipSnackbar {
+class TolokaSnackbar {
   static final List<OverlayEntry> _entries = [];
 
   static void show(final BuildContext context, final PopupModel model) {
@@ -87,13 +87,13 @@ class _NotificationCard extends StatelessWidget {
                   children: [
                     Text(
                       model.title,
-                      style:
-                          ZipFonts.medium.style.copyWith(color: Colors.black),
+                      style: TolokaFonts.medium.style
+                          .copyWith(color: Colors.black),
                     ),
                     if (model.message != null && model.message!.isNotEmpty)
                       Text(
                         model.message!,
-                        style: ZipFonts.small.style
+                        style: TolokaFonts.small.style
                             .copyWith(color: Colors.black54),
                       ),
                   ],
@@ -104,8 +104,8 @@ class _NotificationCard extends StatelessWidget {
                   onPressed: () => model.onPressed!(context),
                   child: Text(
                     model.type.actionText,
-                    style:
-                        ZipFonts.small.style.copyWith(color: model.type.color),
+                    style: TolokaFonts.small.style
+                        .copyWith(color: model.type.color),
                   ),
                 ),
             ],

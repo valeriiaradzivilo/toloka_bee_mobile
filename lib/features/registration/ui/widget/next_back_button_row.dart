@@ -3,7 +3,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../common/routing/routes.dart';
-import '../../../../common/widgets/zip_snackbar.dart';
+import '../../../../common/widgets/toloka_snackbar.dart';
 import '../../../../data/models/ui/e_popup_type.dart';
 import '../../../../data/models/ui/popup_model.dart';
 import '../../bloc/register_bloc.dart';
@@ -76,7 +76,7 @@ class NextBackButtonRow extends StatelessWidget {
                         if (canGo) {
                           registerBloc.register().then((final value) {
                             if (context.mounted) {
-                              ZipSnackbar.show(
+                              TolokaSnackbar.show(
                                 context,
                                 value
                                     ? PopupModel(

@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 
 import '../../../common/constants/request_constants.dart';
 import '../../../common/exceptions/request_limit_reached_for_today.dart';
-import '../../../common/widgets/zip_snackbar.dart';
+import '../../../common/widgets/toloka_snackbar.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/usecase/contacts/get_contacts_by_user_id_usecase.dart';
@@ -108,7 +108,7 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
       result.fold(
         (final failure) {
           if (failure is RequestLimitReachedForToday) {
-            ZipSnackbar.show(
+            TolokaSnackbar.show(
               event.context,
               PopupModel(
                 title: translate('request.limit_reached'),
@@ -123,7 +123,7 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
             );
             return;
           }
-          ZipSnackbar.show(
+          TolokaSnackbar.show(
             event.context,
             PopupModel(
               title: translate('request.hand.error'),
@@ -132,7 +132,7 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
           );
         },
         (final success) {
-          ZipSnackbar.show(
+          TolokaSnackbar.show(
             event.context,
             PopupModel(
               title: translate('request.hand.success'),

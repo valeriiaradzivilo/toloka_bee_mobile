@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../common/bloc/zip_bloc.dart';
+import '../../../common/bloc/toloka_bloc.dart';
 import '../../../common/constants/location_constants.dart';
 import '../../../common/exceptions/user_blocked_exception.dart';
 import '../../../common/optional_value.dart';
@@ -25,7 +25,7 @@ import '../../../data/usecase/user_management/logout_user_usecase.dart';
 import '../../../data/usecase/volunteer_work/get_volunteer_work_by_user_id_usecase.dart';
 import '../../registration/ui/data/e_position.dart';
 
-class UserBloc extends ZipBloc {
+class UserBloc extends TolokaBloc {
   UserBloc(final GetIt locator)
       : _loginUserUsecase = locator<LoginUserUsecase>(),
         _getCurrentUserDataUsecase = locator<GetCurrentUserDataUsecase>(),

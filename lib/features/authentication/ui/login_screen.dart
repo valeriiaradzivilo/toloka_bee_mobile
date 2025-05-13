@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/routing/routes.dart';
-import '../../../common/theme/zip_fonts.dart';
+import '../../../common/theme/toloka_fonts.dart';
 import '../bloc/user_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -22,7 +22,7 @@ class _LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<_LoginScreen> {
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late final UserBloc _authenticationBloc;
 
@@ -36,7 +36,7 @@ class _LoginScreenState extends State<_LoginScreen> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
 
     super.dispose();
@@ -45,9 +45,9 @@ class _LoginScreenState extends State<_LoginScreen> {
   void _login() {
     setState(() => loggingInProgress = true);
 
-    final username = _usernameController.text;
+    final email = _emailController.text;
     final password = _passwordController.text;
-    _authenticationBloc.login(username, password).then(
+    _authenticationBloc.login(email, password).then(
       (final value) {
         setState(() => loggingInProgress = false);
 
@@ -69,9 +69,9 @@ class _LoginScreenState extends State<_LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextField(
-                  controller: _usernameController,
+                  controller: _emailController,
                   decoration: InputDecoration(
-                    labelText: translate('login.username'),
+                    labelText: translate('login.email'),
                   ),
                 ),
                 TextField(
@@ -99,7 +99,7 @@ class _LoginScreenState extends State<_LoginScreen> {
                 const Gap(20),
                 Text(
                   translate('login.or'),
-                  style: ZipFonts.medium.style,
+                  style: TolokaFonts.medium.style,
                 ),
                 const Gap(20),
                 ElevatedButton(

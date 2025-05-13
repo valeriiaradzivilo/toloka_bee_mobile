@@ -3,7 +3,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 
 import '../constants/padding_constants.dart';
 import '../constants/validation_constant.dart';
-import '../theme/zip_fonts.dart';
+import '../theme/toloka_fonts.dart';
 
 enum TextFieldOption {
   undefined,
@@ -97,7 +97,7 @@ class _AppTextFieldState extends State<AppTextField> {
                 decoration: InputDecoration(
                   label: Text(
                     widget.label ?? '',
-                    style: ZipFonts.small.style,
+                    style: TolokaFonts.small.style,
                   ),
                   errorText: errorText,
                   errorMaxLines: 10,

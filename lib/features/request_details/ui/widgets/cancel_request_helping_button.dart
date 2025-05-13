@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../../common/routing/routes.dart';
-import '../../../../common/theme/zip_color.dart';
-import '../../../../common/theme/zip_fonts.dart';
+import '../../../../common/theme/toloka_color.dart';
+import '../../../../common/theme/toloka_fonts.dart';
 import '../../../../common/widgets/app_text_editing_field.dart';
 import '../../bloc/request_details_bloc.dart';
 import '../../bloc/request_details_event.dart';
@@ -27,7 +27,7 @@ class CancelRequestHelpingButton extends StatelessWidget {
           );
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: ZipColor.errorContainer,
+          backgroundColor: TolokaColor.errorContainer,
         ),
         label: Text(
           translate(
@@ -35,13 +35,13 @@ class CancelRequestHelpingButton extends StatelessWidget {
                 ? 'request.details.cancel'
                 : 'request.details.cancel_volunteer',
           ),
-          style: ZipFonts.tiny.style.copyWith(
-            color: ZipColor.onErrorContainer,
+          style: TolokaFonts.tiny.style.copyWith(
+            color: TolokaColor.onErrorContainer,
           ),
         ),
         icon: const Icon(
           Icons.cancel_presentation_rounded,
-          color: ZipColor.onErrorContainer,
+          color: TolokaColor.onErrorContainer,
         ),
       );
 }
@@ -78,7 +78,7 @@ class __DialogState extends State<_Dialog> {
                 ? 'request.details.cancel'
                 : 'request.details.cancel_volunteer',
           ),
-          style: ZipFonts.medium.style,
+          style: TolokaFonts.medium.style,
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,

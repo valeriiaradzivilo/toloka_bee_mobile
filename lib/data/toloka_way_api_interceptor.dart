@@ -4,7 +4,7 @@ import 'package:simple_logger/simple_logger.dart';
 import 'di.dart';
 import 'source/authentication/auth_data_source.dart';
 
-class ZipWayApiInterceptor extends Interceptor {
+class TolokaWayApiInterceptor extends Interceptor {
   final SimpleLogger logger = SimpleLogger();
 
   @override

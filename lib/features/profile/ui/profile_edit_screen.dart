@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:gap/gap.dart';
 
-import '../../../common/theme/zip_color.dart';
-import '../../../common/theme/zip_fonts.dart';
+import '../../../common/theme/toloka_color.dart';
+import '../../../common/theme/toloka_fonts.dart';
 import '../../registration/ui/data/e_position.dart';
 import '../bloc/profile_cubit.dart';
 import '../bloc/profile_state.dart';
@@ -34,12 +34,12 @@ class ProfileEditScreen extends StatelessWidget {
                             context.read<ProfileCubit>().cancelEdit(),
                         icon: const Icon(
                           Icons.arrow_back,
-                          color: ZipColor.primary,
+                          color: TolokaColor.primary,
                         ),
                       ),
                       Text(
                         translate('profile.edit.title'),
-                        style: ZipFonts.big.style,
+                        style: TolokaFonts.big.style,
                       ),
                     ],
                   ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-import '../../../../common/theme/zip_fonts.dart';
+import '../../../../common/theme/toloka_fonts.dart';
 import '../../../../data/models/ui/e_predefined_report_message.dart';
 import '../../bloc/request_details_bloc.dart';
 import '../../bloc/request_details_event.dart';
@@ -55,7 +55,7 @@ class __ReportDialogState extends State<_ReportDialog> {
   Widget build(final BuildContext context) => AlertDialog(
         title: Text(
           translate('report.dialog.title'),
-          style: ZipFonts.big.style,
+          style: TolokaFonts.big.style,
         ),
         content: SingleChildScrollView(
           child: Column(
@@ -109,7 +109,7 @@ class __ReportDialogState extends State<_ReportDialog> {
               const SizedBox(height: 16),
               Text(
                 translate('report.dialog.only_one_report'),
-                style: ZipFonts.small.error,
+                style: TolokaFonts.small.error,
                 textAlign: TextAlign.center,
               ),
             ],

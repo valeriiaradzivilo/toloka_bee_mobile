@@ -8,9 +8,9 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/routing/routes.dart';
-import '../../../common/theme/zip_color.dart';
-import '../../../common/theme/zip_fonts.dart';
-import '../../../common/widgets/zip_snackbar.dart';
+import '../../../common/theme/toloka_color.dart';
+import '../../../common/theme/toloka_fonts.dart';
+import '../../../common/widgets/toloka_snackbar.dart';
 import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/request_notification_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
               child: BlocConsumer<ProfileCubit, ProfileState>(
                 listener: (final context, final state) {
                   if (state is ProfileUpdated) {
-                    ZipSnackbar.show(
+                    TolokaSnackbar.show(
                       context,
                       PopupModel(
                         title: translate('profile.edit.success'),
@@ -116,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
                             label: Text(translate('profile.actions.back')),
                             icon: const Icon(
                               Icons.arrow_back,
-                              color: ZipColor.primary,
+                              color: TolokaColor.primary,
                             ),
                           ),
                         ],
@@ -154,7 +154,7 @@ class _LoadedProfile extends StatelessWidget {
               label: Text(translate('profile.actions.back')),
               icon: const Icon(
                 Icons.arrow_back,
-                color: ZipColor.primary,
+                color: TolokaColor.primary,
               ),
             ),
             SizedBox.square(
@@ -177,12 +177,12 @@ class _LoadedProfile extends StatelessWidget {
             ),
             Text(
               '${user.name} ${user.surname}',
-              style: ZipFonts.big.style,
+              style: TolokaFonts.big.style,
             ),
             Text(
               user.email,
-              style: ZipFonts.small.style.copyWith(
-                color: ZipColor.onSurfaceVariant.withValues(
+              style: TolokaFonts.small.style.copyWith(
+                color: TolokaColor.onSurfaceVariant.withValues(
                   alpha: 0.7,
                 ),
               ),
@@ -190,8 +190,8 @@ class _LoadedProfile extends StatelessWidget {
             if (EPosition.fromJson(user.position) case final EPosition position)
               Text(
                 position.text,
-                style: ZipFonts.small.style.copyWith(
-                  color: ZipColor.secondary,
+                style: TolokaFonts.small.style.copyWith(
+                  color: TolokaColor.secondary,
                 ),
               ),
             if (requests.isNotEmpty) ...[
@@ -200,7 +200,7 @@ class _LoadedProfile extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   translate('profile.requests'),
-                  style: ZipFonts.medium.style,
+                  style: TolokaFonts.medium.style,
                 ),
               ),
               SizedBox(
@@ -221,7 +221,7 @@ class _LoadedProfile extends StatelessWidget {
               contactInfo: contactInfo,
             ),
             Divider(
-              color: ZipColor.onSurfaceVariant.withValues(
+              color: TolokaColor.onSurfaceVariant.withValues(
                 alpha: 0.7,
               ),
             ),
@@ -231,7 +231,7 @@ class _LoadedProfile extends StatelessWidget {
                 '${translate(
                   'profile.about',
                 )} ${user.about}',
-                style: ZipFonts.small.style,
+                style: TolokaFonts.small.style,
               ),
             ),
             Align(
@@ -247,7 +247,7 @@ class _LoadedProfile extends StatelessWidget {
                         .abs(),
                   },
                 ),
-                style: ZipFonts.small.style,
+                style: TolokaFonts.small.style,
               ),
             ),
             ElevatedButton.icon(
@@ -255,12 +255,12 @@ class _LoadedProfile extends StatelessWidget {
               label: Text(translate('profile.actions.edit')),
               icon: const Icon(
                 Icons.edit,
-                color: ZipColor.onPrimary,
+                color: TolokaColor.onPrimary,
               ),
             ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: ZipColor.onErrorContainer,
+                backgroundColor: TolokaColor.onErrorContainer,
               ),
               onPressed: () {
                 context.read<ProfileCubit>().deleteUser();
@@ -272,7 +272,7 @@ class _LoadedProfile extends StatelessWidget {
               label: Text(translate('profile.actions.delete')),
               icon: const Icon(
                 Icons.delete_forever,
-                color: ZipColor.onPrimary,
+                color: TolokaColor.onPrimary,
               ),
             ),
             const Gap(20),
@@ -292,7 +292,7 @@ class _VolunteerWork extends StatelessWidget {
           if (volunteerWorks.isNotEmpty) ...[
             Text(
               translate('profile.volunteer_work'),
-              style: ZipFonts.medium.style,
+              style: TolokaFonts.medium.style,
             ),
             SizedBox(
               height: 250,

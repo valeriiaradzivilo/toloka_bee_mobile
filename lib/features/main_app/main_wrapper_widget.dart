@@ -7,9 +7,9 @@ import 'package:get_it/get_it.dart';
 import '../../common/bloc/locale_notifier.dart';
 import '../../common/e_supported_localizations.dart';
 import '../../common/reactive/react_widget.dart';
-import '../../common/theme/zip_fonts.dart';
+import '../../common/theme/toloka_fonts.dart';
 import '../../common/widgets/app_icon.dart';
-import '../../common/widgets/zip_snackbar.dart';
+import '../../common/widgets/toloka_snackbar.dart';
 import '../../data/models/ui/popup_model.dart';
 import '../../data/service/snackbar_service.dart';
 import '../admin/complaints/bloc/complaints_admin_bloc.dart';
@@ -35,7 +35,7 @@ class MainWrapperWidget extends StatelessWidget {
           builder: (final ctx, final snapshot) {
             if (snapshot.hasData) {
               SchedulerBinding.instance.addPostFrameCallback((final _) {
-                ZipSnackbar.show(ctx, snapshot.data!);
+                TolokaSnackbar.show(ctx, snapshot.data!);
               });
             }
             return StreamBuilder<PopupModel>(
@@ -43,7 +43,7 @@ class MainWrapperWidget extends StatelessWidget {
               builder: (final ctx, final snapshot) {
                 if (snapshot.hasData) {
                   SchedulerBinding.instance.addPostFrameCallback((final _) {
-                    ZipSnackbar.show(ctx, snapshot.data!);
+                    TolokaSnackbar.show(ctx, snapshot.data!);
                   });
                 }
                 return Stack(
@@ -78,7 +78,7 @@ class MainWrapperWidget extends StatelessWidget {
                                   backgroundColor: Colors.red,
                                   label: Text(
                                     ' ',
-                                    style: ZipFonts.tiny.style.copyWith(
+                                    style: TolokaFonts.tiny.style.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 5,
@@ -144,8 +144,8 @@ class MainWrapperWidget extends StatelessWidget {
                     value: entry,
                     child: Text(
                       '${entry.flag} ${entry.text}',
-                      style:
-                          ZipFonts.medium.style.copyWith(color: Colors.black),
+                      style: TolokaFonts.medium.style
+                          .copyWith(color: Colors.black),
                     ),
                   ),
                 )

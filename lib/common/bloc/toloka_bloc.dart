@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:simple_logger/simple_logger.dart';
 
-abstract class ZipBloc {
-  ZipBloc() {
+abstract class TolokaBloc {
+  TolokaBloc() {
     _onCreated();
   }
 

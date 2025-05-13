@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../common/theme/zip_color.dart';
-import '../../../../common/theme/zip_fonts.dart';
-import '../../../../common/widgets/zip_snackbar.dart';
+import '../../../../common/theme/toloka_color.dart';
+import '../../../../common/theme/toloka_fonts.dart';
+import '../../../../common/widgets/toloka_snackbar.dart';
 import '../../../../data/models/contact_info_model.dart';
 import '../../../../data/models/ui/e_popup_type.dart';
 import '../../../../data/models/ui/popup_model.dart';
@@ -25,12 +25,12 @@ class ProfileContacts extends StatelessWidget {
       children: [
         Text(
           translate('profile.contacts.title'),
-          style: ZipFonts.medium.style,
+          style: TolokaFonts.medium.style,
         ),
         Text(
           translate('profile.contacts.subtitle'),
-          style: ZipFonts.tiny.style.copyWith(
-            color: ZipColor.onSurfaceVariant.withValues(
+          style: TolokaFonts.tiny.style.copyWith(
+            color: TolokaColor.onSurfaceVariant.withValues(
               alpha: 0.7,
             ),
           ),
@@ -38,7 +38,7 @@ class ProfileContacts extends StatelessWidget {
         if (contactInfo == null) ...[
           Text(
             translate('profile.contacts.no'),
-            style: ZipFonts.small.error,
+            style: TolokaFonts.small.error,
             textAlign: TextAlign.center,
           ),
         ] else ...[
@@ -70,7 +70,7 @@ class ProfileContacts extends StatelessWidget {
             "${translate(
               'contacts.preferred',
             )}: ${contactInfo!.preferredMethod.text.toLowerCase()}",
-            style: ZipFonts.small.style,
+            style: TolokaFonts.small.style,
           ),
         ],
         ElevatedButton.icon(
@@ -113,11 +113,11 @@ class ProfileContacts extends StatelessWidget {
                             ElevatedButton.icon(
                               onPressed: () => Navigator.pop(context, false),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: ZipColor.onSurfaceVariant,
+                                backgroundColor: TolokaColor.onSurfaceVariant,
                               ),
                               icon: const Icon(
                                 Icons.cancel,
-                                color: ZipColor.onPrimary,
+                                color: TolokaColor.onPrimary,
                               ),
                               label: Text(
                                 translate('common.cancel'),
@@ -126,7 +126,7 @@ class ProfileContacts extends StatelessWidget {
                             ElevatedButton.icon(
                               onPressed: () {
                                 if (preferredMethod == null) {
-                                  ZipSnackbar.show(
+                                  TolokaSnackbar.show(
                                     context,
                                     PopupModel(
                                       title: translate(
@@ -149,7 +149,7 @@ class ProfileContacts extends StatelessWidget {
                                 );
 
                                 if (!contact.isPreferredMethodContactSet) {
-                                  ZipSnackbar.show(
+                                  TolokaSnackbar.show(
                                     context,
                                     PopupModel(
                                       title: translate(
@@ -165,7 +165,7 @@ class ProfileContacts extends StatelessWidget {
                               label: Text(translate('profile.contacts.save')),
                               icon: const Icon(
                                 Icons.save,
-                                color: ZipColor.onPrimary,
+                                color: TolokaColor.onPrimary,
                               ),
                             ),
                           ],
@@ -196,7 +196,7 @@ class ProfileContacts extends StatelessWidget {
           label: Text(translate('profile.contacts.edit')),
           icon: const Icon(
             Icons.contact_mail_rounded,
-            color: ZipColor.onPrimary,
+            color: TolokaColor.onPrimary,
           ),
         ),
       ],
@@ -250,13 +250,13 @@ class ContactDataText extends StatelessWidget {
               children: [
                 Text(
                   '${method.text}:',
-                  style: ZipFonts.small.style,
+                  style: TolokaFonts.small.style,
                 ),
                 if (value != null)
                   Flexible(
                     child: Text(
                       value!,
-                      style: ZipFonts.small.style.copyWith(
+                      style: TolokaFonts.small.style.copyWith(
                         decoration: TextDecoration.underline,
                       ),
                     ),

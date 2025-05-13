@@ -7,7 +7,7 @@ import 'package:mime/mime.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../common/bloc/zip_bloc.dart';
+import '../../../common/bloc/toloka_bloc.dart';
 import '../../../common/optional_value.dart';
 import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/user_auth_model.dart';
@@ -16,7 +16,7 @@ import '../../../data/usecase/user_management/register_user_usecase.dart';
 import '../ui/data/e_position.dart';
 import '../ui/data/e_steps.dart';
 
-class RegisterBloc extends ZipBloc {
+class RegisterBloc extends TolokaBloc {
   RegisterBloc(final GetIt sl)
       : _registerUserUsecase = sl<RegisterUserUsecase>(),
         _saveContactUsecase = sl<SaveContactUsecase>();
@@ -26,7 +26,6 @@ class RegisterBloc extends ZipBloc {
       _dateOfBirthController.stream;
   ValueStream<String> get nameStream => _nameController.stream;
   ValueStream<String> get surnameStream => _surnameController.stream;
-  ValueStream<String> get usernameStream => _usernameController.stream;
   ValueStream<String> get passwordStream => _passwordController.stream;
   ValueStream<String> get emailStream => _emailController.stream;
   ValueStream<({Uint8List bytes, String contentType})> get photoStream =>
@@ -43,7 +42,7 @@ class RegisterBloc extends ZipBloc {
 
   set name(final String value) => _nameController.add(value);
   set surname(final String value) => _surnameController.add(value);
-  set username(final String value) => _usernameController.add(value);
+
   set password(final String value) => _passwordController.add(value);
   set email(final String value) => _emailController.add(value);
   set dateOfBirth(final DateTime value) =>
@@ -66,7 +65,6 @@ class RegisterBloc extends ZipBloc {
       id: const Uuid().v4(),
       email: _emailController.value,
       password: _passwordController.value,
-      username: _usernameController.value,
       name: _nameController.value,
       surname: _surnameController.value,
       birthDate: _dateOfBirthController.value.valueOrNull!.toIso8601String(),
@@ -126,7 +124,7 @@ class RegisterBloc extends ZipBloc {
   Future<void> dispose() async {
     await _nameController.close();
     await _surnameController.close();
-    await _usernameController.close();
+
     await _passwordController.close();
     await _emailController.close();
     await _dateOfBirthController.close();
@@ -148,8 +146,6 @@ class RegisterBloc extends ZipBloc {
   final BehaviorSubject<String> _nameController =
       BehaviorSubject<String>.seeded('');
   final BehaviorSubject<String> _surnameController =
-      BehaviorSubject<String>.seeded('');
-  final BehaviorSubject<String> _usernameController =
       BehaviorSubject<String>.seeded('');
   final BehaviorSubject<String> _passwordController =
       BehaviorSubject<String>.seeded('');

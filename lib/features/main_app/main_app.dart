@@ -8,7 +8,7 @@ import '../../common/bloc/locale_notifier.dart';
 import '../../common/routing/route_generator.dart';
 import '../../common/routing/routes.dart';
 import '../../common/theme/theme.dart';
-import '../../common/theme/util.dart';
+import '../../common/theme/toloka_theme.dart';
 import '../authentication/bloc/user_bloc.dart';
 import 'main_wrapper_widget.dart';
 
@@ -23,7 +23,7 @@ class MainApp extends StatelessWidget {
   Widget build(final BuildContext context) {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
     final textTheme =
-        ZipTheme.createTextTheme(context, 'Roboto Serif', 'Roboto');
+        TolokaTheme.createTextTheme(context, 'Roboto Serif', 'Roboto');
     final theme = MaterialTheme(textTheme);
 
     FlutterNativeSplash.remove();

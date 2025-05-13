@@ -11,8 +11,8 @@ import 'package:provider/provider.dart';
 
 import '../../../common/reactive/react_widget.dart';
 import '../../../common/routing/routes.dart';
-import '../../../common/theme/zip_color.dart';
-import '../../../common/theme/zip_fonts.dart';
+import '../../../common/theme/toloka_color.dart';
+import '../../../common/theme/toloka_fonts.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../authentication/bloc/user_bloc.dart';
 import '../../give_hand/bloc/give_hand_bloc.dart';
@@ -86,7 +86,7 @@ class MapScreen extends StatelessWidget {
                               point: LatLng(data.latitude, data.longitude),
                               child: Icon(
                                 Icons.person_4_rounded,
-                                color: ZipColor.userRandomColor,
+                                color: TolokaColor.userRandomColor,
                                 size: 50,
                               ),
                             ),
@@ -105,12 +105,12 @@ class MapScreen extends StatelessWidget {
           LocationServiceState.disabled => Center(
               child: Text(
                 translate('location.disabled'),
-                style: ZipFonts.big.error,
+                style: TolokaFonts.big.error,
               ),
             ),
           LocationServiceState.loading => const Center(
               child: CircularProgressIndicator(
-                color: ZipColor.primary,
+                color: TolokaColor.primary,
               ),
             ),
         },
@@ -128,7 +128,7 @@ class _BottomSheet extends StatelessWidget {
         builder: (final user) => Container(
           width: double.infinity,
           decoration: const BoxDecoration(
-            color: ZipColor.surfaceBright,
+            color: TolokaColor.surfaceBright,
             borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -149,7 +149,7 @@ class _BottomSheet extends StatelessWidget {
                       children: [
                         Text(
                           translate('map.actions.question'),
-                          style: ZipFonts.medium.style,
+                          style: TolokaFonts.medium.style,
                         ),
                         const Gap(10),
                         IconButton(
@@ -159,7 +159,7 @@ class _BottomSheet extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(20),
                                 decoration: BoxDecoration(
-                                  color: ZipColor.surface,
+                                  color: TolokaColor.surface,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Column(
@@ -215,11 +215,11 @@ class _BottomSheet extends StatelessWidget {
                             ),
                             label: Text(
                               translate('map.actions.give.hand'),
-                              style: ZipFonts.small.style,
+                              style: TolokaFonts.small.style,
                             ),
                             icon: const Icon(
                               Icons.handshake_outlined,
-                              color: ZipColor.onPrimary,
+                              color: TolokaColor.onPrimary,
                             ),
                           ),
                         ),
@@ -245,11 +245,11 @@ class _BottomSheet extends StatelessWidget {
                             ),
                             label: Text(
                               translate('map.actions.ask.hand'),
-                              style: ZipFonts.small.style,
+                              style: TolokaFonts.small.style,
                             ),
                             icon: const Icon(
                               Icons.volunteer_activism_outlined,
-                              color: ZipColor.onPrimary,
+                              color: TolokaColor.onPrimary,
                             ),
                           ),
                         ),
@@ -292,7 +292,8 @@ class _AccountInfo extends StatelessWidget {
                         width: 100,
                         height: 100,
                         decoration: BoxDecoration(
-                          border: Border.all(color: ZipColor.primary, width: 2),
+                          border:
+                              Border.all(color: TolokaColor.primary, width: 2),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         clipBehavior: Clip.hardEdge,
@@ -300,7 +301,7 @@ class _AccountInfo extends StatelessWidget {
                             ? const Icon(
                                 Icons.person_4_rounded,
                                 size: 50,
-                                color: ZipColor.primary,
+                                color: TolokaColor.primary,
                               )
                             : DecoratedBox(
                                 decoration: BoxDecoration(
@@ -323,13 +324,13 @@ class _AccountInfo extends StatelessWidget {
                           vertical: 5,
                         ),
                         decoration: BoxDecoration(
-                          color: ZipColor.primary,
+                          color: TolokaColor.primary,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           translate('profile.your'),
-                          style: ZipFonts.tiny.style.copyWith(
-                            color: ZipColor.onPrimary,
+                          style: TolokaFonts.tiny.style.copyWith(
+                            color: TolokaColor.onPrimary,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -370,14 +371,14 @@ class _AccountInfo extends StatelessWidget {
                             : '',
                       },
                     ),
-                    style: ZipFonts.big.style,
+                    style: TolokaFonts.big.style,
                   ),
                 ),
                 const Gap(10),
                 Flexible(
                   child: Text(
                     translate('map.hello.subtitle'),
-                    style: ZipFonts.medium.style,
+                    style: TolokaFonts.medium.style,
                   ),
                 ),
               ],

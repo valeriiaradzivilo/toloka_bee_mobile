@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum ZipFonts {
+enum TolokaFonts {
   big,
   medium,
   small,

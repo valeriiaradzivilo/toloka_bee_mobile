@@ -1,9 +1,9 @@
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../../../common/bloc/zip_bloc.dart';
+import '../../../common/bloc/toloka_bloc.dart';
 
-class MainScreenBloc extends ZipBloc {
+class MainScreenBloc extends TolokaBloc {
   void readWarning() {
     _isWarningRead.add(true);
   }

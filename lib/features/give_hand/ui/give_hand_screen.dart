@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
-import '../../../common/theme/zip_color.dart';
-import '../../../common/theme/zip_fonts.dart';
+import '../../../common/theme/toloka_color.dart';
+import '../../../common/theme/toloka_fonts.dart';
 import '../../../common/widgets/app_number_editing_field.dart';
 import '../bloc/give_hand_bloc.dart';
 import '../bloc/give_hand_event.dart';
@@ -56,14 +56,14 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
           children: [
             Text(
               translate('give.hand.title'),
-              style: ZipFonts.big.style,
+              style: TolokaFonts.big.style,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 5),
             Text(
               translate('give.hand.subtitle'),
-              style: ZipFonts.tiny.style.copyWith(
-                color: ZipColor.inverseSurface,
+              style: TolokaFonts.tiny.style.copyWith(
+                color: TolokaColor.inverseSurface,
               ),
               textAlign: TextAlign.left,
             ),
@@ -79,7 +79,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                     children: [
                       Text(
                         '${translate('give.hand.radius')}: ',
-                        style: ZipFonts.small.style,
+                        style: TolokaFonts.small.style,
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
@@ -128,7 +128,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                           ),
                           Text(
                             'km',
-                            style: ZipFonts.small.style,
+                            style: TolokaFonts.small.style,
                           ),
                         ],
                       ),
@@ -144,7 +144,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                   },
                   title: Text(
                     translate('give.hand.only_remote'),
-                    style: ZipFonts.small.style,
+                    style: TolokaFonts.small.style,
                   ),
                 ),
               ],
@@ -154,7 +154,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
               replacement: Center(
                 child: Text(
                   translate('give.hand.no_requests'),
-                  style: ZipFonts.medium.style,
+                  style: TolokaFonts.medium.style,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -188,7 +188,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                               angle: 0.5,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: ZipColor.onTertiaryFixed,
+                                  color: TolokaColor.onTertiaryFixed,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 padding: const EdgeInsets.symmetric(
@@ -197,8 +197,8 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                                 ),
                                 child: Text(
                                   translate('give.hand.remote'),
-                                  style: ZipFonts.small.style.copyWith(
-                                    color: ZipColor.onTertiary,
+                                  style: TolokaFonts.small.style.copyWith(
+                                    color: TolokaColor.onTertiary,
                                     fontSize: 14,
                                   ),
                                 ),
