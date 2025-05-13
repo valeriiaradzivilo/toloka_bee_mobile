@@ -23,6 +23,9 @@ class GiveHandBloc extends Bloc<GiveHandEvent, GiveHandState> {
     );
     on<ChangeRadiusEvent>(
       _onChangeRadius,
+      transformer: (final events, final mapper) => events
+          .debounceTime(const Duration(milliseconds: 100))
+          .asyncExpand(mapper),
     );
     on<ChangeOnlyRemoteEvent>(_onChangeOnlyRemote);
   }

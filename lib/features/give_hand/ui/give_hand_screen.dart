@@ -97,7 +97,7 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                             icon: const Icon(Icons.remove_circle_outline),
                           ),
                           SizedBox(
-                            width: 40,
+                            width: 50,
                             child: AppNumberEditingField(
                               maxValue: 1000,
                               minValue: 1,

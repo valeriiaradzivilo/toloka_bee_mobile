@@ -387,5 +387,5 @@ class _ControlRequestCompletionRow extends StatelessWidget {
         ],
       );
 
-  //TODO: If the volunteer confirms the request is done, then the requester cannot cancel the request but can remove the volunteer from the request and set status to pending
+  //TODO: Додай можливість видалити волонтера з запиту, але обов'язково з причиною
 }

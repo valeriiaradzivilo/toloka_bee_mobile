@@ -123,6 +123,8 @@ class NotificationsDataSourceImpl implements NotificationsDataSource {
   ) async {
     //TODO: Дороби personalized на беці
 
+    //TODO: Можливо варто додати захист від sql ін'єкцій
+
     final response = await _dio.post(
       '$_basePathRequest/get-personalized',
       data: location.toJson(),
