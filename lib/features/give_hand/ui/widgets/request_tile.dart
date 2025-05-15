@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common/routing/routes.dart';
@@ -62,7 +61,9 @@ class RequestTile extends StatelessWidget {
                               maxLines: maxDescriptionLines,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const Gap(5),
+                            const SizedBox(
+                              height: 5,
+                            ),
                             if (request.requestType != ERequestHandType.other)
                               Text(
                                 '\u2981 ${translate(

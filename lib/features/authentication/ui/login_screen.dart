@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/routing/routes.dart';
@@ -96,12 +95,16 @@ class _LoginScreenState extends State<_LoginScreen> {
                         )
                       : Text(translate('login.button')),
                 ),
-                const Gap(20),
+                const SizedBox(
+                  height: 20,
+                ),
                 Text(
                   translate('login.or'),
                   style: TolokaFonts.medium.style,
                 ),
-                const Gap(20),
+                const SizedBox(
+                  height: 20,
+                ),
                 ElevatedButton(
                   onPressed: () => Navigator.pushReplacementNamed(
                     context,

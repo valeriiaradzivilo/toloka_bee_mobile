@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -275,7 +274,9 @@ class _LoadedProfile extends StatelessWidget {
                 color: TolokaColor.onPrimary,
               ),
             ),
-            const Gap(20),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       );

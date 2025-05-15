@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:gap/gap.dart';
 
 class ErrorScreen extends StatelessWidget {
   final FlutterErrorDetails details;
@@ -31,7 +30,9 @@ class ErrorScreen extends StatelessWidget {
                           .titleLarge
                           ?.copyWith(color: Colors.red),
                     ),
-                    const Gap(8),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Text(
                       translate('error.screen.message'),
                       style: Theme.of(context)
@@ -40,7 +41,9 @@ class ErrorScreen extends StatelessWidget {
                           ?.copyWith(color: Colors.red),
                     ),
                     if (kDebugMode) ...[
-                      const Gap(8),
+                      const SizedBox(
+                        height: 8,
+                      ),
                       Text(
                         details.exceptionAsString(),
                         style: const TextStyle(color: Colors.red),

@@ -41,5 +41,7 @@ List<double> _closeLocations(final double value) {
       ),
     );
   }
+
+  result.shuffle();
   return result;
 }

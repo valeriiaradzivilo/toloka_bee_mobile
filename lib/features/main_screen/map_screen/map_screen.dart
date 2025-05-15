@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -143,7 +142,9 @@ class _BottomSheet extends StatelessWidget {
                 child: Column(
                   children: [
                     const Divider(),
-                    const Gap(10),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -151,7 +152,9 @@ class _BottomSheet extends StatelessWidget {
                           translate('map.actions.question'),
                           style: TolokaFonts.medium.style,
                         ),
-                        const Gap(10),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         IconButton(
                           onPressed: () => showAdaptiveDialog(
                             context: context,
@@ -169,17 +172,23 @@ class _BottomSheet extends StatelessWidget {
                                     Text(
                                       translate('map.actions.dialog.header'),
                                     ),
-                                    const Gap(10),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
                                     Text(
                                       translate(
                                         'map.actions.dialog.explanation',
                                       ),
                                     ),
-                                    const Gap(20),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     Text(
                                       translate('map.actions.dialog.note.one'),
                                     ),
-                                    const Gap(20),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
                                     Text(
                                       translate(
                                         'map.actions.dialog.note.location',
@@ -195,7 +204,9 @@ class _BottomSheet extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const Gap(20),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -223,7 +234,9 @@ class _BottomSheet extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Gap(10),
+                        const SizedBox(
+                          width: 10,
+                        ),
                         Expanded(
                           child: ElevatedButton.icon(
                             onPressed: () => showModalBottomSheet(
@@ -258,7 +271,9 @@ class _BottomSheet extends StatelessWidget {
                   ],
                 ),
               ),
-              const Gap(40),
+              const SizedBox(
+                height: 40,
+              ),
             ],
           ),
         ),
@@ -354,7 +369,9 @@ class _AccountInfo extends StatelessWidget {
               ),
             ],
           ),
-          const Gap(20),
+          const SizedBox(
+            width: 20,
+          ),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,7 +391,9 @@ class _AccountInfo extends StatelessWidget {
                     style: TolokaFonts.big.style,
                   ),
                 ),
-                const Gap(10),
+                const SizedBox(
+                  height: 10,
+                ),
                 Flexible(
                   child: Text(
                     translate('map.hello.subtitle'),

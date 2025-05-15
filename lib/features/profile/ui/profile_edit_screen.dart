@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:gap/gap.dart';
 
 import '../../../common/theme/toloka_color.dart';
 import '../../../common/theme/toloka_fonts.dart';
@@ -99,7 +98,9 @@ class ProfileEditScreen extends StatelessWidget {
                     obscureText: true,
                     onChanged: context.read<ProfileCubit>().setPassword,
                   ),
-                  const Gap(24),
+                  const SizedBox(
+                    height: 24,
+                  ),
                   ElevatedButton(
                     onPressed: state is ProfileUpdating &&
                             state.changedUser.about.isNotEmpty &&

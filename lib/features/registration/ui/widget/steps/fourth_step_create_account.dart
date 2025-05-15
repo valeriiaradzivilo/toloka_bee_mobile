@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:gap/gap.dart';
 
 import '../../../../../common/theme/toloka_fonts.dart';
 import '../../../../../common/widgets/app_number_editing_field.dart';
@@ -108,7 +107,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
               Row(
                 children: [
                   Icon(Icons.contact_phone, color: primary),
-                  const Gap(8),
+                  const SizedBox(
+                    width: 8,
+                  ),
                   Flexible(
                     child: Text(
                       translate('create.account.contact.title'),
@@ -117,12 +118,16 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                   ),
                 ],
               ),
-              const Gap(4),
+              const SizedBox(
+                height: 4,
+              ),
               Text(
                 translate('create.account.contact.subtitle'),
                 style: TolokaFonts.small.style.copyWith(color: Colors.black54),
               ),
-              const Gap(24),
+              const SizedBox(
+                height: 24,
+              ),
               MenuAnchor(
                 controller: _menuController,
                 menuChildren: [
@@ -158,7 +163,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                               : _icons[_preferredMethod]!,
                           color: primary,
                         ),
-                        const Gap(8),
+                        const SizedBox(
+                          width: 8,
+                        ),
                         Expanded(
                           child: Text(
                             _preferredMethod == null
@@ -178,7 +185,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                   ),
                 ),
               ),
-              const Gap(24),
+              const SizedBox(
+                height: 24,
+              ),
               Row(
                 children: [
                   PhoneCodeDropdown(
@@ -188,7 +197,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                       setState(() => _selectedCountry = c);
                     },
                   ),
-                  const Gap(12),
+                  const SizedBox(
+                    width: 12,
+                  ),
                   Expanded(
                     child: AppNumberEditingField(
                       controller: _phoneController,
@@ -211,7 +222,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                   ),
                 ],
               ),
-              const Gap(12),
+              const SizedBox(
+                height: 12,
+              ),
               _ContactRow(
                 icon: _icons[ContactMethod.email],
                 option: TextFieldOption.email,
@@ -219,7 +232,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                 onChanged: widget.onEmailChanged,
                 method: ContactMethod.email,
               ),
-              const Gap(12),
+              const SizedBox(
+                height: 12,
+              ),
               _ContactRow(
                 icon: _icons[ContactMethod.viber],
                 option: TextFieldOption.undefined,
@@ -227,7 +242,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                 onChanged: widget.onViberChanged,
                 method: ContactMethod.viber,
               ),
-              const Gap(12),
+              const SizedBox(
+                height: 12,
+              ),
               _ContactRow(
                 icon: _icons[ContactMethod.telegram],
                 option: TextFieldOption.undefined,
@@ -235,7 +252,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                 onChanged: widget.onTelegramChanged,
                 method: ContactMethod.telegram,
               ),
-              const Gap(12),
+              const SizedBox(
+                height: 12,
+              ),
               _ContactRow(
                 icon: _icons[ContactMethod.whatsapp],
                 option: TextFieldOption.undefined,
@@ -243,7 +262,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                 onChanged: widget.onWhatsAppChanged,
                 method: ContactMethod.whatsapp,
               ),
-              const Gap(20),
+              const SizedBox(
+                height: 12,
+              ),
               Center(
                 child: Text(
                   translate('contacts.hint'),
@@ -252,7 +273,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const Gap(20),
+              const SizedBox(
+                height: 20,
+              ),
               if (widget.showNextBackButton)
                 NextBackButtonRow(
                   step: ESteps.addContactInfo,
@@ -324,7 +347,9 @@ class _ContactRow extends StatelessWidget {
   Widget build(final BuildContext context) => Row(
         children: [
           Icon(icon, color: Theme.of(context).colorScheme.primary),
-          const Gap(12),
+          const SizedBox(
+            width: 12,
+          ),
           Expanded(
             child: AppTextField(
               controller: controller,
