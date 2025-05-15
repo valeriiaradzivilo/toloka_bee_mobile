@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
@@ -10,7 +11,10 @@ import 'package:uuid/uuid.dart';
 import '../../../common/bloc/toloka_bloc.dart';
 import '../../../common/optional_value.dart';
 import '../../../data/models/contact_info_model.dart';
+import '../../../data/models/ui/e_popup_type.dart';
+import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
+import '../../../data/service/snackbar_service.dart';
 import '../../../data/usecase/contacts/save_contacts_usecase.dart';
 import '../../../data/usecase/user_management/register_user_usecase.dart';
 import '../ui/data/e_position.dart';
@@ -19,7 +23,8 @@ import '../ui/data/e_steps.dart';
 class RegisterBloc extends TolokaBloc {
   RegisterBloc(final GetIt sl)
       : _registerUserUsecase = sl<RegisterUserUsecase>(),
-        _saveContactUsecase = sl<SaveContactUsecase>();
+        _saveContactUsecase = sl<SaveContactUsecase>(),
+        _snackbarService = sl<SnackbarService>();
 
   ValueStream<ESteps> get stepCounterStream => _stepController.stream;
   ValueStream<Optional<DateTime>> get dateOfBirthStream =>
@@ -59,7 +64,7 @@ class RegisterBloc extends TolokaBloc {
 
   EPosition? get currentPosition => _position;
 
-  Future<bool> register() async {
+  Future<void> register() async {
     final base64Image = base64Encode(_photoController.value.bytes);
     final user = UserAuthModel(
       id: const Uuid().v4(),
@@ -95,7 +100,17 @@ class RegisterBloc extends TolokaBloc {
       await _saveContactUsecase(contact);
     });
 
-    return result.isRight();
+    _snackbarService.show(
+      result.isRight()
+          ? PopupModel(
+              title: translate('create.account.success'),
+              type: EPopupType.success,
+            )
+          : PopupModel(
+              title: translate('create.account.error'),
+              type: EPopupType.error,
+            ),
+    );
   }
 
   void pickImage() async {
@@ -142,6 +157,7 @@ class RegisterBloc extends TolokaBloc {
 
   final RegisterUserUsecase _registerUserUsecase;
   final SaveContactUsecase _saveContactUsecase;
+  final SnackbarService _snackbarService;
 
   final BehaviorSubject<String> _nameController =
       BehaviorSubject<String>.seeded('');

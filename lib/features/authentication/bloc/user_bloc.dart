@@ -142,8 +142,8 @@ class UserBloc extends TolokaBloc {
         await _loginUserUsecase('test@user.com', 'Lera1234!'),
       's' when kDebugMode =>
         await _loginUserUsecase('sofiia@gmail.com', 'Lera1234!'),
-      'c' when kDebugMode =>
-        await _loginUserUsecase('cupatea@gmail.com', 'Lera1234!'),
+      'r' when kDebugMode =>
+        await _loginUserUsecase('requester@gmail.com', 'Lera1234!'),
       _ => await _loginUserUsecase(username, password),
     };
 

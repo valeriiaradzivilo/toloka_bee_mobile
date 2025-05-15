@@ -18,6 +18,7 @@ import '../../give_hand/bloc/give_hand_bloc.dart';
 import '../../give_hand/bloc/give_hand_event.dart';
 import '../../give_hand/ui/give_hand_screen.dart';
 import '../../request_hand/bloc/create_request_bloc.dart';
+import '../../request_hand/bloc/create_request_event.dart';
 import '../../request_hand/ui/request_hand_screen.dart';
 import 'bloc/map_screen_bloc.dart';
 import 'data/location_service_state.dart';
@@ -251,7 +252,8 @@ class _BottomSheet extends StatelessWidget {
                                     bloc.dispose(),
                                 child: BlocProvider(
                                   create: (final context) =>
-                                      CreateRequestBloc(GetIt.instance),
+                                      CreateRequestBloc(GetIt.instance)
+                                        ..add(const InitCreateRequestEvent()),
                                   child: const RequestHandModal(),
                                 ),
                               ),
@@ -330,24 +332,27 @@ class _AccountInfo extends StatelessWidget {
                               ),
                       ),
                     ),
-                    Transform.rotate(
-                      angle: 0.3,
-                      child: Container(
-                        width: 70,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: TolokaColor.primary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          translate('profile.your'),
-                          style: TolokaFonts.tiny.style.copyWith(
-                            color: TolokaColor.onPrimary,
+                    Visibility(
+                      visible: isAuthenticated,
+                      child: Transform.rotate(
+                        angle: 0.3,
+                        child: Container(
+                          width: 70,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
                           ),
-                          textAlign: TextAlign.center,
+                          decoration: BoxDecoration(
+                            color: TolokaColor.primary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            translate('profile.your'),
+                            style: TolokaFonts.tiny.style.copyWith(
+                              color: TolokaColor.onPrimary,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ),

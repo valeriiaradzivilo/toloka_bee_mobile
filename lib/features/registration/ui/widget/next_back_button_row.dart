@@ -3,9 +3,6 @@ import 'package:flutter_translate/flutter_translate.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../common/routing/routes.dart';
-import '../../../../common/widgets/toloka_snackbar.dart';
-import '../../../../data/models/ui/e_popup_type.dart';
-import '../../../../data/models/ui/popup_model.dart';
 import '../../bloc/register_bloc.dart';
 import '../data/e_steps.dart';
 
@@ -74,27 +71,9 @@ class NextBackButtonRow extends StatelessWidget {
                             ? canGoToTheNextStep!()
                             : true;
                         if (canGo) {
-                          registerBloc.register().then((final value) {
-                            if (context.mounted) {
-                              TolokaSnackbar.show(
-                                context,
-                                value
-                                    ? PopupModel(
-                                        title:
-                                            translate('create.account.success'),
-                                        type: EPopupType.success,
-                                      )
-                                    : PopupModel(
-                                        title:
-                                            translate('create.account.error'),
-                                        type: EPopupType.error,
-                                      ),
-                              );
-
-                              Navigator.of(context)
-                                  .pushReplacementNamed(Routes.loginScreen);
-                            }
-                          });
+                          registerBloc.register();
+                          Navigator.of(context)
+                              .pushReplacementNamed(Routes.loginScreen);
                         }
                       }
                     : null,

@@ -51,102 +51,141 @@ class CreateRequestBloc extends Bloc<CreateRequestEvent, CreateRequestState> {
       },
     );
     on<SetDeadlineEvent>(
-      (final event, final emit) =>
-          emit(state.loadedState.copyWith(deadline: event.deadline)),
+      (final event, final emit) {
+        if (state case final LoadedCreateRequestState st) {
+          emit(st.copyWith(deadline: event.deadline));
+        }
+      },
     );
 
     on<SetDescriptionEvent>(
-      (final event, final emit) =>
-          emit(state.loadedState.copyWith(description: event.description)),
+      (final event, final emit) {
+        if (state case final LoadedCreateRequestState st) {
+          emit(st.copyWith(description: event.description));
+        }
+      },
     );
 
     on<SetIsRemoteEvent>(
-      (final event, final emit) => emit(
-        state.loadedState.copyWith(
-          isRemote: event.isRemote,
-          isPhysicalStrength: false,
-        ),
-      ),
+      (final event, final emit) {
+        if (state case final LoadedCreateRequestState st) {
+          emit(
+            st.copyWith(
+              isRemote: event.isRemote,
+              isPhysicalStrength: false,
+            ),
+          );
+        }
+      },
     );
 
     on<SetIsPhysicalStrengthEvent>(
-      (final event, final emit) => emit(
-        state.loadedState.copyWith(
-          isPhysicalStrength: event.isPhysicalStrength,
-          isRemote: false,
-        ),
-      ),
+      (final event, final emit) {
+        if (state case final LoadedCreateRequestState st) {
+          emit(
+            st.copyWith(
+              isPhysicalStrength: event.isPhysicalStrength,
+              isRemote: false,
+            ),
+          );
+        }
+      },
     );
 
     on<SetPriceEvent>(
-      (final event, final emit) =>
-          emit(state.loadedState.copyWith(price: event.price)),
+      (final event, final emit) {
+        if (state case final LoadedCreateRequestState st) {
+          emit(
+            st.copyWith(
+              price: event.price,
+            ),
+          );
+        }
+      },
     );
 
     on<SetLocationEvent>(
-      (final event, final emit) => emit(
-        state.loadedState
-            .copyWith(location: LatLng(event.latitude, event.longitude)),
-      ),
+      (final event, final emit) {
+        if (state case final LoadedCreateRequestState st
+            when st.location.latitude != event.latitude &&
+                st.location.longitude != event.longitude) {
+          emit(
+            st.copyWith(
+              location: LatLng(event.latitude, event.longitude),
+            ),
+          );
+        }
+      },
     );
 
     on<SetRequiredVolunteersCountEvent>(
       (final event, final emit) {
         if (event.requiredVolunteersCount == null) return;
-        emit(
-          state.loadedState.copyWith(
-            requiredVolunteersCount: event.requiredVolunteersCount,
-          ),
-        );
+        if (state case final LoadedCreateRequestState st) {
+          emit(
+            st.copyWith(
+              requiredVolunteersCount: event.requiredVolunteersCount,
+            ),
+          );
+        }
       },
     );
 
     on<SendRequestEvent>((final event, final emit) async {
-      final result = await _sendNotificationUsecase(
-        state.loadedState.toRequestNotificationModel(),
-      );
-      result.fold(
-        (final failure) {
-          if (failure is RequestLimitReachedForToday) {
+      if (state case final LoadedCreateRequestState state) {
+        final result = await _sendNotificationUsecase(
+          state.toRequestNotificationModel(),
+        );
+        result.fold(
+          (final failure) {
+            if (failure is RequestLimitReachedForToday) {
+              TolokaSnackbar.show(
+                event.context,
+                PopupModel(
+                  title: translate('request.limit_reached'),
+                  message: translate(
+                    'request.limit_reached_message',
+                    args: {
+                      'limit': RequestConstants.requestLimitForTheDay,
+                    },
+                  ),
+                  type: EPopupType.error,
+                ),
+              );
+              return;
+            }
             TolokaSnackbar.show(
               event.context,
               PopupModel(
-                title: translate('request.limit_reached'),
-                message: translate(
-                  'request.limit_reached_message',
-                  args: {
-                    'limit': RequestConstants.requestLimitForTheDay,
-                  },
-                ),
+                title: translate('request.hand.error'),
                 type: EPopupType.error,
               ),
             );
-            return;
-          }
-          TolokaSnackbar.show(
-            event.context,
-            PopupModel(
-              title: translate('request.hand.error'),
-              type: EPopupType.error,
-            ),
-          );
-        },
-        (final success) {
-          TolokaSnackbar.show(
-            event.context,
-            PopupModel(
-              title: translate('request.hand.success'),
-              message: translate('request.hand.thanks'),
-              type: EPopupType.success,
-            ),
-          );
-        },
-      );
+          },
+          (final success) {
+            TolokaSnackbar.show(
+              event.context,
+              PopupModel(
+                title: translate('request.hand.success'),
+                message: translate('request.hand.thanks'),
+                type: EPopupType.success,
+              ),
+            );
+          },
+        );
+      }
     });
 
     on<SetRequestTypeEvent>(
-      (final event, final emit) =>
-          emit(state.loadedState.copyWith(requestType: event.requestType)),
+      (final event, final emit) {
+        if (state case final LoadedCreateRequestState st) {
+          emit(
+            st.copyWith(
+              requestType: event.requestType,
+            ),
+          );
+        }
+      },
     );
   }
 }

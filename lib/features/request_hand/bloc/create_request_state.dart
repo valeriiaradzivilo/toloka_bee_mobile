@@ -9,8 +9,6 @@ import '../../../data/models/request_notification_model.dart';
 
 sealed class CreateRequestState {
   const CreateRequestState();
-
-  LoadedCreateRequestState get loadedState => this as LoadedCreateRequestState;
 }
 
 final class CreateRequestLoading extends CreateRequestState {

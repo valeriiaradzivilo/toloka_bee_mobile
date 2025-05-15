@@ -17,6 +17,8 @@ class RequestHandModal extends StatefulWidget {
 
   @override
   State<RequestHandModal> createState() => _RequestHandModalState();
+
+  void add(final InitCreateRequestEvent initCreateRequestEvent) {}
 }
 
 class _RequestHandModalState extends State<RequestHandModal> {
@@ -36,8 +38,6 @@ class _RequestHandModalState extends State<RequestHandModal> {
   Widget build(final BuildContext context) => SizedBox(
         height: MediaQuery.of(context).size.height,
         child: BlocBuilder<CreateRequestBloc, CreateRequestState>(
-          bloc: context.read<CreateRequestBloc>()
-            ..add(const InitCreateRequestEvent()),
           builder: (final context, final state) => StreamBuilder(
             stream: context.read<UserBloc>().locationStream,
             builder: (final context, final snapshot) {
