@@ -23,4 +23,13 @@ class RequestComplaintsLoaded extends ComplaintsAdminState {
     required this.requestComplaints,
     required this.userComplaints,
   });
+
+  RequestComplaintsLoaded copyWith({
+    final List<RequestComplaintsGroupModel>? requestComplaints,
+    final List<UserComplaintsGroupModel>? userComplaints,
+  }) =>
+      RequestComplaintsLoaded(
+        requestComplaints: requestComplaints ?? this.requestComplaints,
+        userComplaints: userComplaints ?? this.userComplaints,
+      );
 }

@@ -68,4 +68,57 @@ class ComplaintRepositoryImpl implements ComplaintRepository {
       return Left(Fail('Failed to report user'));
     }
   }
+
+  @override
+  Future<Either<Fail, void>> deleteRequestComplaint(
+    final String complaintId,
+  ) async {
+    try {
+      await _dataSource.deleteRequestComplaint(complaintId);
+      return const Right(null);
+    } catch (e) {
+      logger.severe('Error deleting complaint: $e');
+      return Left(Fail('Failed to delete complaint'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> blockUser(
+    final String userId,
+    final DateTime blockUntil,
+  ) async {
+    try {
+      await _dataSource.blockUser(userId, blockUntil);
+      return const Right(null);
+    } catch (e) {
+      logger.severe('Error blocking user: $e');
+      return Left(Fail('Failed to block user'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> blockUserForever(
+    final String userId,
+  ) async {
+    try {
+      await _dataSource.blockUserForever(userId);
+      return const Right(null);
+    } catch (e) {
+      logger.severe('Error blocking user forever: $e');
+      return Left(Fail('Failed to block user forever'));
+    }
+  }
+
+  @override
+  Future<Either<Fail, void>> deleteUserComplaint(
+    final String complaintId,
+  ) async {
+    try {
+      await _dataSource.deleteUserComplaint(complaintId);
+      return const Right(null);
+    } catch (e) {
+      logger.severe('Error deleting user complaint: $e');
+      return Left(Fail('Failed to delete user complaint'));
+    }
+  }
 }

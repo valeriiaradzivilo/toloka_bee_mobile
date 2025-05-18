@@ -121,8 +121,6 @@ class NotificationsDataSourceImpl implements NotificationsDataSource {
   Future<List<RequestNotificationModel>> getAllRequests(
     final GetRequestsModel location,
   ) async {
-    //TODO: Можливо варто додати захист від sql ін'єкцій
-
     final response = await _dio.post(
       '$_basePathRequest/get-personalized',
       data: location.toJson(),

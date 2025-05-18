@@ -22,15 +22,16 @@ class TolokaSnackbar {
 
     const height = 100.0;
     const spacing = 8.0;
+    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
 
     late final OverlayEntry entry;
     entry = OverlayEntry(
       builder: (final ctx) => Positioned(
-        bottom: 16 + index * (height + spacing),
+        bottom: 16 + index * (height + spacing) + bottomInsets,
         left: 16,
         right: 16,
         child: Dismissible(
-          key: UniqueKey(),
+          key: ValueKey(model),
           direction: DismissDirection.down,
           onDismissed: (final _) {
             entry.remove();
@@ -43,12 +44,6 @@ class TolokaSnackbar {
 
     overlayState.insert(entry);
 
-    entry.addListener(() {
-      if (entry.opaque) {
-        entry.remove();
-        _entries.remove(entry);
-      }
-    });
     _entries.add(entry);
 
     Future.delayed(

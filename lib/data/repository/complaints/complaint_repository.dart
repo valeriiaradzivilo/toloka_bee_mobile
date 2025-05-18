@@ -18,4 +18,17 @@ abstract class ComplaintRepository {
   Future<Either<Fail, void>> reportUser(
     final UserComplaintModel userComplaintModel,
   );
+  Future<Either<Fail, void>> deleteRequestComplaint(
+    final String complaintId,
+  );
+  Future<Either<Fail, void>> blockUser(
+    final String userId,
+    final DateTime blockUntil,
+  );
+  Future<Either<Fail, void>> blockUserForever(
+    final String userId,
+  );
+  Future<Either<Fail, void>> deleteUserComplaint(
+    final String complaintId,
+  );
 }

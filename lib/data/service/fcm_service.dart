@@ -141,8 +141,7 @@ class FcmService {
         ) /
         1000;
 
-    //TODO: Add ability to set distance in profile
-    if (distanceKm > 100) return;
+    if (distanceKm > 20) return;
 
     _snackbarService.show(
       PopupModel(

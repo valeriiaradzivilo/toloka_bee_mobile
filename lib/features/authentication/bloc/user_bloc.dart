@@ -16,6 +16,7 @@ import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
 import '../../../data/service/fcm_service.dart';
+import '../../../data/service/snackbar_service.dart';
 import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
 import '../../../data/usecase/subscriptions/subscribe_to_location_topics_usecase.dart';
 import '../../../data/usecase/subscriptions/subscribe_to_request_id_usecase.dart';
@@ -35,7 +36,8 @@ class UserBloc extends TolokaBloc {
         _logoutUserUsecase = locator<LogoutUserUsecase>(),
         _subscribeToTopicUsecase = locator<SubscribeToLocationTopicsUsecase>(),
         _subscribeToRequestIdUsecase = locator<SubscribeToRequestIdUsecase>(),
-        _fcmService = locator<FcmService>() {
+        _fcmService = locator<FcmService>(),
+        _snackbar = locator<SnackbarService>() {
     _initAuth();
     _initLocationControl();
 
@@ -114,6 +116,12 @@ class UserBloc extends TolokaBloc {
             (final user) => _user.add(OptionalValue(user)),
           );
         });
+      }),
+    );
+
+    addSubscription(
+      authPopupStream.listen((final popup) {
+        _snackbar.show(popup);
       }),
     );
   }
@@ -274,6 +282,7 @@ class UserBloc extends TolokaBloc {
   final SubscribeToLocationTopicsUsecase _subscribeToTopicUsecase;
 
   final FcmService _fcmService;
+  final SnackbarService _snackbar;
 
   final BehaviorSubject<Optional<UserAuthModel>> _user =
       BehaviorSubject<Optional<UserAuthModel>>.seeded(const OptionalNull());

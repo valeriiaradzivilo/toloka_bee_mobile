@@ -270,6 +270,7 @@ class RequestDetailsBloc
   ) async {
     final result = await _reportRequestUsecase(
       RequestComplaintModel(
+        id: '',
         requestId: event.requestId,
         reporterUserId: FirebaseAuth.instance.currentUser?.uid ?? '',
         reason: event.message,

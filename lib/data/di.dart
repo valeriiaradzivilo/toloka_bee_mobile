@@ -30,6 +30,9 @@ import 'source/users/user_data_source_impl.dart';
 import 'source/volunteer_work/volunteer_work_data_source.dart';
 import 'source/volunteer_work/volunteer_work_data_source_impl.dart';
 import 'toloka_way_api_interceptor.dart';
+import 'usecase/complaints/block_user_forever_usecase.dart';
+import 'usecase/complaints/block_user_usecase.dart';
+import 'usecase/complaints/delete_request_complaint_usecase.dart';
 import 'usecase/complaints/get_request_complaints_grouped_usecase.dart';
 import 'usecase/complaints/get_user_complaints_grouped_usecase.dart';
 import 'usecase/complaints/report_request_usecase.dart';
@@ -43,7 +46,6 @@ import 'usecase/get_volunteers_by_location_usecase.dart';
 import 'usecase/requests/accept_request_usecase.dart';
 import 'usecase/requests/cancel_helping_usecase.dart';
 import 'usecase/requests/cancel_request_usecase.dart';
-import 'usecase/requests/delete_request_usecase.dart';
 import 'usecase/requests/get_all_requests_usecase.dart';
 import 'usecase/requests/get_requests_by_ids_usecase.dart';
 import 'usecase/requests/get_requests_by_user_id_usecase.dart';
@@ -175,8 +177,8 @@ Future<void> initUseCases() async {
   serviceLocator.registerLazySingleton<DeleteUserUsecase>(
     () => DeleteUserUsecase(serviceLocator()),
   );
-  serviceLocator.registerLazySingleton<DeleteRequestUsecase>(
-    () => DeleteRequestUsecase(serviceLocator()),
+  serviceLocator.registerLazySingleton<DeleteRequestComplaintUsecase>(
+    () => DeleteRequestComplaintUsecase(serviceLocator(), serviceLocator()),
   );
   serviceLocator.registerLazySingleton<AcceptRequestUsecase>(
     () => AcceptRequestUsecase(serviceLocator()),
@@ -231,5 +233,12 @@ Future<void> initUseCases() async {
   );
   serviceLocator.registerLazySingleton<CancelHelpingUsecase>(
     () => CancelHelpingUsecase(serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton<BlockUserUsecase>(
+    () => BlockUserUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<BlockUserForeverUsecase>(
+    () => BlockUserForeverUsecase(serviceLocator()),
   );
 }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../models/request_complaint_model.dart';
@@ -77,6 +78,67 @@ class ComplaintDataSourceImpl implements ComplaintDataSource {
     await _dio.post(
       '/complaints/user',
       data: userComplaintModel.toJson(),
+    );
+  }
+
+  @override
+  Future<void> deleteRequestComplaint(
+    final String complaintId,
+  ) async {
+    await _dio.delete(
+      '/admin/complaints/delete-request/$complaintId',
+      data: {
+        'adminUserId': FirebaseAuth.instance.currentUser?.uid,
+      },
+    );
+  }
+
+  @override
+  Future<void> deleteUserComplaint(
+    final String complaintId,
+  ) async {
+    await _dio.delete(
+      '/admin/complaints/delete-user/$complaintId',
+      data: {
+        'adminUserId': FirebaseAuth.instance.currentUser?.uid,
+      },
+    );
+  }
+
+  @override
+  Future<void> blockUser(
+    final String userId,
+    final DateTime blockUntil,
+  ) async {
+    final days = blockUntil.difference(DateTime.now()).inDays;
+    if (days < 0) {
+      throw Exception('Block until date must be in the future');
+    }
+    if (days > 100000) {
+      throw Exception('Block duration cannot be more than 100000 days');
+    }
+
+    await _dio.post(
+      '/admin/blocking/block',
+      data: {
+        'userId': userId,
+        'adminUserId': FirebaseAuth.instance.currentUser?.uid,
+        'days': days,
+      },
+    );
+  }
+
+  @override
+  Future<void> blockUserForever(
+    final String userId,
+  ) async {
+    await _dio.post(
+      '/admin/blocking/block-permanent',
+      data: {
+        'userId': userId,
+        'adminUserId': FirebaseAuth.instance.currentUser?.uid,
+        'days': 0,
+      },
     );
   }
 }

@@ -188,14 +188,30 @@ class _UserComplaintCardState extends State<_UserComplaintCard> {
                               child: Text(translate('common.cancel')),
                             ),
                             TextButton(
-                              onPressed: () {
-                                context.read<ComplaintsAdminBloc>().add(
-                                      BlockUserAdminEvent(
-                                        userId: widget.group.reportedUserId,
-                                        months: 1,
-                                      ),
-                                    );
-                                Navigator.of(context).pop();
+                              onPressed: () async {
+                                final blockUntil = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime.now().add(
+                                    const Duration(days: 1),
+                                  ),
+                                  lastDate: DateTime.now().add(
+                                    const Duration(days: 50000),
+                                  ),
+                                );
+                                if (blockUntil == null) {
+                                  return;
+                                }
+
+                                if (context.mounted) {
+                                  context.read<ComplaintsAdminBloc>().add(
+                                        BlockUserEvent(
+                                          userId: widget.group.reportedUserId,
+                                          blockUntil: blockUntil,
+                                        ),
+                                      );
+
+                                  Navigator.of(context).pop();
+                                }
                               },
                               child: Text(translate('common.confirm')),
                             ),
@@ -369,31 +385,43 @@ class _RequestComplaintCardState extends State<_RequestComplaintCard> {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (final context) => AlertDialog(
-                          title:
-                              Text(translate('admin.complaint.delete_request')),
-                          content: Text(
-                            translate('admin.complaint.delete_request_message'),
+                        builder: (final _) => BlocProvider.value(
+                          value: context.read<ComplaintsAdminBloc>(),
+                          child: AlertDialog(
+                            title: Text(
+                              translate('admin.complaint.delete_request'),
+                            ),
+                            content: Text(
+                              translate(
+                                'admin.complaint.delete_request_message',
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(translate('common.cancel')),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  context.read<ComplaintsAdminBloc>().add(
+                                        DeleteRequestEvent(
+                                          requestId: widget.group.requestId,
+                                          complaintIds: widget.group.complaints
+                                              .map(
+                                                (final complaint) =>
+                                                    complaint.id,
+                                              )
+                                              .toList(),
+                                        ),
+                                      );
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(translate('common.confirm')),
+                              ),
+                            ],
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.cancel')),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                context.read<ComplaintsAdminBloc>().add(
-                                      DeleteRequestEvent(
-                                        widget.group.requestId,
-                                      ),
-                                    );
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.confirm')),
-                            ),
-                          ],
                         ),
                       );
                     },

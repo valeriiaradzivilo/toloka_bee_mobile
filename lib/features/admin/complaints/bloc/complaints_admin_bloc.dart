@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../data/usecase/complaints/block_user_forever_usecase.dart';
+import '../../../../data/usecase/complaints/block_user_usecase.dart';
+import '../../../../data/usecase/complaints/delete_request_complaint_usecase.dart';
 import '../../../../data/usecase/complaints/get_request_complaints_grouped_usecase.dart';
 import '../../../../data/usecase/complaints/get_user_complaints_grouped_usecase.dart';
 import 'complaints_admin_event.dart';
@@ -11,6 +14,9 @@ class ComplaintsAdminBloc
     extends Bloc<ComplaintsAdminEvent, ComplaintsAdminState> {
   final GetRequestComplaintsGroupedUsecase _getRequestComplaintsGroupedUsecase;
   final GetUserComplaintsGroupedUsecase _getUserComplaintsGroupedUsecase;
+  final DeleteRequestComplaintUsecase _deleteRequestUsecase;
+  final BlockUserForeverUsecase _blockUserForeverUsecase;
+  final BlockUserUsecase _blockUserUsecase;
 
   ComplaintsAdminBloc(
     final GetIt locator,
@@ -18,8 +24,14 @@ class ComplaintsAdminBloc
             locator<GetRequestComplaintsGroupedUsecase>(),
         _getUserComplaintsGroupedUsecase =
             locator<GetUserComplaintsGroupedUsecase>(),
+        _deleteRequestUsecase = locator<DeleteRequestComplaintUsecase>(),
+        _blockUserForeverUsecase = locator<BlockUserForeverUsecase>(),
+        _blockUserUsecase = locator<BlockUserUsecase>(),
         super(const ComplaintsAdminLoading()) {
     on<GetComplaintsAdminEvent>(_onLoadRequestComplaints);
+    on<DeleteRequestEvent>(_onDeleteRequest);
+    on<BlockUserForeverEvent>(_onBlockUserForever);
+    on<BlockUserEvent>(_onBlockUser);
   }
 
   Future<void> _onLoadRequestComplaints(
@@ -54,5 +66,92 @@ class ComplaintsAdminBloc
         ),
       ),
     );
+  }
+
+  Future<void> _onDeleteRequest(
+    final DeleteRequestEvent event,
+    final Emitter<ComplaintsAdminState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is! RequestComplaintsLoaded) {
+      emit(const ComplaintsAdminError('Invalid state'));
+      return;
+    }
+
+    emit(const ComplaintsAdminLoading());
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      emit(const ComplaintsAdminError('User not authenticated'));
+      return;
+    }
+
+    final resultRequests = await _deleteRequestUsecase(
+      DeleteRequestUsecaseParams(
+        complaintId: event.complaintIds,
+        requestId: event.requestId,
+      ),
+    );
+
+    if (resultRequests.isLeft()) {
+      emit(const ComplaintsAdminError('Failed to load complaints'));
+      return;
+    }
+
+    final requests = resultRequests.isRight()
+        ? currentState.requestComplaints
+            .where((final request) => request.requestId != event.requestId)
+            .toList()
+        : currentState.requestComplaints;
+
+    emit(
+      currentState.copyWith(
+        requestComplaints: requests,
+      ),
+    );
+  }
+
+  Future<void> _onBlockUserForever(
+    final BlockUserForeverEvent event,
+    final Emitter<ComplaintsAdminState> emit,
+  ) async {
+    emit(const ComplaintsAdminLoading());
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      emit(const ComplaintsAdminError('User not authenticated'));
+      return;
+    }
+
+    final result = await _blockUserForeverUsecase(
+      event.userId,
+    );
+
+    if (result.isLeft()) {
+      emit(const ComplaintsAdminError('Failed to block user'));
+      return;
+    }
+  }
+
+  Future<void> _onBlockUser(
+    final BlockUserEvent event,
+    final Emitter<ComplaintsAdminState> emit,
+  ) async {
+    emit(const ComplaintsAdminLoading());
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      emit(const ComplaintsAdminError('User not authenticated'));
+      return;
+    }
+
+    final result = await _blockUserUsecase(
+      BlockUserUsecaseParams(
+        userId: event.userId,
+        blockUntil: event.blockUntil,
+      ),
+    );
+
+    if (result.isLeft()) {
+      emit(const ComplaintsAdminError('Failed to block user'));
+      return;
+    }
   }
 }

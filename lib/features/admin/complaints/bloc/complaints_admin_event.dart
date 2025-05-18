@@ -6,13 +6,13 @@ class GetComplaintsAdminEvent extends ComplaintsAdminEvent {
   const GetComplaintsAdminEvent();
 }
 
-class BlockUserAdminEvent extends ComplaintsAdminEvent {
-  const BlockUserAdminEvent({
+class BlockUserEvent extends ComplaintsAdminEvent {
+  const BlockUserEvent({
     required this.userId,
-    required this.months,
+    required this.blockUntil,
   });
   final String userId;
-  final int months;
+  final DateTime blockUntil;
 }
 
 class BlockUserForeverEvent extends ComplaintsAdminEvent {
@@ -21,8 +21,12 @@ class BlockUserForeverEvent extends ComplaintsAdminEvent {
 }
 
 class DeleteRequestEvent extends ComplaintsAdminEvent {
-  const DeleteRequestEvent(this.requestId);
+  const DeleteRequestEvent({
+    required this.requestId,
+    required this.complaintIds,
+  });
   final String requestId;
+  final List<String> complaintIds;
 }
 
 class DeleteRequestAndBlockUserEvent extends ComplaintsAdminEvent {

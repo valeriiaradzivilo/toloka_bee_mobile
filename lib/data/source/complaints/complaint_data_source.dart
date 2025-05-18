@@ -14,4 +14,17 @@ abstract class ComplaintDataSource {
   Future<void> reportRequest(final RequestComplaintModel requestComplaintModel);
 
   Future<void> reportUser(final UserComplaintModel userComplaintModel);
+  Future<void> deleteRequestComplaint(
+    final String complaintId,
+  );
+  Future<void> deleteUserComplaint(
+    final String complaintId,
+  );
+  Future<void> blockUser(
+    final String userId,
+    final DateTime blockUntil,
+  );
+  Future<void> blockUserForever(
+    final String userId,
+  );
 }
