@@ -366,7 +366,7 @@ class _AccountInfo extends StatelessWidget {
                       child: Transform.rotate(
                         angle: 0.3,
                         child: Container(
-                          width: 70,
+                          width: 90,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 5,

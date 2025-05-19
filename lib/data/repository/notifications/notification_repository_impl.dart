@@ -244,7 +244,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
       await _fcmDataSource.unsubscribeFromRequestUpdates(params.requestId);
       await _fcmDataSource.sendRequestUpdateNotification(
         params.requestId,
-        ERequestUpdate.canceledByRequester,
+        ERequestUpdate.cancelledByRequester,
         additionalData: params.reason,
       );
       return const Right(null);

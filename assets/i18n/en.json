@@ -177,6 +177,7 @@
                 "label": "Type of help"
             },
             "description": "Describe the service that you need *",
+            "description_title": "Important note: your exact location is not shared with the other users. Please if you need the help at your specific location, write it in the description or ask users to contact you directly.",
             "no_contact_info": "No contact information available.\nPlease add at least one contact to help the ones who help you...",
             "remote": {
                 "title": "Can be done remotely",
@@ -236,7 +237,7 @@
             "cancel_volunteer": "Stop helping",
             "cancel_volunteer_confirm": "Are you sure you want to stop helping? If the volunteers were found, they will be notified about that.",
             "cancel_error": "Error occurred while canceling the request. Please try again later.",
-            "cancel_success": "Canceled successfully.",
+            "cancel_success": "Cancelled successfully.",
             "your_request": "Your request",
             "see_contacts": "See contacts",
             "contacts": "Contacts",
@@ -287,11 +288,11 @@
             "for_requester": {
                 "accepted": "Your request was accepted by a volunteer. Open to see the details.",
                 "completed": "Your request was marked as completed by the volunteer. Confirm that in the request details.",
-                "canceled": "Your request was canceled by the volunteer. Open to see the details."
+                "cancelled": "Your request was cancelled by the volunteer. Open to see the details."
             },
             "for_volunteer": {
                 "completed": "Requester marked the request as completed. Thank you for your help!",
-                "canceled": "Requester canceled the request. Sorry, but you cannot help them anymore."
+                "cancelled": "Requester cancelled the request. Sorry, but you cannot help them anymore."
             }
         },
         "confirm": {

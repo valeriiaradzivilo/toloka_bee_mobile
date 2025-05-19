@@ -116,6 +116,10 @@ class _RequestHandModalState extends State<RequestHandModal> {
                                 },
                                 maxSymbols: 500,
                               ),
+                              Text(
+                                translate('request.hand.description_title'),
+                                style: TolokaFonts.small.style,
+                              ),
                               CheckboxListTile(
                                 value: state.isRemote,
                                 onChanged: (final value) {

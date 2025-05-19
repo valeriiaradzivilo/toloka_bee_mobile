@@ -153,7 +153,7 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
       await _volunteerWorkDataSource.cancelHelping(id);
       await _fcmDataSource.sendRequestUpdateNotification(
         id,
-        ERequestUpdate.canceledByVolunteer,
+        ERequestUpdate.cancelledByVolunteer,
       );
       await _fcmDataSource.unsubscribeFromRequestUpdates(id);
 
