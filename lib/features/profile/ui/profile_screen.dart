@@ -53,8 +53,6 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
     MainApp.routeObserver.unsubscribe(this);
     super.dispose();
   }
-  //TODO: Додай редагування фото
-  //TODO: After the user is deleted, the app should close all active requests
 
   @override
   void didPopNext() {

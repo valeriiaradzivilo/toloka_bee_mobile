@@ -19,6 +19,7 @@ import '../../../data/usecase/contacts/update_contacts_usecase.dart';
 import '../../../data/usecase/requests/get_requests_by_ids_usecase.dart';
 import '../../../data/usecase/requests/get_requests_by_user_id_usecase.dart';
 import '../../../data/usecase/user_management/delete_user_usecase.dart';
+import '../../../data/usecase/user_management/get_current_user_data_usecase.dart';
 import '../../../data/usecase/user_management/update_user_usecase.dart';
 import '../../../data/usecase/volunteer_work/get_volunteer_work_by_user_id_usecase.dart';
 import 'profile_state.dart';
@@ -35,6 +36,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         _getRequestsByIdsUsecase = getIt<GetRequestsByIdsUsecase>(),
         _snackbarService = getIt<SnackbarService>(),
         _deleteUserUsecase = getIt<DeleteUserUsecase>(),
+        _getCurrentUserDataUsecase = getIt<GetCurrentUserDataUsecase>(),
         super(const ProfileLoading());
 
   final UpdateUserUsecase _updateUserUsecase;
@@ -45,6 +47,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   final GetVolunteerWorksByUserIdUsecase _getVolunteerWorksByUserIdUsecase;
   final GetRequestsByIdsUsecase _getRequestsByIdsUsecase;
   final DeleteUserUsecase _deleteUserUsecase;
+  final GetCurrentUserDataUsecase _getCurrentUserDataUsecase;
 
   final SnackbarService _snackbarService;
 
@@ -52,63 +55,75 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   UserAuthModel get currentUser => _currentUser;
 
-  void loadUser(final UserAuthModel user) async {
-    _currentUser = user;
-    final result = await _getRequestsByUserIdUsecase.call(user.id);
+  void loadUser(final UserAuthModel userStart) async {
+    _currentUser = userStart;
 
-    await result.fold(
-      (final failure) async => emit(
-        ProfileLoaded(
-          user: user,
-          requests: [],
-          volunteerWorks: [],
-          contactInfo: null,
-        ),
-      ),
-      (final requests) async {
-        final contactsResult = await _getContactByUserIdUsecase.call(user.id);
-        final worksResult =
-            await _getVolunteerWorksByUserIdUsecase.call(user.id);
+    final currentUserResult = await _getCurrentUserDataUsecase.call();
 
-        await contactsResult.fold(
-          (final failure) async => emit(
-            const ProfileError('Unable to load contacts'),
+    await currentUserResult.fold((final failure) async {
+      emit(
+        const ProfileError('Unable to load user data'),
+      );
+      return;
+    }, (final user) async {
+      final result = await _getRequestsByUserIdUsecase.call(userStart.id);
+
+      await result.fold(
+        (final failure) async => emit(
+          ProfileLoaded(
+            user: userStart,
+            requests: [],
+            volunteerWorks: [],
+            contactInfo: null,
           ),
-          (final contactInfo) async {
-            await worksResult.fold(
-              (final failure) async => emit(
-                const ProfileError('Unable to load volunteer works'),
-              ),
-              (final works) async {
-                final workRequestsResult = await _getRequestsByIdsUsecase.call(
-                  works.map((final work) => work.requestId).toList(),
-                );
+        ),
+        (final requests) async {
+          final contactsResult =
+              await _getContactByUserIdUsecase.call(userStart.id);
+          final worksResult =
+              await _getVolunteerWorksByUserIdUsecase.call(userStart.id);
 
-                workRequestsResult.fold(
-                  (final failure) => emit(
-                    const ProfileError('Unable to load volunteer works'),
-                  ),
-                  (final workRequests) {
-                    workRequests.sort(
-                      (final a, final b) => a.status.compareTo(b.status),
-                    );
+          await contactsResult.fold(
+            (final failure) async => emit(
+              const ProfileError('Unable to load contacts'),
+            ),
+            (final contactInfo) async {
+              await worksResult.fold(
+                (final failure) async => emit(
+                  const ProfileError('Unable to load volunteer works'),
+                ),
+                (final works) async {
+                  final workRequestsResult =
+                      await _getRequestsByIdsUsecase.call(
+                    works.map((final work) => work.requestId).toList(),
+                  );
 
-                    emit(
-                      ProfileLoaded(
-                        user: user,
-                        requests: requests,
-                        volunteerWorks: workRequests,
-                        contactInfo: contactInfo,
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          },
-        );
-      },
-    );
+                  workRequestsResult.fold(
+                    (final failure) => emit(
+                      const ProfileError('Unable to load volunteer works'),
+                    ),
+                    (final workRequests) {
+                      workRequests.sort(
+                        (final a, final b) => a.status.compareTo(b.status),
+                      );
+
+                      emit(
+                        ProfileLoaded(
+                          user: user,
+                          requests: requests,
+                          volunteerWorks: workRequests,
+                          contactInfo: contactInfo,
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          );
+        },
+      );
+    });
   }
 
   void setAbout(final String about) {
@@ -176,6 +191,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
     final currentState = state as ProfileUpdating;
     emit(const ProfileLoading());
+
     final result = await _updateUserUsecase.call(currentState);
     result.fold(
       (final failure) => emit(

@@ -273,6 +273,13 @@ class UserBloc extends TolokaBloc {
     }
   }
 
+  void updateUser() async {
+    final user = await _getCurrentUserDataUsecase.call();
+    user.fold((final _) {}, (final user) {
+      _user.add(OptionalValue(user));
+    });
+  }
+
   final LoginUserUsecase _loginUserUsecase;
   final GetCurrentUserDataUsecase _getCurrentUserDataUsecase;
   final GetRequestsByUserIdUsecase _getRequestsByUserIdUsecase;

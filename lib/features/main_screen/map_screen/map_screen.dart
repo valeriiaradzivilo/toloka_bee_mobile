@@ -17,6 +17,7 @@ import '../../authentication/bloc/user_bloc.dart';
 import '../../give_hand/bloc/give_hand_bloc.dart';
 import '../../give_hand/bloc/give_hand_event.dart';
 import '../../give_hand/ui/give_hand_screen.dart';
+import '../../main_app/main_app.dart';
 import '../../request_hand/bloc/create_request_bloc.dart';
 import '../../request_hand/bloc/create_request_event.dart';
 import '../../request_hand/ui/request_hand_screen.dart';
@@ -119,8 +120,36 @@ class MapScreen extends StatelessWidget {
   }
 }
 
-class _BottomSheet extends StatelessWidget {
+class _BottomSheet extends StatefulWidget {
   const _BottomSheet();
+
+  @override
+  State<_BottomSheet> createState() => _BottomSheetState();
+}
+
+class _BottomSheetState extends State<_BottomSheet> with RouteAware {
+  @override
+  void initState() {
+    context.read<UserBloc>().updateUser();
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    MainApp.routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    MainApp.routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    context.read<UserBloc>().updateUser();
+  }
 
   @override
   Widget build(final BuildContext context) => ReactWidget(

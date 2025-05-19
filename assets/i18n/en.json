@@ -110,7 +110,8 @@
             "old_password": "Old Password",
             "new_password": "New Password",
             "save": "Save changes",
-            "position": "Who do you want to be?"
+            "position": "Who do you want to be?",
+            "success": "Profile updated successfully."
         },
         "requests": "Your requests:",
         "contacts": {
