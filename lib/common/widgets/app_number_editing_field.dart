@@ -46,7 +46,7 @@ class _AppNumberEditingFieldState extends State<AppNumberEditingField> {
           if (parsed == null) {
             return translate('validation.error.field.not.number');
           }
-          if (widget.minValue != null && parsed <= widget.minValue!) {
+          if (widget.minValue != null && parsed < widget.minValue!) {
             return translate(
               'validation.error.field.min.value',
               args: {
