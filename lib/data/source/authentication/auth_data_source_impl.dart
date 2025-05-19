@@ -206,4 +206,19 @@ class AuthDataSourceImpl implements AuthDataSource {
       throw Exception('User is not logged in');
     }
   }
+
+  @override
+  Future<void> changeImage(final String image) async {
+    final response = await _dio.put(
+      '$_basePath/update-photo',
+      data: {
+        'photo': image,
+        'userId': _auth.currentUser?.uid,
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to change image: ${response.statusCode}');
+    }
+  }
 }

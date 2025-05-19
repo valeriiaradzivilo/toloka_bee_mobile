@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/scheduler.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../common/widgets/toloka_snackbar.dart';
 import '../../features/main_app/main_app.dart';
@@ -10,7 +11,9 @@ class SnackbarService {
   SnackbarService._internal() {
     _popupController = StreamController<PopupModel>.broadcast();
 
-    popupStream.listen((final data) {
+    popupStream
+        .debounceTime(const Duration(milliseconds: 100))
+        .listen((final data) {
       SchedulerBinding.instance.addPostFrameCallback((final _) {
         TolokaSnackbar.show(
           MainApp.navigatorKey.currentState!.context,

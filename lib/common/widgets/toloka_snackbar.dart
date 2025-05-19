@@ -22,12 +22,13 @@ class TolokaSnackbar {
 
     const height = 100.0;
     const spacing = 8.0;
-    final bottomInsets = MediaQuery.of(context).viewInsets.bottom;
 
     late final OverlayEntry entry;
     entry = OverlayEntry(
       builder: (final ctx) => Positioned(
-        bottom: 16 + index * (height + spacing) + bottomInsets,
+        bottom: 16 +
+            index * (height + spacing) +
+            MediaQuery.of(context).viewInsets.bottom,
         left: 16,
         right: 16,
         child: Dismissible(

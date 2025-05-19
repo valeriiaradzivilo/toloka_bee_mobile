@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../data/models/contact_info_model.dart';
@@ -281,6 +285,28 @@ class ProfileCubit extends Cubit<ProfileState> {
             ),
           );
         },
+      );
+    }
+  }
+
+  void pickImage() async {
+    if (state case final ProfileLoaded currentState) {
+      final picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.camera);
+      if (image == null) {
+        return;
+      }
+      final bytes = await image.readAsBytes();
+      final contentType = lookupMimeType(image.name) ?? '';
+
+      final base = base64Encode(bytes);
+      emit(
+        currentState.copyWith(
+          user: currentState.user.copyWith(
+            photo: base,
+            photoFormat: contentType,
+          ),
+        ),
       );
     }
   }

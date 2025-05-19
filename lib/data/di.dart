@@ -58,6 +58,7 @@ import 'usecase/user_management/get_user_by_id_usecase.dart';
 import 'usecase/user_management/login_user_usecase.dart';
 import 'usecase/user_management/logout_user_usecase.dart';
 import 'usecase/user_management/register_user_usecase.dart';
+import 'usecase/user_management/update_user_image_usecase.dart';
 import 'usecase/user_management/update_user_usecase.dart';
 import 'usecase/volunteer_work/confirm_volunteer_work_by_requester_usecase.dart';
 import 'usecase/volunteer_work/confirm_volunteer_work_by_volunteer_usecase.dart';
@@ -240,5 +241,8 @@ Future<void> initUseCases() async {
   );
   serviceLocator.registerLazySingleton<BlockUserForeverUsecase>(
     () => BlockUserForeverUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<UpdateUserImageUsecase>(
+    () => UpdateUserImageUsecase(serviceLocator()),
   );
 }

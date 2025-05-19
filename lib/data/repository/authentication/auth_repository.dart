@@ -13,4 +13,5 @@ abstract class AuthRepository {
   Future<Either<Fail, void>> logout();
   Future<Either<Fail, void>> updateUser(final ProfileUpdating user);
   Future<Either<Fail, void>> deleteUser(final String userId);
+  Future<Either<Fail, void>> changeImage(final String image);
 }

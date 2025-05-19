@@ -17,4 +17,6 @@ abstract class AuthDataSource {
   Future<void> updateUser(final ProfileUpdating user);
 
   Future<void> deleteUser(final String userId);
+
+  Future<void> changeImage(final String image);
 }

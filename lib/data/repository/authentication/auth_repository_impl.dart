@@ -69,4 +69,14 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(Fail('Failed to delete user'));
     }
   }
+
+  @override
+  Future<Either<Fail, void>> changeImage(final String image) async {
+    try {
+      return Right(_authDataSource.changeImage(image));
+    } catch (e) {
+      logger.severe('Failed to change image: $e');
+      return Left(Fail('Failed to change image'));
+    }
+  }
 }

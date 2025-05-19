@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -21,6 +23,8 @@ class ProfileEditScreen extends StatelessWidget {
             final current = context.read<ProfileCubit>().currentUser;
             String selectedPosition = current.position;
 
+            final _ = state as ProfileUpdating;
+
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,6 +45,56 @@ class ProfileEditScreen extends StatelessWidget {
                         style: TolokaFonts.big.style,
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: GestureDetector(
+                      onTap: () => context.read<ProfileCubit>().pickImage(),
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: Builder(
+                              builder: (final context) {
+                                try {
+                                  final bytes = base64Decode(state.user.photo);
+                                  return Image.memory(
+                                    key: UniqueKey(),
+                                    bytes,
+                                    fit: BoxFit.scaleDown,
+                                    errorBuilder:
+                                        (final _, final __, final ___) =>
+                                            const Icon(Icons.person, size: 75),
+                                  );
+                                } catch (_) {
+                                  return const Icon(Icons.person, size: 75);
+                                }
+                              },
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: MediaQuery.of(context).size.width / 2 - 75,
+                            child: IconButton(
+                              onPressed: () =>
+                                  context.read<ProfileCubit>().pickImage(),
+                              style: Theme.of(context)
+                                  .iconButtonTheme
+                                  .style!
+                                  .copyWith(
+                                    backgroundColor: WidgetStateProperty.all(
+                                      Colors.white,
+                                    ),
+                                  ),
+                              icon: const Icon(
+                                Icons.edit,
+                                color: TolokaColor.primary,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   TextFormField(
                     initialValue: current.name,
@@ -102,8 +156,7 @@ class ProfileEditScreen extends StatelessWidget {
                     height: 24,
                   ),
                   ElevatedButton(
-                    onPressed: state is ProfileUpdating &&
-                            state.changedUser.about.isNotEmpty &&
+                    onPressed: state.changedUser.about.isNotEmpty &&
                             state.changedUser.name.isNotEmpty &&
                             state.changedUser.surname.isNotEmpty &&
                             selectedPosition.isNotEmpty
