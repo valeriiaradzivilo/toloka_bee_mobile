@@ -28,7 +28,7 @@ class MainWrapperWidget extends StatelessWidget {
       child: Material(
         child: Stack(
           children: [
-            if (child != null) child!,
+            if (child != null) child ?? const CircularProgressIndicator(),
             Align(
               alignment: Alignment.topRight,
               child: Row(
@@ -43,7 +43,8 @@ class MainWrapperWidget extends StatelessWidget {
                           isScrollControlled: true,
                           useSafeArea: true,
                           showDragHandle: true,
-                          context: MainApp.navigatorKey.currentState!.context,
+                          context: MainApp.navigatorKey.currentState?.context ??
+                              context,
                           builder: (final context) => BlocProvider(
                             create: (final context) =>
                                 ComplaintsAdminBloc(GetIt.I)
@@ -81,7 +82,7 @@ class MainWrapperWidget extends StatelessWidget {
                   IconButton(
                     icon: const AppIcon(),
                     onPressed: () => _showLanguageDialog(
-                      MainApp.navigatorKey.currentState!.context,
+                      MainApp.navigatorKey.currentState?.context ?? context,
                     ),
                   ),
                 ],

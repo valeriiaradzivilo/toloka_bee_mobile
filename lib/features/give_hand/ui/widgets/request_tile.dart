@@ -101,7 +101,7 @@ class RequestTile extends StatelessWidget {
                                 style: TolokaFonts.tiny.style,
                                 overflow: TextOverflow.clip,
                               ),
-                            if (distance != null)
+                            if (distance != null && !request.isRemote)
                               Text(
                                 '\u2981 ${translate(
                                   'give.hand.distance',

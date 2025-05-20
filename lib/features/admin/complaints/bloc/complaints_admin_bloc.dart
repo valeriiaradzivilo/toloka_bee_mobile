@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../data/models/ui/e_popup_type.dart';
+import '../../../../data/models/ui/popup_model.dart';
+import '../../../../data/service/snackbar_service.dart';
 import '../../../../data/usecase/complaints/block_user_forever_usecase.dart';
 import '../../../../data/usecase/complaints/block_user_usecase.dart';
 import '../../../../data/usecase/complaints/delete_request_complaint_usecase.dart';
@@ -17,6 +21,7 @@ class ComplaintsAdminBloc
   final DeleteRequestComplaintUsecase _deleteRequestUsecase;
   final BlockUserForeverUsecase _blockUserForeverUsecase;
   final BlockUserUsecase _blockUserUsecase;
+  final SnackbarService _snackbarService;
 
   ComplaintsAdminBloc(
     final GetIt locator,
@@ -27,6 +32,7 @@ class ComplaintsAdminBloc
         _deleteRequestUsecase = locator<DeleteRequestComplaintUsecase>(),
         _blockUserForeverUsecase = locator<BlockUserForeverUsecase>(),
         _blockUserUsecase = locator<BlockUserUsecase>(),
+        _snackbarService = locator<SnackbarService>(),
         super(const ComplaintsAdminLoading()) {
     on<GetComplaintsAdminEvent>(_onLoadRequestComplaints);
     on<DeleteRequestEvent>(_onDeleteRequest);
@@ -108,6 +114,14 @@ class ComplaintsAdminBloc
         requestComplaints: requests,
       ),
     );
+    _snackbarService.show(
+      PopupModel(
+        title: translate(
+          'admin.snackbar.request_deleted',
+        ),
+        type: EPopupType.success,
+      ),
+    );
   }
 
   Future<void> _onBlockUserForever(
@@ -129,6 +143,15 @@ class ComplaintsAdminBloc
       emit(const ComplaintsAdminError('Failed to block user'));
       return;
     }
+
+    _snackbarService.show(
+      PopupModel(
+        title: translate(
+          'admin.snackbar.user_blocked',
+        ),
+        type: EPopupType.success,
+      ),
+    );
   }
 
   Future<void> _onBlockUser(
@@ -153,5 +176,14 @@ class ComplaintsAdminBloc
       emit(const ComplaintsAdminError('Failed to block user'));
       return;
     }
+
+    _snackbarService.show(
+      PopupModel(
+        title: translate(
+          'admin.snackbar.user_blocked',
+        ),
+        type: EPopupType.success,
+      ),
+    );
   }
 }

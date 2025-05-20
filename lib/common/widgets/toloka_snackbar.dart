@@ -13,6 +13,8 @@ class TolokaSnackbar {
     final overlayState = MainApp.navigatorKey.currentState?.overlay;
     if (overlayState == null) return;
 
+    final bottom = MediaQuery.of(overlayState.context).viewInsets.bottom;
+
     final index = _entries.length;
 
     if (index >= 5) {
@@ -26,9 +28,7 @@ class TolokaSnackbar {
     late final OverlayEntry entry;
     entry = OverlayEntry(
       builder: (final ctx) => Positioned(
-        bottom: 16 +
-            index * (height + spacing) +
-            MediaQuery.of(context).viewInsets.bottom,
+        bottom: 16 + index * (height + spacing) + bottom,
         left: 16,
         right: 16,
         child: Dismissible(

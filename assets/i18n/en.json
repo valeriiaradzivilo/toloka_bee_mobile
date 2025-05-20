@@ -390,6 +390,11 @@
             "delete_request_and_block_user": "Delete request and block user",
             "open_user_profile": "Open user profile",
             "open_request": "Open request"
+        },
+        "snackbar": {
+            "user_blocked": "User blocked successfully.",
+            "request_deleted": "Request deleted successfully.",
+            "user_blocked_and_request_deleted": "User blocked and request deleted successfully."
         }
     },
     "position": {

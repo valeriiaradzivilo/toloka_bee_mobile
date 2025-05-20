@@ -175,7 +175,7 @@ class _UserComplaintCardState extends State<_UserComplaintCard> {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (final context) => AlertDialog(
+                        builder: (final ctx) => AlertDialog(
                           title: Text(translate('admin.complaint.block_user')),
                           content: Text(
                             translate('admin.complaint.block_user_message'),
@@ -183,19 +183,19 @@ class _UserComplaintCardState extends State<_UserComplaintCard> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).pop();
+                                Navigator.of(ctx).pop();
                               },
                               child: Text(translate('common.cancel')),
                             ),
                             TextButton(
                               onPressed: () async {
                                 final blockUntil = await showDatePicker(
-                                  context: context,
+                                  context: ctx,
                                   firstDate: DateTime.now().add(
                                     const Duration(days: 1),
                                   ),
                                   lastDate: DateTime.now().add(
-                                    const Duration(days: 50000),
+                                    const Duration(days: 100000),
                                   ),
                                 );
                                 if (blockUntil == null) {
@@ -210,7 +210,7 @@ class _UserComplaintCardState extends State<_UserComplaintCard> {
                                         ),
                                       );
 
-                                  Navigator.of(context).pop();
+                                  Navigator.of(ctx).pop();
                                 }
                               },
                               child: Text(translate('common.confirm')),
