@@ -187,7 +187,7 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (final context) => AlertDialog(
+                        builder: (final ctx) => AlertDialog(
                           title: Text(
                             translate('admin.complaint.delete_complaint'),
                           ),

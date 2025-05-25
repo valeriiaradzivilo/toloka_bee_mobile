@@ -9,6 +9,8 @@ import '../../../../data/service/snackbar_service.dart';
 import '../../../../data/usecase/complaints/block_user_forever_usecase.dart';
 import '../../../../data/usecase/complaints/block_user_usecase.dart';
 import '../../../../data/usecase/complaints/delete_request_and_complaints_usecase.dart';
+import '../../../../data/usecase/complaints/delete_request_complaint_usecase.dart';
+import '../../../../data/usecase/complaints/delete_user_complaint_usecase.dart';
 import '../../../../data/usecase/complaints/get_request_complaints_grouped_usecase.dart';
 import '../../../../data/usecase/complaints/get_user_complaints_grouped_usecase.dart';
 import 'complaints_admin_event.dart';
@@ -18,9 +20,12 @@ class ComplaintsAdminBloc
     extends Bloc<ComplaintsAdminEvent, ComplaintsAdminState> {
   final GetRequestComplaintsGroupedUsecase _getRequestComplaintsGroupedUsecase;
   final GetUserComplaintsGroupedUsecase _getUserComplaintsGroupedUsecase;
-  final DeleteRequestAndComplaintsUsecase _deleteRequestUsecase;
+  final DeleteRequestAndComplaintsUsecase _deleteRequestAndComplaintsUsecase;
   final BlockUserForeverUsecase _blockUserForeverUsecase;
   final BlockUserUsecase _blockUserUsecase;
+
+  final DeleteRequestComplaintUsecase _deleteRequestComplaintUsecase;
+  final DeleteUserComplaintUsecase _deleteUserComplaintUsecase;
   final SnackbarService _snackbarService;
 
   ComplaintsAdminBloc(
@@ -29,15 +34,22 @@ class ComplaintsAdminBloc
             locator<GetRequestComplaintsGroupedUsecase>(),
         _getUserComplaintsGroupedUsecase =
             locator<GetUserComplaintsGroupedUsecase>(),
-        _deleteRequestUsecase = locator<DeleteRequestAndComplaintsUsecase>(),
+        _deleteRequestAndComplaintsUsecase =
+            locator<DeleteRequestAndComplaintsUsecase>(),
         _blockUserForeverUsecase = locator<BlockUserForeverUsecase>(),
         _blockUserUsecase = locator<BlockUserUsecase>(),
+        _deleteRequestComplaintUsecase =
+            locator<DeleteRequestComplaintUsecase>(),
+        _deleteUserComplaintUsecase = locator<DeleteUserComplaintUsecase>(),
         _snackbarService = locator<SnackbarService>(),
         super(const ComplaintsAdminLoading()) {
     on<GetComplaintsAdminEvent>(_onLoadRequestComplaints);
     on<DeleteRequestEvent>(_onDeleteRequest);
     on<BlockUserForeverEvent>(_onBlockUserForever);
     on<BlockUserEvent>(_onBlockUser);
+    on<DeleteRequestAndBlockUserEvent>(_onDeleteRequestAndBlockUser);
+    on<DeleteUserComplaintEvent>(_onDeleteUserComplaint);
+    on<DeleteRequestComplaintEvent>(_onDeleteRequestComplaint);
   }
 
   Future<void> _onLoadRequestComplaints(
@@ -91,7 +103,7 @@ class ComplaintsAdminBloc
       return;
     }
 
-    final resultRequests = await _deleteRequestUsecase(
+    final resultRequests = await _deleteRequestAndComplaintsUsecase(
       DeleteRequestUsecaseParams(
         complaintId: event.complaintIds,
         requestId: event.requestId,
@@ -185,5 +197,107 @@ class ComplaintsAdminBloc
         type: EPopupType.success,
       ),
     );
+  }
+
+  Future<void> _onDeleteRequestAndBlockUser(
+    final DeleteRequestAndBlockUserEvent event,
+    final Emitter<ComplaintsAdminState> emit,
+  ) async {
+    emit(const ComplaintsAdminLoading());
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      emit(const ComplaintsAdminError('User not authenticated'));
+      return;
+    }
+
+    final result = await _deleteRequestAndComplaintsUsecase(
+      DeleteRequestUsecaseParams(
+        complaintId: [],
+        requestId: event.requestId,
+      ),
+    );
+
+    if (result.isLeft()) {
+      emit(const ComplaintsAdminError('Failed to delete request'));
+      return;
+    }
+
+    final blockResult = await _blockUserForeverUsecase(event.requestId);
+
+    if (blockResult.isLeft()) {
+      emit(const ComplaintsAdminError('Failed to block user'));
+      return;
+    }
+
+    _snackbarService.show(
+      PopupModel(
+        title: translate(
+          'admin.snackbar.request_deleted_and_user_blocked',
+        ),
+        type: EPopupType.success,
+      ),
+    );
+  }
+
+  Future<void> _onDeleteUserComplaint(
+    final DeleteUserComplaintEvent event,
+    final Emitter<ComplaintsAdminState> emit,
+  ) async {
+    emit(const ComplaintsAdminLoading());
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      emit(const ComplaintsAdminError('User not authenticated'));
+      return;
+    }
+
+    final result = await _deleteUserComplaintUsecase(
+      event.complaintId,
+    );
+
+    if (result.isLeft()) {
+      emit(const ComplaintsAdminError('Failed to delete user complaint'));
+      return;
+    }
+
+    _snackbarService.show(
+      PopupModel(
+        title: translate(
+          'admin.snackbar.complaint_deleted',
+        ),
+        type: EPopupType.success,
+      ),
+    );
+    add(const GetComplaintsAdminEvent());
+  }
+
+  Future<void> _onDeleteRequestComplaint(
+    final DeleteRequestComplaintEvent event,
+    final Emitter<ComplaintsAdminState> emit,
+  ) async {
+    emit(const ComplaintsAdminLoading());
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      emit(const ComplaintsAdminError('User not authenticated'));
+      return;
+    }
+
+    final result = await _deleteRequestComplaintUsecase(
+      event.complaintId,
+    );
+
+    if (result.isLeft()) {
+      emit(const ComplaintsAdminError('Failed to delete request complaint'));
+      return;
+    }
+
+    _snackbarService.show(
+      PopupModel(
+        title: translate(
+          'admin.snackbar.complaint_deleted',
+        ),
+        type: EPopupType.success,
+      ),
+    );
+    add(const GetComplaintsAdminEvent());
   }
 }
