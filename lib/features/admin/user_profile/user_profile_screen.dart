@@ -79,5 +79,4 @@ class UserProfileScreen extends StatelessWidget {
           return const SizedBox.shrink();
         },
       );
-  //TODO: переглянь чи адмін функції працюють як описано
 }
