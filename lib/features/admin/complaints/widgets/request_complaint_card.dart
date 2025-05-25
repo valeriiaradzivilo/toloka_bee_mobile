@@ -8,6 +8,7 @@ import '../../../../common/theme/toloka_fonts.dart';
 import '../../../../data/models/complaints/request_complaints_group_model.dart';
 import '../bloc/complaints_admin_bloc.dart';
 import '../bloc/complaints_admin_event.dart';
+import 'admin_cancel_button.dart';
 
 class RequestComplaintCard extends StatefulWidget {
   const RequestComplaintCard(this.group, {super.key});
@@ -98,41 +99,24 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
                   ListTile(
                     title: Text(translate('admin.complaint.delete_request')),
                     onTap: () {
-                      showDialog(
+                      showAdminConfirmDialog(
                         context: context,
-                        builder: (final _) => BlocProvider.value(
-                          value: context.read<ComplaintsAdminBloc>(),
-                          child: AlertDialog(
-                            title: Text(
-                              translate('admin.complaint.delete_request'),
-                            ),
-                            content: Text(
-                              translate(
-                                'admin.complaint.delete_request_message',
-                              ),
-                            ),
-                            actions: [
-                              const _CancelButton(),
-                              TextButton(
-                                onPressed: () {
-                                  context.read<ComplaintsAdminBloc>().add(
-                                        DeleteRequestEvent(
-                                          requestId: widget.group.requestId,
-                                          complaintIds: widget.group.complaints
-                                              .map(
-                                                (final complaint) =>
-                                                    complaint.id,
-                                              )
-                                              .toList(),
-                                        ),
-                                      );
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(translate('common.confirm')),
-                              ),
-                            ],
-                          ),
+                        title: translate('admin.complaint.delete_request'),
+                        content: translate(
+                          'admin.complaint.delete_request_message',
                         ),
+                        onConfirm: () {
+                          context.read<ComplaintsAdminBloc>().add(
+                                DeleteRequestEvent(
+                                  requestId: widget.group.requestId,
+                                  complaintIds: widget.group.complaints
+                                      .map(
+                                        (final complaint) => complaint.id,
+                                      )
+                                      .toList(),
+                                ),
+                              );
+                        },
                       );
                     },
                   ),
@@ -143,68 +127,43 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
                       ),
                     ),
                     onTap: () {
-                      showDialog(
+                      showAdminConfirmDialog(
                         context: context,
-                        builder: (final context) => AlertDialog(
-                          title: Text(
-                            translate(
-                              'admin.complaint.delete_request_and_block_user',
-                            ),
-                          ),
-                          content: Text(
-                            translate('admin.complaint.delete_request_message'),
-                          ),
-                          actions: [
-                            const _CancelButton(),
-                            TextButton(
-                              onPressed: () {
-                                context.read<ComplaintsAdminBloc>().add(
-                                      DeleteRequestAndBlockUserEvent(
-                                        widget.group.requestId,
-                                      ),
-                                    );
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.confirm')),
-                            ),
-                          ],
+                        title: translate(
+                          'admin.complaint.delete_request_and_block_user',
                         ),
+                        content:
+                            translate('admin.complaint.delete_request_message'),
+                        onConfirm: () {
+                          context.read<ComplaintsAdminBloc>().add(
+                                DeleteRequestAndBlockUserEvent(
+                                  widget.group.requestId,
+                                ),
+                              );
+                        },
                       );
                     },
                   ),
                   ListTile(
                     title: Text(translate('admin.complaint.delete_complaint')),
                     onTap: () {
-                      showDialog(
+                      showAdminConfirmDialog(
                         context: context,
-                        builder: (final ctx) => AlertDialog(
-                          title: Text(
-                            translate('admin.complaint.delete_complaint'),
-                          ),
-                          content: Text(
-                            translate(
-                              'admin.complaint.delete_complaint_message',
-                            ),
-                          ),
-                          actions: [
-                            const _CancelButton(),
-                            TextButton(
-                              onPressed: () {
-                                context.read<ComplaintsAdminBloc>().add(
-                                      DeleteRequestComplaintEvent(
-                                        complaintId: widget.group.complaints
-                                            .map(
-                                              (final complaint) => complaint.id,
-                                            )
-                                            .toList(),
-                                      ),
-                                    );
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.confirm')),
-                            ),
-                          ],
+                        title: translate('admin.complaint.delete_complaint'),
+                        content: translate(
+                          'admin.complaint.delete_complaint_message',
                         ),
+                        onConfirm: () {
+                          context.read<ComplaintsAdminBloc>().add(
+                                DeleteRequestComplaintEvent(
+                                  complaintId: widget.group.complaints
+                                      .map(
+                                        (final complaint) => complaint.id,
+                                      )
+                                      .toList(),
+                                ),
+                              );
+                        },
                       );
                     },
                   ),
@@ -241,17 +200,5 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
             ],
           ),
         ),
-      );
-}
-
-class _CancelButton extends StatelessWidget {
-  const _CancelButton();
-
-  @override
-  Widget build(final BuildContext context) => TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text(translate('common.cancel')),
       );
 }

@@ -8,6 +8,7 @@ import '../../../../common/theme/toloka_fonts.dart';
 import '../../../../data/models/complaints/user_complaints_group_model.dart';
 import '../bloc/complaints_admin_bloc.dart';
 import '../bloc/complaints_admin_event.dart';
+import 'admin_cancel_button.dart';
 
 class UserComplaintCard extends StatefulWidget {
   const UserComplaintCard(this.group, {super.key});
@@ -106,7 +107,7 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
                             translate('admin.complaint.block_user_message'),
                           ),
                           actions: [
-                            const _CancelButton(),
+                            const AdminCancelButton(),
                             TextButton(
                               onPressed: () async {
                                 final blockUntil = await showDatePicker(
@@ -144,32 +145,19 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
                     title:
                         Text(translate('admin.complaint.block_user_forever')),
                     onTap: () {
-                      showDialog(
+                      showAdminConfirmDialog(
                         context: context,
-                        builder: (final context) => AlertDialog(
-                          title: Text(
-                            translate('admin.complaint.block_user_forever'),
-                          ),
-                          content: Text(
-                            translate(
-                              'admin.complaint.block_user_message',
-                            ),
-                          ),
-                          actions: [
-                            const _CancelButton(),
-                            TextButton(
-                              onPressed: () {
-                                context.read<ComplaintsAdminBloc>().add(
-                                      BlockUserForeverEvent(
-                                        widget.group.reportedUserId,
-                                      ),
-                                    );
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.confirm')),
-                            ),
-                          ],
+                        title: translate('admin.complaint.block_user_forever'),
+                        content: translate(
+                          'admin.complaint.block_user_message',
                         ),
+                        onConfirm: () {
+                          context.read<ComplaintsAdminBloc>().add(
+                                BlockUserForeverEvent(
+                                  widget.group.reportedUserId,
+                                ),
+                              );
+                        },
                       );
                     },
                   ),
@@ -188,7 +176,7 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
                             ),
                           ),
                           actions: [
-                            const _CancelButton(),
+                            const AdminCancelButton(),
                             TextButton(
                               onPressed: () {
                                 context.read<ComplaintsAdminBloc>().add(
@@ -242,17 +230,5 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
             ],
           ),
         ),
-      );
-}
-
-class _CancelButton extends StatelessWidget {
-  const _CancelButton();
-
-  @override
-  Widget build(final BuildContext context) => TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text(translate('common.cancel')),
       );
 }
