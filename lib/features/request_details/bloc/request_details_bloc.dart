@@ -10,11 +10,11 @@ import 'package:get_it/get_it.dart';
 import '../../../common/exceptions/request_already_accepted_exception.dart';
 import '../../../common/exceptions/request_expired_exception.dart';
 import '../../../common/list_extension.dart';
-import '../../../data/models/request_complaint_model.dart';
+import '../../../data/models/complaints/request_complaint_model.dart';
+import '../../../data/models/complaints/user_complaint_model.dart';
 import '../../../data/models/ui/e_popup_type.dart';
 import '../../../data/models/ui/popup_model.dart';
 import '../../../data/models/user_auth_model.dart';
-import '../../../data/models/user_complaint_model.dart';
 import '../../../data/models/volunteer_work_model.dart';
 import '../../../data/service/snackbar_service.dart';
 import '../../../data/usecase/complaints/report_request_usecase.dart';
@@ -303,6 +303,7 @@ class RequestDetailsBloc
   ) async {
     final result = await _reportUserUsecase(
       UserComplaintModel(
+        id: '',
         reportedUserId: event.userId,
         reporterUserId: FirebaseAuth.instance.currentUser?.uid ?? '',
         reason: event.message,

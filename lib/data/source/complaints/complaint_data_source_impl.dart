@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_logger/simple_logger.dart';
 
-import '../../models/request_complaint_model.dart';
-import '../../models/request_complaints_group_model.dart';
-import '../../models/user_complaint_model.dart';
-import '../../models/user_complaints_group_model.dart';
+import '../../models/complaints/request_complaint_model.dart';
+import '../../models/complaints/request_complaints_group_model.dart';
+import '../../models/complaints/user_complaint_model.dart';
+import '../../models/complaints/user_complaints_group_model.dart';
 import 'complaint_data_source.dart';
 
 class ComplaintDataSourceImpl implements ComplaintDataSource {
@@ -87,9 +87,6 @@ class ComplaintDataSourceImpl implements ComplaintDataSource {
   ) async {
     await _dio.delete(
       '/admin/complaints/delete-request/$complaintId',
-      data: {
-        'adminUserId': FirebaseAuth.instance.currentUser?.uid,
-      },
     );
   }
 
@@ -99,9 +96,6 @@ class ComplaintDataSourceImpl implements ComplaintDataSource {
   ) async {
     await _dio.delete(
       '/admin/complaints/delete-user/$complaintId',
-      data: {
-        'adminUserId': FirebaseAuth.instance.currentUser?.uid,
-      },
     );
   }
 

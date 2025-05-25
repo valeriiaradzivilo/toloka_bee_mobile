@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_logger/simple_logger.dart';
@@ -93,8 +92,15 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<String> getFirebaseMessagingAccessToken() async {
-    final jsonString =
-        await rootBundle.loadString('assets/serviceAccount.json');
+    final tokenResult = await _dio.get(
+      '$_basePath/token',
+    );
+    if (tokenResult.statusCode != 200) {
+      throw Exception('Failed to get Firebase Messaging access token');
+    }
+
+    final jsonString = tokenResult.data as String;
+
     final Map<String, dynamic> serviceJson = json.decode(jsonString);
 
     final credentials = ServiceAccountCredentials.fromJson(serviceJson);

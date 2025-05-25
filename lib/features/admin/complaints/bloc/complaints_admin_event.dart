@@ -35,3 +35,17 @@ class DeleteRequestAndBlockUserEvent extends ComplaintsAdminEvent {
   );
   final String requestId;
 }
+
+class DeleteUserComplaintEvent extends ComplaintsAdminEvent {
+  const DeleteUserComplaintEvent({
+    required this.complaintId,
+  });
+  final List<String> complaintId;
+}
+
+class DeleteRequestComplaintEvent extends ComplaintsAdminEvent {
+  const DeleteRequestComplaintEvent({
+    required this.complaintId,
+  });
+  final List<String> complaintId;
+}

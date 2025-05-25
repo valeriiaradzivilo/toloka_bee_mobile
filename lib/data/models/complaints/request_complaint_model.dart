@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part '../../generated/data/models/request_complaint_model.freezed.dart';
-part '../../generated/data/models/request_complaint_model.g.dart';
+part '../../../generated/data/models/complaints/request_complaint_model.freezed.dart';
+part '../../../generated/data/models/complaints/request_complaint_model.g.dart';
 
 @freezed
 class RequestComplaintModel with _$RequestComplaintModel {
   factory RequestComplaintModel({
+    @JsonKey(includeFromJson: true, includeToJson: false)
     required final String id,
     required final String reporterUserId,
     required final String requestId,

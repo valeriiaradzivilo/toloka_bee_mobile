@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../models/request_complaint_model.dart';
+import '../../models/complaints/request_complaint_model.dart';
 import '../../repository/complaints/complaint_repository.dart';
 import '../usecase.dart';
 

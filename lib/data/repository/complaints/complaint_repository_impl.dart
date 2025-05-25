@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:simple_logger/simple_logger.dart';
 
-import '../../models/request_complaint_model.dart';
-import '../../models/request_complaints_group_model.dart';
-import '../../models/user_complaint_model.dart';
-import '../../models/user_complaints_group_model.dart';
+import '../../models/complaints/request_complaint_model.dart';
+import '../../models/complaints/request_complaints_group_model.dart';
+import '../../models/complaints/user_complaint_model.dart';
+import '../../models/complaints/user_complaints_group_model.dart';
 import '../../source/complaints/complaint_data_source.dart';
 import 'complaint_repository.dart';
 

@@ -389,7 +389,9 @@
             "delete_request_message": "Are you sure you want to delete this request? This action cannot be undone.",
             "delete_request_and_block_user": "Delete request and block user",
             "open_user_profile": "Open user profile",
-            "open_request": "Open request"
+            "open_request": "Open request",
+            "delete_complaint": "Delete complaint",
+            "delete_complaint_message": "Are you sure you want to delete this complaint? This action cannot be undone."
         },
         "snackbar": {
             "user_blocked": "User blocked successfully.",

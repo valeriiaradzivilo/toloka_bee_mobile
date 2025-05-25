@@ -8,7 +8,7 @@ import '../../../../data/models/ui/popup_model.dart';
 import '../../../../data/service/snackbar_service.dart';
 import '../../../../data/usecase/complaints/block_user_forever_usecase.dart';
 import '../../../../data/usecase/complaints/block_user_usecase.dart';
-import '../../../../data/usecase/complaints/delete_request_complaint_usecase.dart';
+import '../../../../data/usecase/complaints/delete_request_and_complaints_usecase.dart';
 import '../../../../data/usecase/complaints/get_request_complaints_grouped_usecase.dart';
 import '../../../../data/usecase/complaints/get_user_complaints_grouped_usecase.dart';
 import 'complaints_admin_event.dart';
@@ -18,7 +18,7 @@ class ComplaintsAdminBloc
     extends Bloc<ComplaintsAdminEvent, ComplaintsAdminState> {
   final GetRequestComplaintsGroupedUsecase _getRequestComplaintsGroupedUsecase;
   final GetUserComplaintsGroupedUsecase _getUserComplaintsGroupedUsecase;
-  final DeleteRequestComplaintUsecase _deleteRequestUsecase;
+  final DeleteRequestAndComplaintsUsecase _deleteRequestUsecase;
   final BlockUserForeverUsecase _blockUserForeverUsecase;
   final BlockUserUsecase _blockUserUsecase;
   final SnackbarService _snackbarService;
@@ -29,7 +29,7 @@ class ComplaintsAdminBloc
             locator<GetRequestComplaintsGroupedUsecase>(),
         _getUserComplaintsGroupedUsecase =
             locator<GetUserComplaintsGroupedUsecase>(),
-        _deleteRequestUsecase = locator<DeleteRequestComplaintUsecase>(),
+        _deleteRequestUsecase = locator<DeleteRequestAndComplaintsUsecase>(),
         _blockUserForeverUsecase = locator<BlockUserForeverUsecase>(),
         _blockUserUsecase = locator<BlockUserUsecase>(),
         _snackbarService = locator<SnackbarService>(),

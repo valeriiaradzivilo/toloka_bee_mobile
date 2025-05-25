@@ -32,7 +32,9 @@ import 'source/volunteer_work/volunteer_work_data_source_impl.dart';
 import 'toloka_way_api_interceptor.dart';
 import 'usecase/complaints/block_user_forever_usecase.dart';
 import 'usecase/complaints/block_user_usecase.dart';
+import 'usecase/complaints/delete_request_and_complaints_usecase.dart';
 import 'usecase/complaints/delete_request_complaint_usecase.dart';
+import 'usecase/complaints/delete_user_complaint_usecase.dart';
 import 'usecase/complaints/get_request_complaints_grouped_usecase.dart';
 import 'usecase/complaints/get_user_complaints_grouped_usecase.dart';
 import 'usecase/complaints/report_request_usecase.dart';
@@ -178,8 +180,14 @@ Future<void> initUseCases() async {
   serviceLocator.registerLazySingleton<DeleteUserUsecase>(
     () => DeleteUserUsecase(serviceLocator()),
   );
+  serviceLocator.registerLazySingleton<DeleteRequestAndComplaintsUsecase>(
+    () => DeleteRequestAndComplaintsUsecase(serviceLocator(), serviceLocator()),
+  );
   serviceLocator.registerLazySingleton<DeleteRequestComplaintUsecase>(
-    () => DeleteRequestComplaintUsecase(serviceLocator(), serviceLocator()),
+    () => DeleteRequestComplaintUsecase(serviceLocator()),
+  );
+  serviceLocator.registerLazySingleton<DeleteUserComplaintUsecase>(
+    () => DeleteUserComplaintUsecase(serviceLocator()),
   );
   serviceLocator.registerLazySingleton<AcceptRequestUsecase>(
     () => AcceptRequestUsecase(serviceLocator()),

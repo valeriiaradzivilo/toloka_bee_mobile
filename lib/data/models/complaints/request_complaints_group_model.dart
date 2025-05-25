@@ -2,8 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'request_complaint_model.dart';
 
-part '../../generated/data/models/request_complaints_group_model.freezed.dart';
-part '../../generated/data/models/request_complaints_group_model.g.dart';
+part '../../../generated/data/models/complaints/request_complaints_group_model.freezed.dart';
+part '../../../generated/data/models/complaints/request_complaints_group_model.g.dart';
 
 @freezed
 class RequestComplaintsGroupModel with _$RequestComplaintsGroupModel {

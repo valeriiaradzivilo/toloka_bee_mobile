@@ -3,10 +3,10 @@ import 'package:dartz/dartz.dart';
 import '../../repository/complaints/complaint_repository.dart';
 import '../usecase.dart';
 
-class DeleteRequestComplaintUsecase extends UseCase<Either, List<String>> {
+class DeleteUserComplaintUsecase extends UseCase<Either, List<String>> {
   final ComplaintRepository _complaintRepository;
 
-  DeleteRequestComplaintUsecase(
+  DeleteUserComplaintUsecase(
     this._complaintRepository,
   );
 
@@ -16,7 +16,7 @@ class DeleteRequestComplaintUsecase extends UseCase<Either, List<String>> {
   ) async {
     for (final complaintId in params) {
       final result =
-          await _complaintRepository.deleteRequestComplaint(complaintId);
+          await _complaintRepository.deleteUserComplaint(complaintId);
       if (result.isLeft()) {
         return result;
       }
