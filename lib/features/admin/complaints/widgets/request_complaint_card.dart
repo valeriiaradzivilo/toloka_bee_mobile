@@ -112,12 +112,7 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
                               ),
                             ),
                             actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(translate('common.cancel')),
-                              ),
+                              const _CancelButton(),
                               TextButton(
                                 onPressed: () {
                                   context.read<ComplaintsAdminBloc>().add(
@@ -160,12 +155,7 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
                             translate('admin.complaint.delete_request_message'),
                           ),
                           actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.cancel')),
-                            ),
+                            const _CancelButton(),
                             TextButton(
                               onPressed: () {
                                 context.read<ComplaintsAdminBloc>().add(
@@ -197,12 +187,7 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
                             ),
                           ),
                           actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.cancel')),
-                            ),
+                            const _CancelButton(),
                             TextButton(
                               onPressed: () {
                                 context.read<ComplaintsAdminBloc>().add(
@@ -256,5 +241,17 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
             ],
           ),
         ),
+      );
+}
+
+class _CancelButton extends StatelessWidget {
+  const _CancelButton();
+
+  @override
+  Widget build(final BuildContext context) => TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(translate('common.cancel')),
       );
 }

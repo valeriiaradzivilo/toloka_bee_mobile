@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
+const _validationFieldMustNotBeEmpty = 'validation.error.field.not.empty';
+
 class ValidationConstant {
   static String? email(final String? email, final BuildContext context) {
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
     if (email == null) {
-      return translate('validation.error.field.not.empty');
+      return translate(_validationFieldMustNotBeEmpty);
     } else if (!emailRegExp.hasMatch(email)) {
       return translate('validation.error.email.invalid');
     }
@@ -19,7 +21,7 @@ class ValidationConstant {
     final charactersRegExp = RegExp('[@!]+');
     final forbiddenCharactersRegExp = RegExp('[^!@a-zA-Z\\d]');
     if (password == null) {
-      return translate('validation.error.field.not.empty');
+      return translate(_validationFieldMustNotBeEmpty);
     } else if (password.isEmpty || password.length < 8) {
       return translate('validation.error.password.min.length');
     } else if (!lowercaseRegExp.hasMatch(password)) {
@@ -39,9 +41,9 @@ class ValidationConstant {
 
   static String? name(final String? name, final BuildContext context) {
     if (name == null) {
-      return translate('validation.error.field.not.empty');
+      return translate(_validationFieldMustNotBeEmpty);
     } else if (name.isEmpty) {
-      return translate('validation.error.field.not.empty');
+      return translate(_validationFieldMustNotBeEmpty);
     } else if (name.contains(' ')) {
       return translate('validation.error.name.no.spaces');
     }

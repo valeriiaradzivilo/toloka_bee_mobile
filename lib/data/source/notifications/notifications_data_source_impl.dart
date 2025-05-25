@@ -54,7 +54,7 @@ class NotificationsDataSourceImpl implements NotificationsDataSource {
   Future<void> sendNotification(
     final RequestNotificationModel notification,
   ) async {
-    final postUrl =
+    const postUrl =
         'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
 
     final location = LatLng(notification.latitude, notification.longitude);
@@ -295,7 +295,7 @@ class NotificationsDataSourceImpl implements NotificationsDataSource {
     final ERequestUpdate requestUpdate, {
     final String? additionalData,
   }) async {
-    final postUrl =
+    const postUrl =
         'https://fcm.googleapis.com/v1/projects/zip-way/messages:send';
 
     final title = requestUpdate.text;

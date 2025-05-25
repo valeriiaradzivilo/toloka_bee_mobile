@@ -13,7 +13,7 @@ class TolokaWayApiInterceptor extends Interceptor {
     final RequestInterceptorHandler handler,
   ) async {
     try {
-      final noAuthPaths = '/auth';
+      const noAuthPaths = '/auth';
       final requiresAccessToken = !options.path.contains(noAuthPaths);
 
       final authDataSource = serviceLocator<AuthDataSource>();

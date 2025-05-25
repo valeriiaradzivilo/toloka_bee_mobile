@@ -3,6 +3,8 @@ import 'package:flutter_translate/flutter_translate.dart';
 
 import '../theme/toloka_fonts.dart';
 
+const _oopsErrorOccurred = 'oops.error.occurred';
+
 class ReactWidget<T> extends StatelessWidget {
   const ReactWidget({
     super.key,
@@ -26,7 +28,7 @@ class ReactWidget<T> extends StatelessWidget {
           if (data.hasError) {
             return Center(
               child: Text(
-                translate('oops.error.occurred'),
+                translate(_oopsErrorOccurred),
                 style: TolokaFonts.small.error,
               ),
             );
@@ -65,7 +67,7 @@ class ReactWidget2<T, A> extends StatelessWidget {
           if (data1.hasError) {
             return Center(
               child: Text(
-                translate('oops.error.occurred'),
+                translate(_oopsErrorOccurred),
                 style: TolokaFonts.small.error,
               ),
             );
@@ -107,7 +109,7 @@ class ReactWidget3<T, A, B> extends StatelessWidget {
           if (data1.hasError) {
             return Center(
               child: Text(
-                translate('oops.error.occurred'),
+                translate(_oopsErrorOccurred),
                 style: TolokaFonts.small.error,
               ),
             );
@@ -152,7 +154,7 @@ class ReactWidget4<T, A, B, C> extends StatelessWidget {
           if (data1.hasError) {
             return Center(
               child: Text(
-                translate('oops.error.occurred'),
+                translate(_oopsErrorOccurred),
                 style: TolokaFonts.small.error,
               ),
             );

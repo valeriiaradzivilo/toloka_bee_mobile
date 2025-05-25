@@ -26,6 +26,8 @@ import '../../../data/usecase/user_management/logout_user_usecase.dart';
 import '../../../data/usecase/volunteer_work/get_volunteer_work_by_user_id_usecase.dart';
 import '../../registration/ui/data/e_position.dart';
 
+const _testPassword = 'Lera1234!';
+
 class UserBloc extends TolokaBloc {
   UserBloc(final GetIt locator)
       : _loginUserUsecase = locator<LoginUserUsecase>(),
@@ -145,13 +147,14 @@ class UserBloc extends TolokaBloc {
 
   Future<bool> login(final String username, final String password) async {
     final authResult = switch (username) {
-      'l' when kDebugMode => await _loginUserUsecase('lera@z.com', 'Lera1234!'),
+      'l' when kDebugMode =>
+        await _loginUserUsecase('lera@z.com', _testPassword),
       't' when kDebugMode =>
-        await _loginUserUsecase('test@user.com', 'Lera1234!'),
+        await _loginUserUsecase('test@user.com', _testPassword),
       's' when kDebugMode =>
-        await _loginUserUsecase('sofiia@gmail.com', 'Lera1234!'),
+        await _loginUserUsecase('sofiia@gmail.com', _testPassword),
       'r' when kDebugMode =>
-        await _loginUserUsecase('requester@gmail.com', 'Lera1234!'),
+        await _loginUserUsecase('requester@gmail.com', _testPassword),
       _ => await _loginUserUsecase(username, password),
     };
 

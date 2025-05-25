@@ -106,12 +106,7 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
                             translate('admin.complaint.block_user_message'),
                           ),
                           actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(ctx).pop();
-                              },
-                              child: Text(translate('common.cancel')),
-                            ),
+                            const _CancelButton(),
                             TextButton(
                               onPressed: () async {
                                 final blockUntil = await showDatePicker(
@@ -161,12 +156,7 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
                             ),
                           ),
                           actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.cancel')),
-                            ),
+                            const _CancelButton(),
                             TextButton(
                               onPressed: () {
                                 context.read<ComplaintsAdminBloc>().add(
@@ -198,12 +188,7 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
                             ),
                           ),
                           actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(translate('common.cancel')),
-                            ),
+                            const _CancelButton(),
                             TextButton(
                               onPressed: () {
                                 context.read<ComplaintsAdminBloc>().add(
@@ -257,5 +242,17 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
             ],
           ),
         ),
+      );
+}
+
+class _CancelButton extends StatelessWidget {
+  const _CancelButton();
+
+  @override
+  Widget build(final BuildContext context) => TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(translate('common.cancel')),
       );
 }

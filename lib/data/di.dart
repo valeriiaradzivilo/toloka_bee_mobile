@@ -79,7 +79,7 @@ Future<void> init() async {
 
 Future<void> initDatasources() async {
   ///Android Emulator
-  final backendUrl = 'http://10.0.2.2:8080';
+  const backendUrl = 'http://10.0.2.2:8080';
 
   // final backendUrl = 'http://192.168.0.102:8080';
   final dio = Dio(
