@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:http/http.dart' as http;
 import 'package:simple_logger/simple_logger.dart';
 
 import '../../../common/exceptions/user_blocked_exception.dart';
@@ -99,21 +97,9 @@ class AuthDataSourceImpl implements AuthDataSource {
       throw Exception('Failed to get Firebase Messaging access token');
     }
 
-    final jsonString = tokenResult.data as String;
+    final token = tokenResult.data as String;
 
-    final Map<String, dynamic> serviceJson = json.decode(jsonString);
-
-    final credentials = ServiceAccountCredentials.fromJson(serviceJson);
-
-    final client = http.Client();
-    final accessCredentials = await obtainAccessCredentialsViaServiceAccount(
-      credentials,
-      ['https://www.googleapis.com/auth/firebase.messaging'],
-      client,
-    );
-
-    client.close();
-    return accessCredentials.accessToken.data;
+    return token;
   }
 
   @override

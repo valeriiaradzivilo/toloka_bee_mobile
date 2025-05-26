@@ -6,12 +6,26 @@ import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../common/theme/toloka_color.dart';
 import '../../../common/theme/toloka_fonts.dart';
+import '../../../common/widgets/app_text_editing_field.dart';
 import '../../registration/ui/data/e_position.dart';
 import '../bloc/profile_cubit.dart';
 import '../bloc/profile_state.dart';
 
-class ProfileEditScreen extends StatelessWidget {
+class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
+
+  @override
+  State<ProfileEditScreen> createState() => _ProfileEditScreenState();
+}
+
+class _ProfileEditScreenState extends State<ProfileEditScreen> {
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(final BuildContext context) => Padding(
@@ -143,14 +157,13 @@ class ProfileEditScreen extends StatelessWidget {
                       labelText: translate('profile.edit.old_password'),
                     ),
                     obscureText: true,
-                    onChanged: context.read<ProfileCubit>().setPassword,
+                    onChanged: context.read<ProfileCubit>().setOldPassword,
                   ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: translate('profile.edit.new_password'),
-                    ),
-                    obscureText: true,
+                  AppTextField(
+                    controller: _passwordController,
+                    label: translate('profile.edit.new_password'),
                     onChanged: context.read<ProfileCubit>().setPassword,
+                    option: TextFieldOption.password,
                   ),
                   const SizedBox(
                     height: 24,

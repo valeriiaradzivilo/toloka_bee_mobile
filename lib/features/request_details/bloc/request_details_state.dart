@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../../../common/list_extension.dart';
 import '../../../data/models/contact_info_model.dart';
 import '../../../data/models/request_notification_model.dart';
 import '../../../data/models/user_auth_model.dart';
@@ -43,6 +44,11 @@ final class RequestDetailsLoaded extends RequestDetailsState {
 
   List<String> get allWorksIds =>
       volunteerWorks.map((final e) => e.id).toList();
+
+  VolunteerWorkModel? fromVolunteerId(final String volunteerId) =>
+      volunteerWorks.firstWhereOrNull(
+        (final work) => work.volunteerId == volunteerId,
+      );
 }
 
 final class RequestDetailsError extends RequestDetailsState {

@@ -106,11 +106,9 @@ class __LoadedGiveHandScreenState extends State<_LoadedGiveHandScreen> {
                               onChanged: (final p0) {
                                 final parsed = int.tryParse(p0);
 
-                                if (parsed != null) {
-                                  context.read<GiveHandBloc>().add(
-                                        ChangeRadiusEvent(parsed),
-                                      );
-                                }
+                                context.read<GiveHandBloc>().add(
+                                      ChangeRadiusEvent(parsed),
+                                    );
                               },
                             ),
                           ),

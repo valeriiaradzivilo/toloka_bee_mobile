@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:intl/intl.dart';
 
+import '../../../common/routing/routes.dart';
 import '../../../common/theme/toloka_color.dart';
 import '../../../common/theme/toloka_fonts.dart';
 import '../../../data/models/e_request_hand_type.dart';
@@ -242,7 +243,8 @@ class RequestDetailsScreen extends StatelessWidget {
                                 context
                                     .read<RequestDetailsBloc>()
                                     .add(const AcceptRequest());
-                                Navigator.of(context).pop();
+                                Navigator.of(context)
+                                    .pushReplacementNamed(Routes.mainScreen);
                               },
                               label: Text(
                                 translate(
@@ -336,58 +338,52 @@ class _ControlRequestCompletionRow extends StatelessWidget {
         children: [
           if (state.isCurrentUsersRequest && state.volunteers.isNotEmpty)
             Text(
-              '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname}').join(', ')}',
+              '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname} ${state.fromVolunteerId(e.id) != null ? state.fromVolunteerId(e.id)!.volunteerConfirmed ? '✓' : '' : ''}').join(', ')}',
               style: TolokaFonts.small.style,
             ),
-          Row(
-            spacing: 20,
-            children: [
-              Flexible(
-                child: CancelRequestHelpingButton(state),
-              ),
-              Flexible(
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    context.read<RequestDetailsBloc>().add(
-                          state.isCurrentUserVolunteerForRequest
-                              ? ConfirmRequestIsCompletedVolunteerEvent(
-                                  requestId: state.requestNotificationModel.id,
-                                  workId:
-                                      state.volunteerWorkModelCurrentUser!.id,
-                                )
-                              : ConfirmRequestIsCompletedRequesterEvent(
-                                  requestId: state.requestNotificationModel.id,
-                                  workIds: state.allWorksIds,
-                                ),
-                        );
-                    Navigator.of(context).pop();
-                  },
-                  label: Text(
-                    translate('request.details.confirm_done'),
-                    style: TolokaFonts.tiny.style.copyWith(
+          if (state.requestNotificationModel.status.canBeHelped)
+            Row(
+              spacing: 20,
+              children: [
+                Flexible(
+                  child: CancelRequestHelpingButton(state),
+                ),
+                Flexible(
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      context.read<RequestDetailsBloc>().add(
+                            state.isCurrentUserVolunteerForRequest
+                                ? ConfirmRequestIsCompletedVolunteerEvent(
+                                    requestId:
+                                        state.requestNotificationModel.id,
+                                    workId:
+                                        state.volunteerWorkModelCurrentUser!.id,
+                                  )
+                                : ConfirmRequestIsCompletedRequesterEvent(
+                                    requestId:
+                                        state.requestNotificationModel.id,
+                                    workIds: state.allWorksIds,
+                                  ),
+                          );
+                      Navigator.of(context)
+                          .pushReplacementNamed(Routes.mainScreen);
+                    },
+                    label: Text(
+                      translate('request.details.confirm_done'),
+                      style: TolokaFonts.tiny.style.copyWith(
+                        color: TolokaColor.onPrimary,
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.done_all,
                       color: TolokaColor.onPrimary,
                     ),
                   ),
-                  icon: const Icon(
-                    Icons.done_all,
-                    color: TolokaColor.onPrimary,
-                  ),
                 ),
-              ),
-            ],
-          ),
-          if (state.isCurrentUsersRequest &&
-              !state.requestNotificationModel.status.canBeHelped)
-            ElevatedButton.icon(
-              onPressed: () {},
-              label: Text(translate('request.details.repeat')),
-              icon: const Icon(
-                Icons.repeat_one,
-                color: TolokaColor.onPrimary,
-              ),
+              ],
             ),
         ],
       );
 
-  //TODO: Додай можливість видалити волонтера з запиту, але обов'язково з причиною
+  //TODO: При заблокуванні користувача, перевір чи скасовуються запити
 }

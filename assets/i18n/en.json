@@ -141,6 +141,7 @@
             "message": "An error occurred. Please restart the app."
         }
     },
+    "password.rules": "Your password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one digit, and one special character (@, !).",
     "validation": {
         "error": {
             "field": {
@@ -153,6 +154,7 @@
                 "invalid": "Please enter a valid email address."
             },
             "password": {
+                "max.length": "Password must be at most 32 characters long.",
                 "min.length": "Password must be at least 8 characters long.",
                 "rules": {
                     "lowercase": "Password must contain at least one lowercase letter.",

@@ -93,7 +93,7 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
     try {
       await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
       for (final workId in workIds) {
-        await _volunteerWorkDataSource.confirmByRequester(workId);
+        await _volunteerWorkDataSource.confirmByRequester(workId, requestId);
       }
       await _fcmDataSource.sendRequestUpdateNotification(
         requestId,

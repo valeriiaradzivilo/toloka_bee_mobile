@@ -24,6 +24,8 @@ class ValidationConstant {
       return translate(_validationFieldMustNotBeEmpty);
     } else if (password.isEmpty || password.length < 8) {
       return translate('validation.error.password.min.length');
+    } else if (password.length > 32) {
+      return translate('validation.error.password.max.length');
     } else if (!lowercaseRegExp.hasMatch(password)) {
       return translate('validation.error.password.rules.lowercase');
     } else if (!uppercaseRegExp.hasMatch(password)) {

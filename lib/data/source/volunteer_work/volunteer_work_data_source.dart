@@ -7,7 +7,10 @@ abstract interface class VolunteerWorkDataSource {
     final String requestId,
   );
   Future<void> confirmByVolunteer(final String workId);
-  Future<void> confirmByRequester(final String workId);
+  Future<void> confirmByRequester(
+    final String workId,
+    final String requestId,
+  );
   Future<List<VolunteerWorkModel>> getWorksByVolunteer(
     final String volunteerId,
   );

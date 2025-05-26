@@ -86,6 +86,7 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
               ),
               MenuAnchor(
                 controller: _menuAnchorController,
+                crossAxisUnconstrained: false,
                 menuChildren: [
                   ListTile(
                     title: Text(translate('admin.complaint.open_request')),

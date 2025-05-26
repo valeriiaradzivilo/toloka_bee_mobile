@@ -119,6 +119,7 @@ class _AppTextFieldState extends State<AppTextField> {
               SizedBox(width: PaddingConstants.medium),
               Tooltip(
                 message: translate('password.rules'),
+                triggerMode: TooltipTriggerMode.tap,
                 child: const Icon(Icons.info_outline_rounded),
               ),
             ],

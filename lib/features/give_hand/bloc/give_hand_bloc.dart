@@ -72,6 +72,8 @@ class GiveHandBloc extends Bloc<GiveHandEvent, GiveHandState> {
   ) {
     if (state is GiveHandLoaded) {
       final currentState = state as GiveHandLoaded;
+      if (currentState.radius == event.radius || event.radius == null) return;
+
       emit(currentState.copyWith(radius: event.radius));
       add(const GiveHandFetchEvent());
     }

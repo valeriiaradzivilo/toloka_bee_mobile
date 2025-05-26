@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../models/e_request_status.dart';
 import '../../models/volunteer_work_model.dart';
 import 'volunteer_work_data_source.dart';
 
@@ -37,11 +38,16 @@ class VolunteerWorkDataSourceImpl implements VolunteerWorkDataSource {
   }
 
   @override
-  Future<void> confirmByRequester(final String workId) async {
+  Future<void> confirmByRequester(
+    final String workId,
+    final String requestId,
+  ) async {
     await _dio.post(
       '$_basePath/confirm/requester',
       data: {
         'workId': workId,
+        'requestId': requestId,
+        'status': ERequestStatus.completed.name.toLowerCase(),
       },
     );
   }

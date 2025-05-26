@@ -87,6 +87,7 @@ class __ReportDialogState extends State<_ReportDialog> {
                 decoration: InputDecoration(
                   labelText: translate('report.dialog.select_reason'),
                 ),
+                isExpanded: true,
                 items: EPredefinedReportMessage.values
                     .map(
                       (final reason) => DropdownMenuItem(

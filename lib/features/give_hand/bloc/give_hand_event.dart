@@ -9,7 +9,7 @@ class GiveHandFetchEvent extends GiveHandEvent {
 class ChangeRadiusEvent extends GiveHandEvent {
   const ChangeRadiusEvent(this.radius);
 
-  final int radius;
+  final int? radius;
 }
 
 class ChangeOnlyRemoteEvent extends GiveHandEvent {

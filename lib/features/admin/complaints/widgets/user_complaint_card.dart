@@ -86,6 +86,7 @@ class _UserComplaintCardState extends State<UserComplaintCard> {
               ),
               MenuAnchor(
                 controller: _menuAnchorController,
+                crossAxisUnconstrained: false,
                 menuChildren: [
                   ListTile(
                     title: Text(translate('admin.complaint.open_user_profile')),
