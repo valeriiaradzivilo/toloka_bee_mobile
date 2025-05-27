@@ -271,10 +271,12 @@ class RequestDetailsScreen extends StatelessWidget {
                           ),
                         if (state.isCurrentUserVolunteerForRequest &&
                             state.requesterContactInfo != null)
-                          Center(
-                            child:
-                                SeeContactsButton(state.requesterContactInfo!),
-                          ),
+                          if (state.requestNotificationModel.status.canBeHelped)
+                            Center(
+                              child: SeeContactsButton(
+                                state.requesterContactInfo!,
+                              ),
+                            ),
                         const SizedBox(
                           height: 20,
                         ),
