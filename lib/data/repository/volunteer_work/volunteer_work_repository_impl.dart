@@ -56,6 +56,10 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
       await _fcmDataSource.sendRequestUpdateNotification(
         requestId,
         ERequestUpdate.acceptedByVolunteer,
+        additionalData: request.description.substring(
+          0,
+          request.description.length < 10 ? request.description.length : 10,
+        ),
       );
 
       await _fcmDataSource.subscribeToRequestUpdates(requestId);
@@ -74,9 +78,15 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
     try {
       await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
       await _volunteerWorkDataSource.confirmByVolunteer(workId);
+      final request = await _fcmDataSource.getRequestById(requestId);
+
       await _fcmDataSource.sendRequestUpdateNotification(
         requestId,
         ERequestUpdate.confirmedByVolunteer,
+        additionalData: request.description.substring(
+          0,
+          request.description.length < 10 ? request.description.length : 10,
+        ),
       );
 
       return const Right(null);
@@ -95,9 +105,14 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
       for (final workId in workIds) {
         await _volunteerWorkDataSource.confirmByRequester(workId, requestId);
       }
+      final request = await _fcmDataSource.getRequestById(requestId);
       await _fcmDataSource.sendRequestUpdateNotification(
         requestId,
         ERequestUpdate.confirmedByRequester,
+        additionalData: request.description.substring(
+          0,
+          request.description.length < 10 ? request.description.length : 10,
+        ),
       );
 
       return const Right(null);
@@ -150,12 +165,21 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
     final String id,
   ) async {
     try {
+      final requestId =
+          (await _volunteerWorkDataSource.getWorkById(id)).requestId;
       await _volunteerWorkDataSource.cancelHelping(id);
+
+      final request = await _fcmDataSource.getRequestById(requestId);
+      await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
+
       await _fcmDataSource.sendRequestUpdateNotification(
-        id,
+        requestId,
         ERequestUpdate.cancelledByVolunteer,
+        additionalData: request.description.substring(
+          0,
+          request.description.length < 10 ? request.description.length : 10,
+        ),
       );
-      await _fcmDataSource.unsubscribeFromRequestUpdates(id);
 
       return const Right(null);
     } catch (e) {

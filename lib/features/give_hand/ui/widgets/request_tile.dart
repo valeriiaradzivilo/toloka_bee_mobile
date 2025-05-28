@@ -68,10 +68,7 @@ class RequestTile extends StatelessWidget {
                               Text(
                                 '\u2981 ${translate(
                                   'give.hand.type',
-                                  args: {
-                                    'type': request.requestType.text,
-                                  },
-                                )}',
+                                )}: ${request.requestType.text}',
                                 style: TolokaFonts.tiny.style,
                                 overflow: TextOverflow.clip,
                               ),

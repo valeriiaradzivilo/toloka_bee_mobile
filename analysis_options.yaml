@@ -10,7 +10,7 @@ analyzer:
     - "gen/**"
 
 
-# Lint rules
+
 linter:
   rules:
     avoid_function_literals_in_foreach_calls: true

@@ -1,3 +1,3 @@
 class RequestConstants {
-  static const int requestLimitForTheDay = 3;
+  static const int requestLimitForTheDay = 100;
 }

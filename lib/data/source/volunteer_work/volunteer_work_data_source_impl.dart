@@ -90,8 +90,24 @@ class VolunteerWorkDataSourceImpl implements VolunteerWorkDataSource {
 
   @override
   Future<void> cancelHelping(final String workId) async {
-    await _dio.delete(
-      '$_basePath/cancel/$workId',
+    await _dio.post(
+      '$_basePath/cancel',
+      data: {
+        'workId': workId,
+        'newStatus': ERequestStatus.pending.name,
+      },
     );
   }
+
+  @override
+  Future<VolunteerWorkModel> getWorkById(final String id) =>
+      _dio.get('$_basePath/$id').then((final response) {
+        if (response.statusCode == 200) {
+          return VolunteerWorkModel.fromJson(response.data);
+        } else {
+          throw Exception(
+            'Failed to get work by id: ${response.statusCode}',
+          );
+        }
+      });
 }

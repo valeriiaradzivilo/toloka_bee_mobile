@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:simple_logger/simple_logger.dart';
 
 import '../../../common/constants/location_constants.dart';
 import '../../models/accept_request_model.dart';
@@ -16,6 +17,7 @@ import 'notifications_data_source.dart';
 
 class NotificationsDataSourceImpl implements NotificationsDataSource {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final logger = SimpleLogger();
 
   NotificationsDataSourceImpl(this._dio);
   final Dio _dio;
@@ -281,6 +283,9 @@ class NotificationsDataSourceImpl implements NotificationsDataSource {
 
   @override
   Future<void> subscribeToRequestUpdates(final String requestId) async {
+    logger.info(
+      'Subscribing to request updates for requestId: $requestId',
+    );
     await _firebaseMessaging.subscribeToTopic(requestId);
   }
 

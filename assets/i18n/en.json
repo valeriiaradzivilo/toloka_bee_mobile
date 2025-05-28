@@ -314,7 +314,7 @@
             "distance": "Distance {distance} km",
             "title": "Active Requests",
             "subtitle": "Personalized list of requests for you. Requests are sorted by your volunteering history.\nClick on the request to see the details of any request.",
-            "type": "Type of request: {type}"
+            "type": "Type of request"
         }
     },
     "common": {

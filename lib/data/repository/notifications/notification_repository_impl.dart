@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:simple_logger/simple_logger.dart';
 
@@ -242,10 +244,13 @@ class NotificationRepositoryImpl implements NotificationRepository {
       await _fcmDataSource.cancelRequest(params.requestId);
 
       await _fcmDataSource.unsubscribeFromRequestUpdates(params.requestId);
-      await _fcmDataSource.sendRequestUpdateNotification(
-        params.requestId,
-        ERequestUpdate.cancelledByRequester,
-        additionalData: params.reason,
+
+      unawaited(
+        _fcmDataSource.sendRequestUpdateNotification(
+          params.requestId,
+          ERequestUpdate.cancelledByRequester,
+          additionalData: params.reason,
+        ),
       );
       return const Right(null);
     } catch (e) {

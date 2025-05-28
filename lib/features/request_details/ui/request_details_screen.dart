@@ -7,6 +7,7 @@ import '../../../common/routing/routes.dart';
 import '../../../common/theme/toloka_color.dart';
 import '../../../common/theme/toloka_fonts.dart';
 import '../../../data/models/e_request_hand_type.dart';
+import '../../../data/models/e_request_status.dart';
 import '../bloc/request_details_bloc.dart';
 import '../bloc/request_details_event.dart';
 import '../bloc/request_details_state.dart';
@@ -192,13 +193,9 @@ class RequestDetailsScreen extends StatelessWidget {
                         if (state.requestNotificationModel.requestType !=
                             ERequestHandType.other)
                           Text(
-                            translate(
+                            '${translate(
                               'give.hand.type',
-                              args: {
-                                'type': state
-                                    .requestNotificationModel.requestType.text,
-                              },
-                            ),
+                            )}: ${state.requestNotificationModel.requestType.text}',
                             style: TolokaFonts.small.style,
                           ),
                         if (state.requestNotificationModel.price != null)
@@ -343,7 +340,8 @@ class _ControlRequestCompletionRow extends StatelessWidget {
               '${translate('request.details.volunteers')} : ${state.volunteers.map((final e) => '${e.name} ${e.surname} ${state.fromVolunteerId(e.id) != null ? state.fromVolunteerId(e.id)!.volunteerConfirmed ? '✓' : '' : ''}').join(', ')}',
               style: TolokaFonts.small.style,
             ),
-          if (state.requestNotificationModel.status.canBeHelped)
+          if (state.requestNotificationModel.status ==
+              ERequestStatus.inProgress)
             Row(
               spacing: 20,
               children: [
@@ -388,4 +386,6 @@ class _ControlRequestCompletionRow extends StatelessWidget {
       );
 
   //TODO: При заблокуванні користувача, перевір чи скасовуються запити
+  //TODO: А шо якщо користувач був видалений
+  //TODO: Якщо заблокований - не дай зайти
 }

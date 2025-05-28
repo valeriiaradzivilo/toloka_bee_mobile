@@ -21,4 +21,5 @@ abstract interface class VolunteerWorkDataSource {
     final String requestId,
   );
   Future<void> cancelHelping(final String id);
+  Future<VolunteerWorkModel> getWorkById(final String id);
 }

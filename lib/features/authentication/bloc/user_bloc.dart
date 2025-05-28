@@ -63,7 +63,7 @@ class UserBloc extends TolokaBloc {
         }
 
         final requestsResult = await _getRequestsByUserIdUsecase.call(
-          users[1].valueOrNull?.id ?? '',
+          users[1].valueOrNull!.id,
         );
 
         requestsResult.fold((final _) {}, (final requests) {
