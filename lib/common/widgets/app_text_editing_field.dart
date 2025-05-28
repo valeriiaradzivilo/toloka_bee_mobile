@@ -28,6 +28,7 @@ class AppTextField extends StatefulWidget {
     this.onValidate,
     this.maxLines,
     this.maxSymbols,
+    this.obscureText = false,
   });
   final TextEditingController controller;
   final String? initialValue;
@@ -39,6 +40,7 @@ class AppTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final Function(bool)? onValidate;
   final int? maxSymbols;
+  final bool obscureText;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -84,12 +86,17 @@ class _AppTextFieldState extends State<AppTextField> {
             Expanded(
               child: TextFormField(
                 controller: widget.controller,
-                minLines: widget.option == TextFieldOption.password ? null : 1,
-                maxLines: widget.option == TextFieldOption.password
+                minLines: widget.option == TextFieldOption.password ||
+                        widget.obscureText
+                    ? null
+                    : 1,
+                maxLines: widget.option == TextFieldOption.password ||
+                        widget.obscureText
                     ? 1
                     : (widget.maxLines ?? 10),
-                obscureText:
-                    widget.option == TextFieldOption.password && obscureText,
+                obscureText: (widget.option == TextFieldOption.password ||
+                        widget.obscureText) &&
+                    obscureText,
                 enableSuggestions: widget.option != TextFieldOption.password,
                 autocorrect: widget.option != TextFieldOption.password,
                 validator: (final value) => _validate(value, context),
@@ -110,12 +117,15 @@ class _AppTextFieldState extends State<AppTextField> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
               ),
             ),
-            if (widget.option == TextFieldOption.password) ...[
+            if (widget.option == TextFieldOption.password ||
+                widget.obscureText) ...[
               IconButton(
                 onPressed: () => setState(() => obscureText = !obscureText),
                 icon:
                     Icon(obscureText ? Icons.visibility_off : Icons.visibility),
               ),
+            ],
+            if (widget.option == TextFieldOption.password) ...[
               SizedBox(width: PaddingConstants.medium),
               Tooltip(
                 message: translate('password.rules'),

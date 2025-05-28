@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../common/routing/routes.dart';
 import '../../../common/theme/toloka_fonts.dart';
+import '../../../common/widgets/app_text_editing_field.dart';
 import '../bloc/user_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -73,11 +74,9 @@ class _LoginScreenState extends State<_LoginScreen> {
                     labelText: translate('login.email'),
                   ),
                 ),
-                TextField(
+                AppTextField(
                   controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: translate('login.password'),
-                  ),
+                  label: translate('login.password'),
                   obscureText: true,
                 ),
                 const SizedBox(height: 20),
