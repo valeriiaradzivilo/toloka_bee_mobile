@@ -195,6 +195,14 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                     initialValue: widget.phone,
                     onChanged: (final c) {
                       setState(() => _selectedCountry = c);
+
+                      if (widget.phone != null &&
+                          _phoneController.text.isEmpty) {
+                        _phoneController.text = widget.phone!.replaceAll(
+                          c.dialCode,
+                          '',
+                        );
+                      }
                     },
                   ),
                   const SizedBox(

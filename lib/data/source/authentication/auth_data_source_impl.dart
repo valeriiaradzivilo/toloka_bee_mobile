@@ -184,6 +184,8 @@ class AuthDataSourceImpl implements AuthDataSource {
       '$_basePath/delete/$userId',
     );
 
+    await _auth.signOut();
+
     if (response.statusCode != 200) {
       throw Exception('Failed to delete user: ${response.statusCode}');
     }
