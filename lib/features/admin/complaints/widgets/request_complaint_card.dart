@@ -138,7 +138,12 @@ class _RequestComplaintCardState extends State<RequestComplaintCard> {
                         onConfirm: () {
                           context.read<ComplaintsAdminBloc>().add(
                                 DeleteRequestAndBlockUserEvent(
-                                  widget.group.requestId,
+                                  requestId: widget.group.requestId,
+                                  complaintIds: widget.group.complaints
+                                      .map(
+                                        (final complaint) => complaint.id,
+                                      )
+                                      .toList(),
                                 ),
                               );
                         },

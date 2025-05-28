@@ -399,7 +399,8 @@
             "user_blocked": "User blocked successfully.",
             "request_deleted": "Request deleted successfully.",
             "user_blocked_and_request_deleted": "User blocked and request deleted successfully.",
-            "complaint_deleted": "Complaint deleted successfully."
+            "complaint_deleted": "Complaint deleted successfully.",
+            "request_deleted_and_user_blocked": "Request deleted and user blocked successfully."
         }
     },
     "position": {

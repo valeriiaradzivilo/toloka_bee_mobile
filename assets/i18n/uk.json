@@ -402,7 +402,8 @@
             "user_blocked": "Користувача заблоковано.",
             "request_deleted": "Запит видалено.",
             "user_blocked_and_request_deleted": "Користувача заблоковано, а запит видалено.",
-            "complaint_deleted": "Скарги видалено."
+            "complaint_deleted": "Скарги видалено.",
+            "request_deleted_and_user_blocked": "Запит видалено, а користувача заблоковано."
         }
     },
     "position": {

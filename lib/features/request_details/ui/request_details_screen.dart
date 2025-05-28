@@ -384,8 +384,4 @@ class _ControlRequestCompletionRow extends StatelessWidget {
             ),
         ],
       );
-
-  //TODO: При заблокуванні користувача, перевір чи скасовуються запити
-  //TODO: А шо якщо користувач був видалений
-  //TODO: Якщо заблокований - не дай зайти
 }

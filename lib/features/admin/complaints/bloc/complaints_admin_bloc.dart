@@ -13,6 +13,7 @@ import '../../../../data/usecase/complaints/delete_request_complaint_usecase.dar
 import '../../../../data/usecase/complaints/delete_user_complaint_usecase.dart';
 import '../../../../data/usecase/complaints/get_request_complaints_grouped_usecase.dart';
 import '../../../../data/usecase/complaints/get_user_complaints_grouped_usecase.dart';
+import '../../../../data/usecase/requests/get_requests_by_ids_usecase.dart';
 import 'complaints_admin_event.dart';
 import 'complaints_admin_state.dart';
 
@@ -23,6 +24,8 @@ class ComplaintsAdminBloc
   final DeleteRequestAndComplaintsUsecase _deleteRequestAndComplaintsUsecase;
   final BlockUserForeverUsecase _blockUserForeverUsecase;
   final BlockUserUsecase _blockUserUsecase;
+
+  final GetRequestsByIdsUsecase _getRequestsByIdsUsecase;
 
   final DeleteRequestComplaintUsecase _deleteRequestComplaintUsecase;
   final DeleteUserComplaintUsecase _deleteUserComplaintUsecase;
@@ -41,6 +44,7 @@ class ComplaintsAdminBloc
         _deleteRequestComplaintUsecase =
             locator<DeleteRequestComplaintUsecase>(),
         _deleteUserComplaintUsecase = locator<DeleteUserComplaintUsecase>(),
+        _getRequestsByIdsUsecase = locator<GetRequestsByIdsUsecase>(),
         _snackbarService = locator<SnackbarService>(),
         super(const ComplaintsAdminLoading()) {
     on<GetComplaintsAdminEvent>(_onLoadRequestComplaints);
@@ -134,6 +138,7 @@ class ComplaintsAdminBloc
         type: EPopupType.success,
       ),
     );
+    add(const GetComplaintsAdminEvent());
   }
 
   Future<void> _onBlockUserForever(
@@ -164,6 +169,7 @@ class ComplaintsAdminBloc
         type: EPopupType.success,
       ),
     );
+    add(const GetComplaintsAdminEvent());
   }
 
   Future<void> _onBlockUser(
@@ -197,6 +203,8 @@ class ComplaintsAdminBloc
         type: EPopupType.success,
       ),
     );
+
+    add(const GetComplaintsAdminEvent());
   }
 
   Future<void> _onDeleteRequestAndBlockUser(
@@ -210,9 +218,23 @@ class ComplaintsAdminBloc
       return;
     }
 
+    final requestResult = await _getRequestsByIdsUsecase(
+      [event.requestId],
+    );
+
+    if (requestResult.isLeft()) {
+      emit(const ComplaintsAdminError('Failed to load request'));
+      return;
+    }
+    final request = requestResult.getOrElse(() => []).firstOrNull;
+    if (request == null) {
+      emit(const ComplaintsAdminError('Request not found'));
+      return;
+    }
+
     final result = await _deleteRequestAndComplaintsUsecase(
       DeleteRequestUsecaseParams(
-        complaintId: [],
+        complaintId: event.complaintIds,
         requestId: event.requestId,
       ),
     );
@@ -222,7 +244,7 @@ class ComplaintsAdminBloc
       return;
     }
 
-    final blockResult = await _blockUserForeverUsecase(event.requestId);
+    final blockResult = await _blockUserForeverUsecase(request.userId);
 
     if (blockResult.isLeft()) {
       emit(const ComplaintsAdminError('Failed to block user'));
@@ -237,6 +259,8 @@ class ComplaintsAdminBloc
         type: EPopupType.success,
       ),
     );
+
+    add(const GetComplaintsAdminEvent());
   }
 
   Future<void> _onDeleteUserComplaint(
