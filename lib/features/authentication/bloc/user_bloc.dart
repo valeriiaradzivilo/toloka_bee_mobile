@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
@@ -25,8 +24,6 @@ import '../../../data/usecase/user_management/login_user_usecase.dart';
 import '../../../data/usecase/user_management/logout_user_usecase.dart';
 import '../../../data/usecase/volunteer_work/get_volunteer_work_by_user_id_usecase.dart';
 import '../../registration/ui/data/e_position.dart';
-
-const _testPassword = 'Lera1234!';
 
 class UserBloc extends TolokaBloc {
   UserBloc(final GetIt locator)
@@ -147,14 +144,6 @@ class UserBloc extends TolokaBloc {
 
   Future<bool> login(final String username, final String password) async {
     final authResult = switch (username) {
-      'l' when kDebugMode =>
-        await _loginUserUsecase('lera@z.com', _testPassword),
-      't' when kDebugMode =>
-        await _loginUserUsecase('test@user.com', _testPassword),
-      's' when kDebugMode =>
-        await _loginUserUsecase('sofiia@gmail.com', _testPassword),
-      'r' when kDebugMode =>
-        await _loginUserUsecase('requester@gmail.com', _testPassword),
       _ => await _loginUserUsecase(username, password),
     };
 

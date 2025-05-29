@@ -382,6 +382,9 @@ class _ControlRequestCompletionRow extends StatelessWidget {
                 ),
               ],
             ),
+          if (state.isCurrentUsersRequest &&
+              state.requestNotificationModel.status == ERequestStatus.pending)
+            Center(child: CancelRequestHelpingButton(state)),
         ],
       );
 }

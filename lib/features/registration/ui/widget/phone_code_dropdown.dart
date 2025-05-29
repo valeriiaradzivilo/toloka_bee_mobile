@@ -53,6 +53,9 @@ class PhoneCodeDropdownState extends State<PhoneCodeDropdown> {
       final list = (response.data as List?)
           .orEmpty
           .map((final e) => Country.fromJson(e as Map<String, dynamic>))
+          .where(
+            (final c) => !c.name.toLowerCase().contains('russia'),
+          )
           .toList()
         ..sort((final a, final b) => a.name.compareTo(b.name));
       return list;
