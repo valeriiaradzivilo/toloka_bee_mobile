@@ -235,8 +235,10 @@ class UserBloc extends TolokaBloc {
           final userNew = data[1].user;
           if (userNew is OptionalNull) return;
           if (userNew case OptionalValue(:final value)
-              when value.position.toLowerCase() ==
-                  EPosition.requester.name.toLowerCase()) {
+              when value.position.toLowerCase() !=
+                      EPosition.volunteer.name.toLowerCase() &&
+                  value.position.toLowerCase() !=
+                      EPosition.both.name.toLowerCase()) {
             return;
           }
           final prev = data[0].location;

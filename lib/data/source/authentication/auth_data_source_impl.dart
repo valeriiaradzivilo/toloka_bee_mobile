@@ -177,13 +177,11 @@ class AuthDataSourceImpl implements AuthDataSource {
       throw Exception('You can only delete your own account');
     }
 
-    await _auth.currentUser?.delete();
-    await _auth.signOut();
-
-    final response = await _dio.delete(
+    final response = await _dio.post(
       '$_basePath/delete/$userId',
     );
 
+    await _auth.currentUser?.delete();
     await _auth.signOut();
 
     if (response.statusCode != 200) {

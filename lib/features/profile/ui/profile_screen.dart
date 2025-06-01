@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -56,6 +58,8 @@ class _ProfileScreenState extends State<ProfileScreen> with RouteAware {
 
   @override
   void didPopNext() {
+    if (_profileCubit.state is ProfileUpdating) return;
+
     _profileCubit.loadUser(
       context.read<UserBloc>().userStream.value.valueOrNull!,
     );
@@ -259,9 +263,29 @@ class _LoadedProfile extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: TolokaColor.onErrorContainer,
               ),
-              onPressed: () {
-                context.read<ProfileCubit>().deleteUser();
-                Navigator.pushReplacementNamed(
+              onPressed: () async {
+                final shouldDelete = await showDialog<bool>(
+                  context: context,
+                  builder: (final context) => AlertDialog(
+                    title: Text(translate('profile.actions.delete')),
+                    content: Text(translate('profile.actions.delete.confirm')),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: Text(translate('common.cancel')),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: Text(translate('common.delete')),
+                      ),
+                    ],
+                  ),
+                );
+                if (shouldDelete != true) return;
+
+                await context.read<ProfileCubit>().deleteUser();
+
+                await Navigator.pushReplacementNamed(
                   context,
                   Routes.mainScreen,
                 );

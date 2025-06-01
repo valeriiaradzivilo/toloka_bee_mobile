@@ -90,6 +90,7 @@
         "title": "Profile",
         "email": "Email",
         "button": "Save",
+        "deleted": "Your account has been deleted.",
         "actions": {
             "back": "Back to Map",
             "edit": "Edit profile",

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:get_it/get_it.dart';
@@ -214,7 +213,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
-  void deleteUser() async {
+  Future<void> deleteUser() async {
     emit(const ProfileLoading());
     final result = await _deleteUserUsecase.call(_currentUser.id);
     result.fold(
@@ -228,7 +227,6 @@ class ProfileCubit extends Cubit<ProfileState> {
             type: EPopupType.success,
           ),
         );
-        FirebaseAuth.instance.signOut();
       },
     );
   }

@@ -35,7 +35,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               current is ProfileUpdating,
           builder: (final context, final state) {
             final current = context.read<ProfileCubit>().currentUser;
-            String selectedPosition = current.position;
 
             final _ = state as ProfileUpdating;
 
@@ -125,7 +124,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     onChanged: context.read<ProfileCubit>().setSurname,
                   ),
                   DropdownButtonFormField<String>(
-                    value: selectedPosition,
+                    value: current.position,
                     decoration: InputDecoration(
                       labelText: translate('profile.edit.position'),
                     ),
@@ -139,7 +138,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         .toList(),
                     onChanged: (final v) {
                       if (v != null) {
-                        selectedPosition = v;
                         context.read<ProfileCubit>().setPosition(v);
                       }
                     },
@@ -172,7 +170,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     onPressed: state.changedUser.about.isNotEmpty &&
                             state.changedUser.name.isNotEmpty &&
                             state.changedUser.surname.isNotEmpty &&
-                            selectedPosition.isNotEmpty
+                            current.position.isNotEmpty
                         ? () => context.read<ProfileCubit>().updateProfile()
                         : null,
                     child: Text(translate('profile.edit.save')),
