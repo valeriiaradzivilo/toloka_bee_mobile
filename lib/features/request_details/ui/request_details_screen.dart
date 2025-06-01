@@ -268,7 +268,10 @@ class RequestDetailsScreen extends StatelessWidget {
                           ),
                         if (state.isCurrentUserVolunteerForRequest &&
                             state.requesterContactInfo != null)
-                          if (state.requestNotificationModel.status.canBeHelped)
+                          if (state.requestNotificationModel.status ==
+                                  ERequestStatus.inProgress ||
+                              state.requestNotificationModel.status ==
+                                  ERequestStatus.needsMorePeople)
                             Center(
                               child: SeeContactsButton(
                                 state.requesterContactInfo!,

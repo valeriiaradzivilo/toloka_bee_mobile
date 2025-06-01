@@ -28,7 +28,7 @@ class SeeContactsButton extends StatelessWidget {
                     translate(
                       'request.details.contacts_hint',
                     ),
-                    style: TolokaFonts.small.style,
+                    style: TolokaFonts.tiny.style,
                   ),
                   ContactDataText(
                     method: ContactMethod.phone,
