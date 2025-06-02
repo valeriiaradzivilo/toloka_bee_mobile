@@ -203,6 +203,9 @@ class _FourthStepCreateAccountState extends State<FourthStepCreateAccount> {
                           '',
                         );
                       }
+
+                      final fullPhone = '${c.dialCode}${_phoneController.text}';
+                      widget.onPhoneChanged(fullPhone);
                     },
                   ),
                   const SizedBox(
