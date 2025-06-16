@@ -16,12 +16,14 @@ import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await AppInitializer.initialize();
-  GetIt.instance<FcmService>().listenToMessages();
-  GetIt.instance<FcmService>().listenToBackgroundMessages();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await AppInitializer.initialize();
+  GetIt.instance<FcmService>().listenToMessages();
+  GetIt.instance<FcmService>().listenToBackgroundMessages();
 
   await Geolocator.requestPermission();
   runApp(const App());

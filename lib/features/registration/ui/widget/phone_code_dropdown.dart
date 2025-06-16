@@ -49,7 +49,12 @@ class PhoneCodeDropdownState extends State<PhoneCodeDropdown> {
   Future<List<Country>> fetchCountries() async {
     try {
       final dio = Dio();
-      final response = await dio.get('https://restcountries.com/v3.1/all');
+      final response = await dio.get(
+        'https://restcountries.com/v3.1/all',
+        queryParameters: {
+          'fields': 'name,cca2,idd',
+        },
+      );
       final list = (response.data as List?)
           .orEmpty
           .map((final e) => Country.fromJson(e as Map<String, dynamic>))

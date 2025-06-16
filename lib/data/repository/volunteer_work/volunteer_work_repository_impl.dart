@@ -77,7 +77,6 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
   ) async {
     try {
       await _fcmDataSource.unsubscribeFromRequestUpdates(requestId);
-      await _volunteerWorkDataSource.confirmByVolunteer(workId);
       final request = await _fcmDataSource.getRequestById(requestId);
 
       await _fcmDataSource.sendRequestUpdateNotification(
@@ -88,6 +87,8 @@ class VolunteerWorkRepositoryImpl implements VolunteerWorkRepository {
           request.description.length < 10 ? request.description.length : 10,
         ),
       );
+
+      await _volunteerWorkDataSource.confirmByVolunteer(workId);
 
       return const Right(null);
     } catch (e) {
